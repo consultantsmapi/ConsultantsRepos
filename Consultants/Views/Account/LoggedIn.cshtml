@@ -25,7 +25,7 @@
         var type = @Html.Raw(Json.Encode(ViewBag.type));
         if(type=="user")
         {
-            document.getElementById("smartForm").style.display="none";
+            document.getElementById("SmartProfile").style.display="none";
 
         }
 
@@ -48,7 +48,7 @@
             {
                 <div class="row right-buttons-Loggedin">
                     <input class="container" type="submit" value="שינוי סיסמא" formaction="@Url.Action("ChangePassword")" }) />
-                    <input type="button" class="myButton" id="smartForm" name="טופס חכם" value="smartform" onclick="location.href='@Url.Action("SmartForm","account")'" }) />
+                    <input type="button" class="myButton" id="SmartProfile" name="טופס חכם" value="smartform" onclick="location.href='@Url.Action("SmartProfile","account")'" }) />
                 </div>
 
 
