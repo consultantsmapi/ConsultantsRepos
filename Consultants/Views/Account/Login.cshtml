@@ -1,0 +1,40 @@
+﻿@model Consultants.Models.UserAccount
+
+@{ ViewBag.Title = "כניסה"; }
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link href="@Url.Content("~/Content/bootstrap.css") rel="stylesheet" type="text/css" />
+</head>
+
+<body >
+    <div class="container">
+        <div class="content-login">
+            <h1>כניסה</h1>
+            @using (Html.BeginForm())
+            {
+                <div>
+                    @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { type="text", placeholder="שם משתמש", id="username",requried="" } })
+                    @*<input type="text" name="Enter" placeholder="שם משתמש" required="" id="username" />*@
+                </div>
+                    <div>
+                        @*<input type="password" name="Password" placeholder="סיסמא" required="" id="password" />*@
+                        @Html.EditorFor(model => model.Password, new { htmlAttributes = new { type="password", placeholder="סיסמא", id="password", requried =""} })
+                    </div>
+                    <div>
+                        <input type="submit" value="כניסה" />
+                        <input type="button" value="הרשמה כיועץ" onclick= "location.href='@Url.Action("ConsultantsRegister","account")'" }) />
+                        <input type="button" value="הרשמה לחיפוש" onclick= "location.href='@Url.Action("Register","account")'" }) />
+                    </div>
+            }
+            <div class="button22">
+                <a href="@Url.Action("ForgotPassword","account")">שכחתי את הסיסמא</a>
+               
+            </div>
+            <span style="color:red;">@TempData["Message"]</span>
+        </div>
+    </div>
+</body>
+</html>
+
