@@ -202,8 +202,6 @@ namespace Consultants.Controllers
             return View();
         }
 
-
-
         public ActionResult LoggedIn()
         {
             if (Session["UserName"] != null)
