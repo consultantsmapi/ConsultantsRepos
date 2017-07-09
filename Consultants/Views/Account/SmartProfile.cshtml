@@ -11,7 +11,6 @@
 
 <html>
 <head>
-
     <meta name="viewport" content="width=device-width" />
     <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css" />
     <link rel="stylesheet" type="text/css" href="~/Content/bootstrap-responsive.css" />
@@ -44,6 +43,7 @@
                 document.getElementById("consultantLastName").value = ConsultantInformation[0].LastName;
                 document.getElementById("consultantEmail").value = ConsultantInformation[0].Email;
                 document.getElementById("consultantPhone").value = ConsultantInformation[0].Phone;
+                document.getElementById("consultantHomePhone").value = ConsultantInformation[0].HomePhone;
                 document.getElementById("consultantFax").value = ConsultantInformation[0].Fax;
                 document.getElementById("consultantAdress").value = ConsultantInformation[0].Adress;
                 document.getElementById("consultantCounsilSubject1").value = ConsultantInformation[0].CounsilSubject1;
@@ -203,37 +203,36 @@
         <br />
         <div class="row">
             <div class="col-lg-15">
-                
-                <input id="consultantFirstName" type="text" value="" />
-                @Html.Label("שם פרטי", new { style = "color:#000000" })
-                <input id="consultantLastName" type="text" value="" />
-                @Html.Label("שם משפחה", new { style = "color:#000000" })
-                <input id="consultantEmail" type="text" value="" />
-                @Html.Label("מייל", new { style = "color:#000000" })
                 <input id="consultantPhone" type="text" value="" />
-                @Html.Label("פלאפון", new { style = "color:#000000" })
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-15">
-                <input id="consultantHomePhone" type="text" value="" />
-                @Html.Label("טלפון", new { style = "color:#000000" })
-                <input id="consultantFax" type="text" value="" />
-                @Html.Label("פקס", new { style = "color:#000000" })
+                @Html.Label("נייד", new { style = "color:#000000" })
                 <input id="consultantAdress" type="text" value="" />
                 @Html.Label("כתובת", new { style = "color:#000000" })
-                <input id="consultantCounsilSubject1" type="text" value="" />
-                @Html.Label("תחום יעוץ 1", new { style = "color:#000000" })
+                <input id="consultantLastName" type="text" value="" />
+                @Html.Label("שם משפחה", new { style = "color:#000000" })
+                <input id="consultantFirstName" type="text" value="" />
+                @Html.Label("שם פרטי", new { style = "color:#000000" })
             </div>
         </div>
         <div class="row">
             <div class="col-lg-15">
-                <input id="consultantCounsilSubject2" type="text" value="" />
-                @Html.Label("תחום יעוץ 2", new { style = "color:#000000" })
-                <input id="consultantYearOfExprience1" type="text" value="" />
-                @Html.Label("שנות נסיון 1", new { style = "color:#000000" })
+                <input id="consultantCounsilSubject1" type="text" value="" />
+                @Html.Label("תחום יעוץ 1", new { style = "color:#000000" })
+                <input id="consultantEmail" type="text" value="" />
+                @Html.Label("אימייל", new { style = "color:#000000" })
+                <input id="consultantFax" type="text" value="" />
+                @Html.Label("פקס", new { style = "color:#000000" })
+                <input id="consultantHomePhone" type="text" value="" />
+                @Html.Label("טלפון", new { style = "color:#000000" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-15">
                 <input id="consultantYearOfExprience2" type="text" value="" />
                 @Html.Label("שנות נסיון 2", new { style = "color:#000000" })
+                <input id="consultantCounsilSubject2" type="text" value="" />
+                @Html.Label("תחום יעוץ 2", new { style = "color:#000000" })     
+                <input id="consultantYearOfExprience1" type="text" value="" />
+                @Html.Label("שנות נסיון 1", new { style = "color:#000000" })
             </div>
         </div>
         <br />

@@ -1,0 +1,45 @@
+﻿@model Consultants.Models.UserAccount
+
+@{
+    ViewBag.Title = "חיפוש יועצים";
+}
+
+@if (Session["UserName"] != null)
+
+{ <h4>Hello @Session["UserName"].ToString()</h4> }
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap-responsive.css" />
+ 
+    <title></title>
+</head>
+
+<script type="text/javascript">
+    function OnCreate() {
+        var type = @Html.Raw(Json.Encode(ViewBag.type));
+
+        if (type=="user")
+        {
+            document.getElementById("SmartProfile").style.display="none";
+        }
+    }
+    window.onload = OnCreate;
+</script>
+
+<body>
+    <div class="container-login">
+        <div id="content-login">
+            @using (Html.BeginForm())
+            {
+                <div class="row right-buttons-Loggedin">
+                    <input class="container" type="submit" value="שינוי סיסמא" formaction="@Url.Action("ChangePassword")" }) />
+                    <input type="button" class="myButton" id="SmartProfile" name="טופס חכם" value="smartform" onclick="location.href='@Url.Action("SmartProfile","account")'" }) />
+                </div>
+            }
+        </div>
+    </div>
+</body>
+
+
