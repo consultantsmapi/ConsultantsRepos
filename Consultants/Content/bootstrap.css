@@ -6780,7 +6780,18 @@ button.close {
 {
     padding-left: 115px;
 }
-
+.right-buttons-forgetPassword
+{
+    padding-left: 120px;
+}
+.right-buttons-Loggedin
+{
+    padding-left: 100px;
+}
+.right-buttons-changePassword
+{
+    padding-left:80px;
+}
 #content-login {
     background: #f9f9f9;
     background: -moz-linear-gradient(top, rgba(248,248,248,1) 0%, rgba(249,249,249,1) 100%);

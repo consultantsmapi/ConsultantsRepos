@@ -145,13 +145,13 @@ namespace Consultants.Controllers
                 if (model1 != null)
                 {
                     Session["UserName"] = model1.UserName.ToString();
-                    return RedirectToAction("SmartProfile");
+                    return RedirectToAction("LoggedIn");
                 }
 
                 if (model2 != null)
                 {
                     Session["UserName"] = model2.UserName.ToString();
-                    return RedirectToAction("SmartProfile");
+                    return RedirectToAction("LoggedIn");
                 }
             }
 
