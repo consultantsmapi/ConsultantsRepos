@@ -6769,6 +6769,9 @@ button.close {
 .right-buttons{
     padding-left: 10px;
 }
+.right-buttons-userregister{
+    padding-left: 115px;
+}
 
 
 
@@ -7276,7 +7279,7 @@ button.close {
     position: relative;
     text-align: center;
     text-shadow: 0 1px 0 #fff;
-    width: 400px;
+    width: 600px;
 }
 
     #content-reg h1 {

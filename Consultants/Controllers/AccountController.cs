@@ -37,14 +37,14 @@ namespace Consultants.Controllers
 
             return View();
         }
-        public ActionResult Register()
+        public ActionResult UserRegister()
         {
             return View();
 
         }
 
         [HttpPost]
-        public ActionResult Register(UserAccount _useraccount)
+        public ActionResult UserRegister(UserAccount _useraccount)
         {
             if (ModelState.IsValid)
             {
