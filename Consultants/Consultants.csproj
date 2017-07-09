@@ -250,7 +250,7 @@
     <Content Include="Views\Account\ConsultantsRegister.cshtml" />
     <Content Include="Views\Account\SmartProfile.cshtml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
-    <Content Include="Views\Account\LoggedIn.cshtml" />
+    <Content Include="Views\Account\SearchConsultants.cshtml" />
     <Content Include="Views\Account\ChangePassword.cshtml" />
   </ItemGroup>
   <ItemGroup>

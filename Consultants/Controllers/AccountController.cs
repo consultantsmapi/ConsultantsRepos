@@ -145,13 +145,13 @@ namespace Consultants.Controllers
                 if (model1 != null)
                 {
                     Session["UserName"] = model1.UserName.ToString();
-                    return RedirectToAction("LoggedIn");
+                    return RedirectToAction("SearchConsultants");
                 }
 
                 if (model2 != null)
                 {
                     Session["UserName"] = model2.UserName.ToString();
-                    return RedirectToAction("LoggedIn");
+                    return RedirectToAction("SearchConsultants");
                 }
             }
 
@@ -172,17 +172,17 @@ namespace Consultants.Controllers
         public ActionResult ChangePassword(UserAccount user)
         {
             IMongoUpdate passwordUpdate;
-            var collection = Context.Database.GetCollection<UserAccount>("Users");
-            usersQuery = Query<UserAccount>.Where(s => s.UserName == user.UserName && s.Password == user.Password);
-            var model = collection.FindOne(usersQuery);
+            var userCollection = Context.Database.GetCollection<UserAccount>("Users");
+            usersQuery = Query<UserAccount>.Where(s => s.UserName == user.UserName && s.Password == user.Password && s.Password == user.ConfirmPassword);
+            var model = userCollection.FindOne(usersQuery);
 
             if (model != null)
             {
                 string name = Request.Form["New Password"];
                 passwordUpdate = Update.Set("ConfirmPassword", name);
-                collection.Update(usersQuery, passwordUpdate);
+                userCollection.Update(usersQuery, passwordUpdate);
                 passwordUpdate = Update.Set("Password", name);
-                collection.Update(usersQuery, passwordUpdate);
+                userCollection.Update(usersQuery, passwordUpdate);
                 Session["UserName"] = model.UserName.ToString();
                 TempData["Message"] = "הסיסמא שונתה בהצלחה";
 
@@ -191,13 +191,33 @@ namespace Consultants.Controllers
 
             else
             {
-                ModelState.AddModelError("", "שם משתמש או סיסמא שגויים");
+                var consultantsCollection = Context.Database.GetCollection<ConsultantsAccount>("Consultants");
+                usersQuery = Query<ConsultantsAccount>.Where(s => s.UserName == user.UserName && s.Password == user.Password && s.Password == user.ConfirmPassword);
+                var consultantsModel = consultantsCollection.FindOne(usersQuery);
+
+                if (consultantsModel != null)
+                {
+                    string name = Request.Form["New Password"];
+                    passwordUpdate = Update.Set("ConfirmPassword", name);
+                    consultantsCollection.Update(usersQuery, passwordUpdate);
+                    passwordUpdate = Update.Set("Password", name);
+                    consultantsCollection.Update(usersQuery, passwordUpdate);
+                    Session["UserName"] = consultantsModel.UserName.ToString();
+                    TempData["Message"] = "הסיסמא שונתה בהצלחה";
+
+                    return RedirectToAction("Login");
+                }
+
+                else
+                {
+                    ModelState.AddModelError("", "שם משתמש או סיסמא שגויים");
+                }         
             }
 
             return View();
         }
 
-        public ActionResult LoggedIn()
+        public ActionResult SearchConsultants()
         {
             if (Session["UserName"] != null)
             {
@@ -229,7 +249,7 @@ namespace Consultants.Controllers
         }
 
         [HttpPost]
-        public ActionResult LoggedIn(UserAccount user)
+        public ActionResult SearchConsultants(UserAccount user)
         {
             if (Session["UserName"] != null)
             {
