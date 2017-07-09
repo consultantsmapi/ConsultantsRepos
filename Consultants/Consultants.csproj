@@ -248,6 +248,7 @@
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\UserRegister.cshtml" />
     <Content Include="Views\Account\ConsultantsRegister.cshtml" />
+    <Content Include="Views\Account\SmartProfile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
