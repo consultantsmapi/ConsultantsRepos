@@ -6772,8 +6772,10 @@ button.close {
 .right-buttons-userregister{
     padding-left: 115px;
 }
-
-
+.right-buttons-consultRegister
+{
+    padding-left: 115px;
+}
 
 #content-login {
     background: #f9f9f9;

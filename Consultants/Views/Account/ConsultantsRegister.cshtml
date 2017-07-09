@@ -1,0 +1,74 @@
+﻿@model Consultants.Models.ConsultantsAccount
+
+@{
+    ViewBag.Title = "רישום למאגר כיועץ";
+}
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap-responsive.css" />
+    <title>הרשמה כיועץ</title>
+</head>
+
+<body>
+    <div class="container center-page">
+        <div class="row">
+            <div id="content-reg" class="col-lg-offset-5">
+                <h1>הרשמה כיועץ</h1>
+                @using (Html.BeginForm())
+                {
+                    <div class="row">
+                        <div class="col-lg-6">
+                            @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { type = "text", placeholder = "שם פרטי", id = "username", required = "" } })
+                            <br />
+                            @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { type = "text", placeholder = "שם משפחה", id = "username", required = "" } })
+                            <br />
+                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { type = "text", placeholder = "אימייל", id = "username" } })
+                            @Html.ValidationMessageFor(model => model.Email)
+                            <br />
+                            @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { type = "text", placeholder = "מספר פלאפון", id = "username", required = "" } })
+                            <br />
+                            @Html.EditorFor(model => model.HomePhone, new { htmlAttributes = new { type = "text", placeholder = "מספר טלפון בבית", id = "username", required = "" } })
+                            <br />
+                            @Html.EditorFor(model => model.Fax, new { htmlAttributes = new { type = "text", placeholder = "מספר פקס", id = "username", required = "" } })
+                            <br />
+                            @Html.EditorFor(model => model.Adress, new { htmlAttributes = new { type = "text", placeholder = "כתובת", id = "username", required = "" } })
+                            <br />
+                        </div>
+
+                        <div class="col-lg-6">
+                            @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { type = "text", placeholder = "שם משתמש", id = "username", required = "" } })
+                            <br />
+                            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { type = "text", placeholder = "סיסמא", id = "password", required = "" } })
+                            <br />
+                            @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { type = "text", placeholder = "אישור סיסמא", id = "password", required = "" } })
+                            <br />
+                            @Html.EditorFor(model => model.CounsilSubject1, new { htmlAttributes = new { type = "text", placeholder = " תחום יעוץ 1", id = "username", required = "" } })
+                            <br />
+                            @Html.EditorFor(model => model.YearOfExprience1, new { htmlAttributes = new { type = "text", placeholder = " שנות נסיון 1", id = "username", required = "" } })
+                            <br />
+                            @Html.EditorFor(model => model.CounsilSubject2, new { htmlAttributes = new { type = "text", placeholder = " תחום יעוץ 2", id = "username", required = "" } })
+                            <br />
+                            @Html.EditorFor(model => model.YearOfExprience2, new { htmlAttributes = new { type = "text", placeholder = " שנות נסיון 2", id = "username", required = "" } })
+                            <br />
+                        </div>
+                    </div>
+                    <br />
+                        <div class="row">
+                            <b>האם לקבל דיוור ממפ"י</b>
+                            <input id="checkbox" name="check" type="checkbox" value="true" />
+                        </div>
+                        <div class="row right-buttons-consultRegister">
+                            <input type="submit" class="" value="הרשם" }) />
+                            <input type="button" value="חזור" onclick="location.href='@Url.Action("Login","account")'" }) />
+                            <span style="color:red;">@TempData["Message"]</span>
+                        </div>
+                }
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
