@@ -11,10 +11,18 @@
 
 <html>
 <head>
+
     <meta name="viewport" content="width=device-width" />
     <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css" />
     <link rel="stylesheet" type="text/css" href="~/Content/bootstrap-responsive.css" />
-    <link rel="stylesheet" type="text/javascript" href="~/Scripts" />
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"> </script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+   
+
     <title>פרופיל חכם</title>
 
     <script type="text/javascript">
@@ -25,7 +33,7 @@
 
         function OnCreate() {
             $(document).ready(function () {
-
+             
                 var array = @Html.Raw(Json.Encode(ViewBag.textBoxList));
                 var sizeTextBox = @Html.Raw(Json.Encode(ViewBag.size));
                 var arrayLabel = @Html.Raw(Json.Encode(ViewBag.LabelList));
@@ -76,25 +84,22 @@
         window.onload = OnCreate;
     </script>
 
-    <script type="text/javascript">
+    
+   <script type="text/javascript">
         var sizeTextBox = @Html.Raw(Json.Encode(ViewBag.size));
         var sizeLabel = @Html.Raw(Json.Encode(ViewBag.sizeLabel));
-
-        if (sizeTextBox == null)
+        if(sizeTextBox==null)
         {
-            var textBoxCount = 0;
+            var textBoxCount =0;
         }
-
         var textBoxCount = sizeTextBox;
-
-        if (sizeLabel == null)
+        if(sizeLabel==null)
         {
             var LabelCount =0;
         }
-
         var LabelCount = sizeLabel;
-
         $(document).ready(function () {
+
             $(function () {
                 $('#pictureButton').click(function () {
                     $('#uploadme').click();
@@ -177,6 +182,9 @@
         });
 
     </script>
+
+
+
 </head>
 
 <body>
@@ -231,7 +239,15 @@
         <br />
         <br />
         <div class="range">
-            @*Text Box-*@<section class="form-style-1"> </section>
+            @*Text Box-*@
+            <section class="form-style-1">
+
+
+                @*<input value="I am an input" />*@
+           
+
+             </section>
+
             @*Label*@<section class="form-style-2"> </section>
 
             @*Need to create for Consultants Table...*@ @*Label*@<section class="form-style-3"> </section>
