@@ -33,14 +33,11 @@ namespace Consultants.Controllers
         {
             var collection = Context.Database.GetCollection<TextBox>("TextBox");
 
-
-
             return View();
         }
         public ActionResult UserRegister()
         {
             return View();
-
         }
 
         [HttpPost]
@@ -64,8 +61,8 @@ namespace Consultants.Controllers
                     Context.Users.Insert(_useraccount);
                     ModelState.Clear();
                     TempData["Message"] = _useraccount.FirstName + " " + _useraccount.LastName + " נרשם בהצלחה";
-                    return RedirectToAction("Login");
 
+                    return RedirectToAction("Login");
                 }
 
                 else
@@ -79,7 +76,6 @@ namespace Consultants.Controllers
         public ActionResult ConsultantsRegister()
         {
             return View();
-
         }
 
         [HttpPost]
@@ -105,8 +101,6 @@ namespace Consultants.Controllers
                 //        ViewBag.Message = "ERROR:" + ex.Message.ToString();
                 //    }
 
-
-
                 if (model == null)
                 {
                     string name = Request.Form["check"];
@@ -127,6 +121,7 @@ namespace Consultants.Controllers
                     ViewBag.Message = "";
                 }
             }
+
             return View();
         }
 
@@ -150,13 +145,13 @@ namespace Consultants.Controllers
                 if (model1 != null)
                 {
                     Session["UserName"] = model1.UserName.ToString();
-                    return RedirectToAction("LoggedIn");
+                    return RedirectToAction("SmartProfile");
                 }
 
                 if (model2 != null)
                 {
                     Session["UserName"] = model2.UserName.ToString();
-                    return RedirectToAction("LoggedIn");
+                    return RedirectToAction("SmartProfile");
                 }
             }
 
@@ -228,12 +223,11 @@ namespace Consultants.Controllers
 
                 }
                 ViewBag.type = type;
-
-
-
             }
+
             return View();
         }
+
         [HttpPost]
         public ActionResult LoggedIn(UserAccount user)
         {
@@ -303,9 +297,8 @@ namespace Consultants.Controllers
 
         }
         [HttpGet]
-        public ActionResult SmartForm()
+        public ActionResult SmartProfile()
         {
-
             if (Session["UserName"] != null)
             {
                 var size = 0;
@@ -320,16 +313,19 @@ namespace Consultants.Controllers
                 var Consultant = consultantsCollection.Find(usersQuery);
                 var textBoxList = new List<TextBox>();
                 var LabelList = new List<EditBox>();
+
                 foreach (var users in usersCursor)
                 {
                     textBoxList.Add(users);
                     size++;
                 }
+
                 foreach (var item in usersCursorLabel)
                 {
                     LabelList.Add(item);
                     sizeLabel++;
                 }
+
                 ViewBag.Consultant = Consultant;
                 ViewBag.textBoxList = (textBoxList);
                 ViewBag.size = size;
@@ -339,10 +335,10 @@ namespace Consultants.Controllers
 
             return View();
         }
-        [HttpPost]
-        public ActionResult SmartForm(List<TextBox> _textbox, List<EditBox> _editbox, int editBoxCount, int textBoxCount)
-        {
 
+        [HttpPost]
+        public ActionResult SmartProfile(List<TextBox> _textbox, List<EditBox> _editbox, int editBoxCount, int textBoxCount)
+        {
             if (Session["UserName"] != null)
             {
                 var consultantsCollection = Context.Database.GetCollection<ConsultantsAccount>("Consultants");
