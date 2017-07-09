@@ -377,8 +377,6 @@ namespace Consultants.Controllers
                 return View();
 
             }
-
-
         }
 
         private void smtpRequest(string userEmail, string emailSubject, string emailBody)
@@ -396,7 +394,7 @@ namespace Consultants.Controllers
 
             try
             {
-                smtp.Send(mail);
+                smtp.Send(mail);    
                 TempData["Message"] = "נשלח בהצלחה";
             }
             catch (Exception ex)
