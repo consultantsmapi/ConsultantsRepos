@@ -248,6 +248,9 @@
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\UserRegister.cshtml" />
     <Content Include="Views\Account\ConsultantsRegister.cshtml" />
+    <Content Include="Views\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\Account\LoggedIn.cshtml" />
+    <Content Include="Views\Account\ChangePassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
