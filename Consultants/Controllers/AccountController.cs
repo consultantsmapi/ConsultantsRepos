@@ -130,13 +130,13 @@ namespace Consultants.Controllers
             return View();
         }
 
-        public ActionResult LoginNew()
+        public ActionResult Login()
         {
             return View();
         }
 
         [HttpPost]
-        public ActionResult LoginNew(UserAccount user)
+        public ActionResult Login(UserAccount user)
         {
             var usersCollection = Context.Database.GetCollection<UserAccount>("Users");
             var consultantsCollection = Context.Database.GetCollection<ConsultantsAccount>("Consultants");
