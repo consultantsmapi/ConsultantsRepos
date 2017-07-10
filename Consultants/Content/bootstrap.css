@@ -7595,6 +7595,7 @@ button.close {
 .form-style-1 input[type=email],
 textarea,
 select {
+    resize: none;
     box-sizing: border-box;
     text-align: right;
     -webkit-box-sizing: border-box;
@@ -7692,16 +7693,7 @@ input[type="labelBox"] {
   position: absolute !important;
 }
 
-textarea#styled {
-	width: 600px;
-	height: 120px;
-	border: 3px solid #cccccc;
-	padding: 5px;
-	font-family: Tahoma, sans-serif;
-	background-image: url(bg.gif);
-	background-position: bottom right;
-	background-repeat: no-repeat;
-}
+
 
 
 .input {
@@ -7718,12 +7710,37 @@ textarea#styled {
     width: 398px;    
 }
 
+
+.textareatest {
+     background-color: white;
+    -moz-appearance: textfield-multiline;
+    -webkit-appearance: textarea;
+    border: 1px solid gray;
+    font: medium -moz-fixed;
+    font: -webkit-small-control;
+    height: 28px;
+    overflow: auto;
+    padding: 2px;
+    resize: both;
+    width: 400px;
+}
+
+form-style-test{
+
+}
+
+
 textarea {
-   
+    height:100%;
     background-color:#fff;
-    resize:none;
-    border:20px black;
-    padding:0px; 
-    margin:0px;
+    width:100%;
+    resize:both;
+     border:2px solid blue;
+    padding:0px;
+     margin:0px;
     
+}
+
+.contenteditable-element {
+  user-select: text;
 }

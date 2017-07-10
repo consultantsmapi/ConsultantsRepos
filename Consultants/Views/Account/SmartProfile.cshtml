@@ -25,38 +25,35 @@
 
 
     <script>
-        $('#textBoxB1utton').click(function () {
-            $('.form-style-1').append(" <textarea name=textBox id=textarea" + textBoxCount + " class=field-long field-textarea> </textarea></div>");
-            textBoxCount++;
+        var x = 0;
+    $('input[type="text"], textarea').each(function () {
+        $(this).attr('readonly', 'readonly');
+    });
+    $(function () {
+        $('#textBoxButton').click(function () {
+            x++;
+            var newElement$ = $("<div><textarea id=textarea" + x +"></textarea></div>")
+                                            
+                                            .draggable({
+                                                cancel: "",
+                                                containment: ".range",
+                                                cursor: "move",
 
-            $(".textBoxBorder").draggable({ containment: '.range' });
-
+                                                start: function () {
+                                                    $("#textarea"+x).focus();
+                                                },
+                                                stop: function () {
+                                                    $("#textarea"+x).focus();
+                                                }
+                                            })
+                                            .resizable({
+                                                containment: ".range",
+                                            })
+ 
+                                             .appendTo('.form-style-test');
         });
-        
-        $(function () {
-            $('#textBoxButton').click(function () {
-               
-                var new_width = 100;
-                var new_height = 200;
-                var newElement$ = $('<div><textarea id="textarea"></textarea></div>')
-                                                .width(new_width)
-                                                .height(new_height)
-                                                .draggable({
-                                                    cancel: "text",
-                                                    start: function () {
-                                                        $('#textarea').focus();
-                                                    },
-                                                    stop: function () {
-                                                        $('#textarea').focus();
-                                                    }
-                                                })
-                                                .resizable()
-
-                                                 .appendTo('.form-style-1');
-            });
-
-        });
-
+      
+    });
 
     </script>
 
@@ -121,9 +118,7 @@
 
         <div class="range">
 
-            <section class="form-style-1">
-                
-              
+            <section class="form-style-test">
             </section>
 
             @*Label*@<section class="form-style-2"> </section>
