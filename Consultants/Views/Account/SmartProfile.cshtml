@@ -22,17 +22,39 @@
     <title>פרופיל חכם</title>
 
 
+    <script type="text/javascript">
+        var countTextArea = 0;
+        var textBox;
+        var Label;
+        var countLabel=0;
+
+        function OnCreate() {
+            $(document).ready(function () {
+
+                var array = @Html.Raw(Json.Encode(ViewBag.textBoxList));
+                var sizeTextBox = @Html.Raw(Json.Encode(ViewBag.size));
+                var arrayLabel = @Html.Raw(Json.Encode(ViewBag.LabelList));
+                var sizeLabel = @Html.Raw(Json.Encode(ViewBag.sizeLabel));
+                var ConsultantInformation=@Html.Raw(Json.Encode(ViewBag.Consultant));
+
+                document.getElementById("consultantFirstName").value = ConsultantInformation[0].FirstName;
+                document.getElementById("consultantLastName").value = ConsultantInformation[0].LastName;
+                document.getElementById("consultantEmail").value = ConsultantInformation[0].Email;
+                document.getElementById("consultantPhone").value = ConsultantInformation[0].Phone;
+                document.getElementById("consultantFax").value = ConsultantInformation[0].Fax;
+                document.getElementById("consultantAdress").value = ConsultantInformation[0].Adress;
+                document.getElementById("consultantCounsilSubject1").value = ConsultantInformation[0].CounsilSubject1;
+                document.getElementById("consultantCounsilSubject2").value = ConsultantInformation[0].CounsilSubject2;
+                document.getElementById("consultantYearOfExprience1").value = ConsultantInformation[0].YearOfExprience1;
+                document.getElementById("consultantYearOfExprience2").value = ConsultantInformation[0].YearOfExprience2;
 
 
-    <script>
-        var x = 0;
-    $('input[type="text"], textarea').each(function () {
-        $(this).attr('readonly', 'readonly');
-    });
-    $(function () {
-        $('#textBoxButton').click(function () {
-            x++;
-            var newElement$ = $("<div><textarea id=textarea" + x +"></textarea></div>")
+
+
+
+                for(var i=0; i<sizeTextBox;i++)
+                {
+                    var newElement$ = $("<div><textarea id=textarea" + countTextArea +"></textarea></div>")
                                             
                                             .draggable({
                                                 cancel: "",
@@ -40,10 +62,10 @@
                                                 cursor: "move",
 
                                                 start: function () {
-                                                    $("#textarea"+x).focus();
+                                                    $("#textarea"+countTextArea).focus();
                                                 },
                                                 stop: function () {
-                                                    $("#textarea"+x).focus();
+                                                    $("#textarea"+countTextArea).focus();
                                                 }
                                             })
                                             .resizable({
@@ -51,7 +73,156 @@
                                             })
  
                                              .appendTo('.form-style-test');
+                    textBox = document.getElementById("textarea" + countTextArea);
+                    textBox.style.width = array[i].Width+"px";
+                    textBox.style.height = array[i].Height+"px";
+                    textBox.style.position= "absolute";
+                    textBox.style.left = (array[i].X)+"px"; //-265
+                    textBox.style.top = (array[i].Y)+"px"; // -231  
+                    textBox.textContent = array[i].Text;
+                    countTextArea++;
+                }
+
+                //for(var i=0; i<sizeLabel;i++)
+                //{
+                 
+                //    Label = document.getElementById("labelNo" + countLabel);
+                //    Label.style.width = arrayLabel[i].Width+"px";
+                //    Label.style.height = arrayLabel[i].Height+"px";
+
+                //    Label.style.left = arrayLabel[i].X+"px";// not working
+                //    Label.style.top = arrayLabel[i].Y+"px" ; //not working
+                //    Label.style.content = arrayLabel[i].Text;// not working
+                //    countLabel++;
+                //}
+
+
+
+
+
+            });
+        }
+        window.onload = OnCreate;
+
+
+
+    </script>
+
+
+
+
+
+
+
+
+    <script>
+        
+        var sizeTextBox = @Html.Raw(Json.Encode(ViewBag.size));
+        var sizeLabel = @Html.Raw(Json.Encode(ViewBag.sizeLabel));
+
+        if(sizeTextBox==null)
+        {
+            var textBoxCount =0;
+        }
+        var textBoxCount = sizeTextBox;
+        if(sizeLabel==null)
+        {
+            var LabelCount =0;
+        }
+        var LabelCount = sizeLabel;
+    $('input[type="text"], textarea').each(function () {
+        $(this).attr('readonly', 'readonly');
+    });
+    $(function () {
+        //create TextBox With Button
+        $('#textBoxButton').click(function () {
+           
+            var newElement$ = $("<div><textarea id=textarea" +textBoxCount+"></textarea></div>")
+                                            
+                                            .draggable({
+                                                cancel: "",
+                                                containment: ".range",
+                                                cursor: "move",
+
+                                                start: function () {
+                                                    $("#textarea"+textBoxCount).focus();
+                                                },
+                                                stop: function () {
+                                                    $("#textarea"+textBoxCount).focus();
+                                                }
+                                            })
+                                            .resizable({
+                                                containment: ".range",
+                                            })
+ 
+                                             .appendTo('.form-style-test');
+            textBoxCount++;
         });
+        /* create Label With Button*/
+        $('#labelTextButton').click(function () {
+           
+
+
+
+        });
+
+
+
+
+        /*Saving Function*/
+        $('#saveButton').click(function () {
+
+            var textBoxIndex = 0;
+            var LabelIndex = 0;
+            var JSONObject = new Array();
+            var JSONObjectEdit = new Array();
+
+            while (textBoxIndex < textBoxCount)
+            {
+                var obj = new Object();
+
+
+                obj.Width = $('#textarea' + textBoxIndex).width();
+                obj.Height = $('#textarea' + textBoxIndex).height();
+                obj.X = $('#textarea' + textBoxIndex).offset().left;
+                obj.Y = $('#textarea' + textBoxIndex).offset().top;
+                obj.Text = $('#textarea' + textBoxIndex).val();
+                obj.Color = " ";
+
+                JSONObject.push(obj);
+                textBoxIndex++;
+
+            }
+
+            while (LabelIndex < LabelCount)
+            {
+
+                var objEdit = new Object();
+                objEdit.Width = $('#' + LabelIndex).width();
+                objEdit.Height = $('#' + LabelIndex).height();
+                objEdit.X = $('#' + LabelIndex).offset().left;
+                objEdit.Y = $('#' + LabelIndex).offset().top;
+                objEdit.Text = $('#' + LabelIndex).val();
+                JSONObjectEdit.push(objEdit);
+                LabelIndex++;
+            }
+            textBoxIndex = 0;
+            LabelIndex = 0;
+            alert("Saved!");
+            $.ajax({
+                url: "@Url.Action("SmartProfile", "Account")",
+                data: JSON.stringify({
+                    _textbox: JSONObject,
+                    _editbox: JSONObjectEdit,
+                    textBoxCount: textBoxCount,
+                    editBoxCount: LabelCount
+                }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            type: "post",
+            cache: false,
+            });
+    });
       
     });
 
