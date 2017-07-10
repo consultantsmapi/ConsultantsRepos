@@ -14,180 +14,56 @@
     <meta name="viewport" content="width=device-width" />
     <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css" />
     <link rel="stylesheet" type="text/css" href="~/Content/bootstrap-responsive.css" />
-
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"> </script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-   
-
     <title>פרופיל חכם</title>
 
-    <script type="text/javascript">
-        var countTextArea = 0;
-        var textBox;
-        var Label;
-        var countLabel=0;
 
-        function OnCreate() {
-            $(document).ready(function () {
-             
-                var array = @Html.Raw(Json.Encode(ViewBag.textBoxList));
-                var sizeTextBox = @Html.Raw(Json.Encode(ViewBag.size));
-                var arrayLabel = @Html.Raw(Json.Encode(ViewBag.LabelList));
-                var sizeLabel = @Html.Raw(Json.Encode(ViewBag.sizeLabel));
-                var ConsultantInformation=@Html.Raw(Json.Encode(ViewBag.Consultant));
 
-                document.getElementById("consultantFirstName").value = ConsultantInformation[0].FirstName;
-                document.getElementById("consultantLastName").value = ConsultantInformation[0].LastName;
-                document.getElementById("consultantEmail").value = ConsultantInformation[0].Email;
-                document.getElementById("consultantPhone").value = ConsultantInformation[0].Phone;
-                document.getElementById("consultantHomePhone").value = ConsultantInformation[0].HomePhone;
-                document.getElementById("consultantFax").value = ConsultantInformation[0].Fax;
-                document.getElementById("consultantAdress").value = ConsultantInformation[0].Adress;
-                document.getElementById("consultantCounsilSubject1").value = ConsultantInformation[0].CounsilSubject1;
-                document.getElementById("consultantCounsilSubject2").value = ConsultantInformation[0].CounsilSubject2;
-                document.getElementById("consultantYearOfExprience1").value = ConsultantInformation[0].YearOfExprience1;
-                document.getElementById("consultantYearOfExprience2").value = ConsultantInformation[0].YearOfExprience2;
 
-                for(var i=0; i<sizeTextBox;i++)
-                {
-                    $('.form-style-1').append("<div class=textBoxBorder> <textarea name=textBox id=textBoxNo" + countTextArea + " class=field-long field-textarea> </textarea></div>");
-                    //     $(".textBoxBorder").draggable({ containment: '.range' });
-                    textBox = document.getElementById("textBoxNo" + countTextArea);
-                    textBox.style.width = array[i].Width+"px";
-                    textBox.style.height = array[i].Height+"px";
-                    textBox.style.position= "absolute";
-                    textBox.style.left = (array[i].X-265)+"px";
-                    textBox.style.top = (array[i].Y-231)+"px";
-                    textBox.textContent = array[i].Text;
-                    countTextArea++;
-                }
+    <script>
+        $('#textBoxB1utton').click(function () {
+            $('.form-style-1').append(" <textarea name=textBox id=textarea" + textBoxCount + " class=field-long field-textarea> </textarea></div>");
+            textBoxCount++;
 
-                for(var i=0; i<sizeLabel;i++)
-                {
-                    $('.form-style-2').append("<div class=labelBoxBorder><input  type=labelBox id=labelNo" + countLabel+"> </div>");
-                    $(".labelBoxBorder").draggable({ containment: '.range' });
-                    $(".labelBoxBorder").resizable({ maxHeight: 20, maxwidth: 500});
-                    Label = document.getElementById("labelNo" + countLabel);
-                    Label.style.width = arrayLabel[i].Width+"px";
-                    Label.style.height = arrayLabel[i].Height+"px";
+            $(".textBoxBorder").draggable({ containment: '.range' });
 
-                    Label.style.left = arrayLabel[i].X+"px";// not working
-                    Label.style.top = arrayLabel[i].Y+"px" ; //not working
-                    Label.style.content = arrayLabel[i].Text;// not working
-                    countLabel++;
-                }
-            });
-        }
-        window.onload = OnCreate;
-    </script>
-
-    
-   <script type="text/javascript">
-        var sizeTextBox = @Html.Raw(Json.Encode(ViewBag.size));
-        var sizeLabel = @Html.Raw(Json.Encode(ViewBag.sizeLabel));
-        if(sizeTextBox==null)
-        {
-            var textBoxCount =0;
-        }
-        var textBoxCount = sizeTextBox;
-        if(sizeLabel==null)
-        {
-            var LabelCount =0;
-        }
-        var LabelCount = sizeLabel;
-        $(document).ready(function () {
-
-            $(function () {
-                $('#pictureButton').click(function () {
-                    $('#uploadme').click();
-                });
-            });
-
-            /*Create textBox*/
+        });
+        
+        $(function () {
             $('#textBoxButton').click(function () {
-                $('.form-style-1').append("<div class=textBoxBorder> <textarea name=textBox id=textBoxNo" + textBoxCount + " class=field-long field-textarea> </textarea></div>");
-                textBoxCount++;
+               
+                var new_width = 100;
+                var new_height = 200;
+                var newElement$ = $('<div><textarea id="textarea"></textarea></div>')
+                                                .width(new_width)
+                                                .height(new_height)
+                                                .draggable({
+                                                    cancel: "text",
+                                                    start: function () {
+                                                        $('#textarea').focus();
+                                                    },
+                                                    stop: function () {
+                                                        $('#textarea').focus();
+                                                    }
+                                                })
+                                                .resizable()
 
-                $(".textBoxBorder").draggable({ containment: '.range' });
-
+                                                 .appendTo('.form-style-1');
             });
 
-            /*Create Label*/
-            $('#labelTextButton').click(function () {
-
-                $('.form-style-2').append("<div class=labelBoxBorder><input  type=labelBox id=labelNo" + LabelCount + "> </div>");
-                LabelCount++;
-                $(".labelBoxBorder").draggable({ containment: '.range' });
-
-                $(".labelBoxBorder").resizable({ maxHeight: 20, maxwidth: 500});
-            });
-
-            /*Saving Function*/
-            $('#saveButton').click(function () {
-
-                var textBoxIndex = 0;
-                var LabelIndex = 0;
-                var JSONObject = new Array();
-                var JSONObjectEdit = new Array();
-
-                while (textBoxIndex < textBoxCount)
-                {
-                    var obj = new Object();
-
-
-                    obj.Width = $('#textBoxNo' + textBoxIndex).width();
-                    obj.Height = $('#textBoxNo' + textBoxIndex).height();
-                    obj.X = $('#textBoxNo' + textBoxIndex).offset().left;
-                    obj.Y = $('#textBoxNo' + textBoxIndex).offset().top;
-                    obj.Text = $('#textBoxNo' + textBoxIndex).val();
-                    obj.Color = " ";
-
-                    JSONObject.push(obj);
-                    textBoxIndex++;
-
-                }
-
-                while (LabelIndex < LabelCount)
-                {
-
-                    var objEdit = new Object();
-                    objEdit.Width = $('#labelNo' + LabelIndex).width();
-                    objEdit.Height = $('#labelNo' + LabelIndex).height();
-                    objEdit.X = $('#labelNo' + LabelIndex).offset().left;
-                    objEdit.Y = $('#labelNo' + LabelIndex).offset().top;
-                    objEdit.Text = $('#labelNo' + LabelIndex).val();
-                    JSONObjectEdit.push(objEdit);
-                    LabelIndex++;
-                }
-                textBoxIndex = 0;
-                LabelIndex = 0;
-                alert("Saved!");
-                $.ajax({
-                    url: "@Url.Action("SmartForm", "Account")",
-                    data: JSON.stringify({
-                        _textbox: JSONObject,
-                        _editbox: JSONObjectEdit,
-                        textBoxCount: textBoxCount,
-                        editBoxCount: LabelCount
-                    }),
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    type: "post",
-                    cache: false,
-                });
-            });
         });
 
-    </script>
 
+    </script>
 
 
 </head>
-
 <body>
+
     <h1>פרופיל חכם</h1>
     <div class="container">
         <div class="row">
@@ -230,27 +106,44 @@
                 <input id="consultantYearOfExprience2" type="text" value="" />
                 @Html.Label("שנות נסיון 2", new { style = "color:#000000" })
                 <input id="consultantCounsilSubject2" type="text" value="" />
-                @Html.Label("תחום יעוץ 2", new { style = "color:#000000" })     
+                @Html.Label("תחום יעוץ 2", new { style = "color:#000000" })
                 <input id="consultantYearOfExprience1" type="text" value="" />
                 @Html.Label("שנות נסיון 1", new { style = "color:#000000" })
             </div>
         </div>
         <br />
         <br />
+
+
+
+
+
+
         <div class="range">
-            @*Text Box-*@
+
             <section class="form-style-1">
-
-
-                @*<input value="I am an input" />*@
-           
-
-             </section>
+                
+              
+            </section>
 
             @*Label*@<section class="form-style-2"> </section>
 
             @*Need to create for Consultants Table...*@ @*Label*@<section class="form-style-3"> </section>
         </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     </div>
 </body>
 </html>
