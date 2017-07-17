@@ -2170,6 +2170,23 @@ if (typeof jQuery === 'undefined') {
     $active.removeClass('in')
   }
 
+  var app = angular.module('myapp', []);
+  app.controller('appctrl', function ($scope, $timeout) {
+      $scope.name = 'Yuval';
+      $scope.showVal = function () { alert($scope.name); };
+      $scope.onValueChanged = function (val, done) {
+          $timeout(function () {
+              var err = Math.random() > 0.5 ? new Error() : null; // Lets fail somtimes
+              done(err);
+          }, 1000);
+      }
+  });
+
+
+
+
+
+
 
   // TAB PLUGIN DEFINITION
   // =====================

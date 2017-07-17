@@ -14,6 +14,7 @@
     <meta name="viewport" content="width=device-width" />
     <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css" />
     <link rel="stylesheet" type="text/css" href="~/Content/bootstrap-responsive.css" />
+    <link rel="stylesheet" type="text/javascript" href="~/Scripts/bootstrap.js" />
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"> </script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -30,6 +31,11 @@
 
         function OnCreate() {
             $(document).ready(function () {
+
+
+                
+    
+
 
                 var array = @Html.Raw(Json.Encode(ViewBag.textBoxList));
                 var sizeTextBox = @Html.Raw(Json.Encode(ViewBag.size));
@@ -77,24 +83,42 @@
                     textBox.style.width = array[i].Width+"px";
                     textBox.style.height = array[i].Height+"px";
                     textBox.style.position= "absolute";
-                    textBox.style.left = (array[i].X)+"px"; //-265
-                    textBox.style.top = (array[i].Y)+"px"; // -231  
+                    textBox.style.left = (array[i].X-265)+"px"; //-265
+                    textBox.style.top = (array[i].Y-231)+"px"; // -231  
                     textBox.textContent = array[i].Text;
                     countTextArea++;
                 }
 
-                //for(var i=0; i<sizeLabel;i++)
-                //{
-                 
-                //    Label = document.getElementById("labelNo" + countLabel);
-                //    Label.style.width = arrayLabel[i].Width+"px";
-                //    Label.style.height = arrayLabel[i].Height+"px";
+               for(var i=0; i<sizeLabel;i++)
+                {
+                  
+                   var newElement$ =   $("<div><label id=labelNo"+countLabel+" for=name contenteditable=true>EditMe</label></div>")
+                   .draggable({
+                       cancel: "",
+                       containment: ".range",
+                       cursor: "move",
 
-                //    Label.style.left = arrayLabel[i].X+"px";// not working
-                //    Label.style.top = arrayLabel[i].Y+"px" ; //not working
-                //    Label.style.content = arrayLabel[i].Text;// not working
-                //    countLabel++;
-                //}
+                       start: function () {
+                           $("#labelNo"+countLabel).focus();
+                       },
+                       stop: function () {
+                           $("#labelNo"+countLabel).focus();
+                       }
+                   })
+                                                    .resizable({
+                                                        containment: ".",
+                                                    })
+
+                                                     .appendTo('.form-style-test');
+                    Label = document.getElementById("labelNo" + countLabel);
+                    Label.style.width = arrayLabel[i].Width+"px";
+                    Label.style.height = arrayLabel[i].Height+"px";
+
+                    Label.style.left = (arrayLabel[i].X)+"px";// not working
+                    Label.style.top = (arrayLabel[i].Y)+"px" ; //not working
+                    Label.innerHTML = arrayLabel[i].Text;
+                    countLabel++;
+                }
 
 
 
@@ -108,6 +132,7 @@
 
     </script>
 
+   
 
 
 
@@ -116,7 +141,7 @@
 
 
     <script>
-        
+
         var sizeTextBox = @Html.Raw(Json.Encode(ViewBag.size));
         var sizeLabel = @Html.Raw(Json.Encode(ViewBag.sizeLabel));
 
@@ -134,11 +159,47 @@
         $(this).attr('readonly', 'readonly');
     });
     $(function () {
+
+        //upload an image
+
+       
+            $('#pictureButton').click(function () {
+             //   $('#uploadme').click();
+                $('#filesToUpload').click();
+               $("input").change(function(e) {
+          
+                    for (var i = 0; i < e.originalEvent.srcElement.files.length; i++) {
+        
+                        var file = e.originalEvent.srcElement.files[i];
+        
+                        var img = document.createElement("img");
+                        var reader = new FileReader();
+                        reader.onloadend = function() {
+                            img.width=300;
+                            img.height=300;
+                            img.src = reader.result;
+                           
+                        }
+
+                        reader.readAsDataURL(file);
+                        $("input").after(img);
+                    }
+
+
+
+
+                });
+            });
+        
+       
+
+
+
         //create TextBox With Button
         $('#textBoxButton').click(function () {
-           
+
             var newElement$ = $("<div><textarea id=textarea" +textBoxCount+"></textarea></div>")
-                                            
+
                                             .draggable({
                                                 cancel: "",
                                                 containment: ".range",
@@ -154,18 +215,34 @@
                                             .resizable({
                                                 containment: ".range",
                                             })
- 
+
                                              .appendTo('.form-style-test');
             textBoxCount++;
         });
         /* create Label With Button*/
         $('#labelTextButton').click(function () {
            
+            var newElement$ =   $("<div><label id=labelNo"+LabelCount+" for=name contenteditable=true>EditMe</label></div>")
+            .draggable({
+                cancel: "",
+                containment: ".range",
+                cursor: "move",
 
+                start: function () {
+                    $("#labelNo"+LabelCount).focus();
+                },
+                stop: function () {
+                    $("#labelNo"+LabelCount).focus();
+                }
+            })
+                                             .resizable({
+                                                 containment: ".",
+                                             })
 
-
+                                              .appendTo('.form-style-test');
+            LabelCount++;
         });
-
+       
 
 
 
@@ -198,11 +275,12 @@
             {
 
                 var objEdit = new Object();
-                objEdit.Width = $('#' + LabelIndex).width();
-                objEdit.Height = $('#' + LabelIndex).height();
-                objEdit.X = $('#' + LabelIndex).offset().left;
-                objEdit.Y = $('#' + LabelIndex).offset().top;
-                objEdit.Text = $('#' + LabelIndex).val();
+                objEdit.Width = $('#labelNo' + LabelIndex).width();
+                objEdit.Height = $('#labelNo' + LabelIndex).height();
+                objEdit.X = $('#labelNo' + LabelIndex).offset().left;
+                objEdit.Y = $('#labelNo' + LabelIndex).offset().top;
+                objEdit.Text = $('#labelNo' + LabelIndex).text();
+ 
                 JSONObjectEdit.push(objEdit);
                 LabelIndex++;
             }
@@ -227,8 +305,8 @@
     });
 
     </script>
-
-
+    
+   
 </head>
 <body>
 
@@ -236,12 +314,15 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-15">
-                <input type="file" id="uploadme" />
-                <input class="myButton" id="pictureButton" type="button" value="הוספת תמונה" />
-                <input class="myButton" id="labelTextButton" type="button" value="הוסף תווית" />
-                <input class="myButton" id="textBoxButton" type="button" value="תיבת טקסט" />
-                <input class="myButton" id="saveButton" type="button" value="שמור" />
-            </div>
+
+                            <input type="file" name="filesToUpload[]" id="filesToUpload" multiple="multiple" accept="image/*" />
+                            <output id="filesInfo"></output>
+                            <input type="file" id="uploadme" accept="image/*" />
+                            <input class="myButton" id="pictureButton" type="button" value="הוספת תמונה" />
+                            <input class="myButton" id="labelTextButton" type="button" value="הוסף תווית" />
+                            <input class="myButton" id="textBoxButton" type="button" value="תיבת טקסט" />
+                            <input class="myButton" id="saveButton" type="button" value="שמור" />
+</div>
         </div>
         <br />
         <br />
@@ -296,15 +377,9 @@
 
             @*Need to create for Consultants Table...*@ @*Label*@<section class="form-style-3"> </section>
         </div>
-
-
-
-
-
-
-
-
-
+       
+   
+        <textareaTest id="dalia" value="??"></textareaTest>
 
 
 

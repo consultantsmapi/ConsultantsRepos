@@ -2507,6 +2507,7 @@ label {
   margin-bottom: 5px;
   font-weight: bold;
 }
+
 input[type="search"] {
   -webkit-box-sizing: border-box;
      -moz-box-sizing: border-box;
@@ -4849,7 +4850,9 @@ a.label:hover,
 a.label:focus {
   color: #fff;
   text-decoration: none;
-  cursor: pointer;
+ cursor: pointer;
+
+
 }
 .label:empty {
   display: none;
@@ -7742,7 +7745,20 @@ textarea {
      margin:0px;
     
 }
+textareaTest {
+    border  : 2px solid red;
+    display : block;
+    height:100%;
+    background-color:#fff;
+    width:100%;
+    resize:both;
+    padding:0px;
+     margin:0px;
+    
+}
 
 .contenteditable-element {
   user-select: text;
 }
+
+
