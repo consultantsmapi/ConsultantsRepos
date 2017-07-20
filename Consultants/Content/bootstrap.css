@@ -7760,5 +7760,5 @@ textareaTest {
 .contenteditable-element {
   user-select: text;
 }
-
+textarea.ui-state-disabled.ui-draggable-disabled {opacity: 1;}
 

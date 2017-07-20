@@ -113,9 +113,10 @@
                     Label = document.getElementById("labelNo" + countLabel);
                     Label.style.width = arrayLabel[i].Width+"px";
                     Label.style.height = arrayLabel[i].Height+"px";
-
-                    Label.style.left = (arrayLabel[i].X)+"px";// not working
-                    Label.style.top = (arrayLabel[i].Y)+"px" ; //not working
+                    Label.style.position= "relative";
+                    Label.style.display= "block";
+                    Label.style.left = (arrayLabel[i].X)+"px";
+                    Label.style.top = (arrayLabel[i].Y)+"px" ; 
                     Label.innerHTML = arrayLabel[i].Text;
                     countLabel++;
                 }
@@ -144,7 +145,7 @@
 
         var sizeTextBox = @Html.Raw(Json.Encode(ViewBag.size));
         var sizeLabel = @Html.Raw(Json.Encode(ViewBag.sizeLabel));
-
+  
         if(sizeTextBox==null)
         {
             var textBoxCount =0;
@@ -192,13 +193,32 @@
             });
         
        
+        //move TextBox and Label
+            $('#dragButton').click(function () {
+                for(var i=0; i<textBoxCount;i++)
+                {
+                       
+                    $("#textarea"+i).draggable({ disabled: false });
+          
+                }
+
+                for(var i=0; i<LabelCount;i++)
+                {
+                  
+                    
+                    $("#labelNo"+i).draggable({ disabled: false });
+                  
+                        
+                }
+                
+            });
 
 
 
         //create TextBox With Button
         $('#textBoxButton').click(function () {
 
-            var newElement$ = $("<div><textarea id=textarea" +textBoxCount+"></textarea></div>")
+            var newElement$ = $("<div><textarea class=ui-widget-content id=textarea" +textBoxCount+"></textarea></div>")
 
                                             .draggable({
                                                 cancel: "",
@@ -217,6 +237,8 @@
                                             })
 
                                              .appendTo('.form-style-test');
+
+         
             textBoxCount++;
         });
         /* create Label With Button*/
@@ -322,6 +344,7 @@
                             <input class="myButton" id="labelTextButton" type="button" value="הוסף תווית" />
                             <input class="myButton" id="textBoxButton" type="button" value="תיבת טקסט" />
                             <input class="myButton" id="saveButton" type="button" value="שמור" />
+                              <input class="myButton" id="dragButton" type="button" value="הזז" />
 </div>
         </div>
         <br />
