@@ -16,11 +16,57 @@
     <link rel="stylesheet" type="text/css" href="~/Content/bootstrap-responsive.css" />
     <link rel="stylesheet" type="text/javascript" href="~/Scripts/bootstrap.js" />
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/utils/Draggable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
+
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"> </script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <title>פרופיל חכם</title>
+
+
+
+
+
+
+
+    <script>
+
+        window.onload = addListeners();
+        var offX;
+        var offY;
+
+
+        function addListeners(){
+            document.getElementById('dxy').addEventListener('mousedown', mouseDown, false);
+            window.addEventListener('mouseup', mouseUp, false);
+
+        }
+
+        function mouseUp()
+        {
+            window.removeEventListener('mousemove', divMove, true);
+        }
+
+        function mouseDown(e){
+            var div = document.getElementById('dxy');
+            offY= e.clientY-parseInt(div.offsetTop);
+            offX= e.clientX-parseInt(div.offsetLeft);
+            window.addEventListener('mousemove', divMove, true);
+        }
+
+        function divMove(e){
+            var div = document.getElementById('dxy');
+            div.style.position = 'absolute';
+            div.style.top = (e.clientY-offY) + 'px';
+            div.style.left = (e.clientX-offX) + 'px';
+        }
+
+    </script>
+
+
+
 
 
     <script type="text/javascript">
@@ -67,12 +113,6 @@
                                                 containment: ".range",
                                                 cursor: "move",
 
-                                                start: function () {
-                                                    $("#textarea"+countTextArea).focus();
-                                                },
-                                                stop: function () {
-                                                    $("#textarea"+countTextArea).focus();
-                                                }
                                             })
                                             .resizable({
                                                 containment: ".range",
@@ -86,6 +126,7 @@
                     textBox.style.left = (array[i].X-265)+"px"; //-265
                     textBox.style.top = (array[i].Y-231)+"px"; // -231  
                     textBox.textContent = array[i].Text;
+                    textBox.trigger('autoresize');
                     countTextArea++;
                 }
 
@@ -133,7 +174,13 @@
 
     </script>
 
-   
+ 
+
+
+
+
+  
+
 
 
 
@@ -145,7 +192,7 @@
 
         var sizeTextBox = @Html.Raw(Json.Encode(ViewBag.size));
         var sizeLabel = @Html.Raw(Json.Encode(ViewBag.sizeLabel));
-  
+        var countImage=0;
         if(sizeTextBox==null)
         {
             var textBoxCount =0;
@@ -166,32 +213,83 @@
        
             $('#pictureButton').click(function () {
              //   $('#uploadme').click();
-                $('#filesToUpload').click();
-               $("input").change(function(e) {
-          
-                    for (var i = 0; i < e.originalEvent.srcElement.files.length; i++) {
-        
-                        var file = e.originalEvent.srcElement.files[i];
-        
-                        var img = document.createElement("img");
-                        var reader = new FileReader();
-                        reader.onloadend = function() {
-                            img.width=300;
-                            img.height=300;
-                            img.src = reader.result;
-                           
+                $('#fileinput').click();
+                (function () {
+
+
+
+                    function previewImage(file) {
+                        var galleryId = "gallery";
+
+                        var gallery = document.getElementById(galleryId);
+                        var divId = "draggable";
+
+                        var draggableDiv = document.getElementById(divId);//rangeId
+                        var imageType = /image.*/;
+
+                        if (!file.type.match(imageType)) {
+                            throw "File Type must be an image";
                         }
 
+                        var thumb = document.createElement("div");
+                        var aDiv = document.createElement("div"); 
+                        aDiv.id="img0";
+                        aDiv.classList.add("draggabletest")
+                        
+                        thumb.classList.add('thumbnail');         //.appendTo('.form-style-test');
+                       
+                        var img = document.createElement("img");
+                        img.file = file;
+                        
+                        thumb.appendChild(img);
+                        gallery.appendChild(thumb);
+                        aDiv.appendChild(gallery);
+                      
+                       ;
+                        // Using FileReader to display the image content
+                        var reader = new FileReader();
+                        reader.onload = (function (aImg) { return function (e) { aImg.src = e.target.result; }; })(img);
+                     
                         reader.readAsDataURL(file);
-                        $("input").after(img);
                     }
 
+                    var uploadfiles = document.querySelector('#fileinput');
+                    uploadfiles.addEventListener('change', function () {
+                        var files = this.files;
+                        for (var i = 0; i < files.length; i++) {
+                            previewImage(this.files[i]);
+                        }
+
+                    }, false);
+                })();
+               //$("input").change(function(e) {
+       
+               //     for (var i = 0; i < e.originalEvent.srcElement.files.length; i++) {
+        
+               //         var file = e.originalEvent.srcElement.files[i];
+        
+               //         var img = document.createElement("img");
+               //         var reader = new FileReader();
+               //         reader.onloadend = function() {
+               //             img.width=300;
+               //             img.height=300;
+               //             img.src = reader.result;
+                           
+               //         }
+
+               //         reader.readAsDataURL(file);
+               //         $("input").after(img);
+               //     }
+
+               
 
 
-
-                });
+               // });
             });
         
+           
+
+
        
         //move TextBox and Label
             $('#dragButton').click(function () {
@@ -267,6 +365,55 @@
        
 
 
+        var newleft = 0;
+        $('#img0').click(function () {
+           
+            $('.draggable').each(function(i,el) {
+                var $drag = $(el);
+                var $handle = $("").appendTo($drag);
+                TweenLite.set($handle, { top: $drag.width(), left: $drag.height() });
+                //TweenLite.set($drag, { left: newleft+10 });
+  
+                Draggable.create($drag);
+  
+                Draggable.create($handle, {
+                    type:"top,left",
+                    onPress: function(e) {
+                        e.stopPropagation(); // cancel drag
+                    },
+                    onDrag: function(e) {
+                        //var $this = $(this._eventTarget),
+                        //    myImg = $this.parent().find("img");
+                        //console.log(myImg);
+                        TweenLite.set(this.target.parentNode, { width: this.x, height:  this.y});
+                    }
+                });
+            });
+        });
+
+        $(document).ready(function () {
+            $('#drag').mousedown(function(){
+                $(document).mousemove(function(event){
+                    $('#drag').css({'left':event.pageX,'top':event.pageY});
+            
+                });
+            });
+            $(document).mouseup(function(){
+                $(this).off('mousemove');
+                $('#drag').css()
+            });  
+        });
+
+
+
+
+
+
+
+
+
+
+
 
         /*Saving Function*/
         $('#saveButton').click(function () {
@@ -327,8 +474,7 @@
     });
 
     </script>
-    
-   
+  
 </head>
 <body>
 
@@ -337,7 +483,11 @@
         <div class="row">
             <div class="col-lg-15">
 
-                            <input type="file" name="filesToUpload[]" id="filesToUpload" multiple="multiple" accept="image/*" />
+                
+              
+                
+
+                            <input type="file"  id="fileinput" multiple="multiple" accept="image/*" />
                             <output id="filesInfo"></output>
                             <input type="file" id="uploadme" accept="image/*" />
                             <input class="myButton" id="pictureButton" type="button" value="הוספת תמונה" />
@@ -391,19 +541,21 @@
 
 
 
-        <div class="range">
-
+        <div id="rangeId" name="rangeName" class="range">
+            @*<div class='draggable' id="draggable"><img src="https://www.google.com/images/srpr/logo11w.png"></div>*@
             <section class="form-style-test">
             </section>
 
             @*Label*@<section class="form-style-2"> </section>
 
             @*Need to create for Consultants Table...*@ @*Label*@<section class="form-style-3"> </section>
-        </div>
-       
-   
-        <textareaTest id="dalia" value="??"></textareaTest>
+            <div id="gallery" class=''></div>
+            @*<div id="dxy" style="width:100px; background-color:red">test</div>*@
+            </div>
+        
 
+    
+   
 
 
 
