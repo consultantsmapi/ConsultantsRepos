@@ -16,489 +16,264 @@
     <link rel="stylesheet" type="text/css" href="~/Content/bootstrap-responsive.css" />
     <link rel="stylesheet" type="text/javascript" href="~/Scripts/bootstrap.js" />
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/utils/Draggable.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
-
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"> </script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
     <title>פרופיל חכם</title>
 
-
-
-
-
-
-
-    <script>
-
-        window.onload = addListeners();
-        var offX;
-        var offY;
-
-
-        function addListeners(){
-            document.getElementById('dxy').addEventListener('mousedown', mouseDown, false);
-            window.addEventListener('mouseup', mouseUp, false);
-
-        }
-
-        function mouseUp()
-        {
-            window.removeEventListener('mousemove', divMove, true);
-        }
-
-        function mouseDown(e){
-            var div = document.getElementById('dxy');
-            offY= e.clientY-parseInt(div.offsetTop);
-            offX= e.clientX-parseInt(div.offsetLeft);
-            window.addEventListener('mousemove', divMove, true);
-        }
-
-        function divMove(e){
-            var div = document.getElementById('dxy');
-            div.style.position = 'absolute';
-            div.style.top = (e.clientY-offY) + 'px';
-            div.style.left = (e.clientX-offX) + 'px';
-        }
-
-    </script>
-
-
-
-
-
     <script type="text/javascript">
+
         var countTextArea = 0;
         var textBox;
         var Label;
         var countLabel=0;
 
-        function OnCreate() {
-            $(document).ready(function () {
+        function OnCreate()
+        {
+
+            var arrayTextBox = @Html.Raw(Json.Encode(ViewBag.textBoxList));
+            var sizeTextBox = @Html.Raw(Json.Encode(ViewBag.size));
+            var arrayLabel = @Html.Raw(Json.Encode(ViewBag.LabelList));
+            var sizeLabel = @Html.Raw(Json.Encode(ViewBag.sizeLabel));
+            var ConsultantInformation=@Html.Raw(Json.Encode(ViewBag.Consultant));
+
+            document.getElementById("consultantFirstName").value = ConsultantInformation[0].FirstName;
+            document.getElementById("consultantLastName").value = ConsultantInformation[0].LastName;
+            document.getElementById("consultantEmail").value = ConsultantInformation[0].Email;
+            document.getElementById("consultantPhone").value = ConsultantInformation[0].Phone;
+            document.getElementById("consultantHomePhone").value = ConsultantInformation[0].HomePhone;
+            document.getElementById("consultantFax").value = ConsultantInformation[0].Fax;
+            document.getElementById("consultantAdress").value = ConsultantInformation[0].Adress;
+            document.getElementById("consultantCounsilSubject1").value = ConsultantInformation[0].CounsilSubject1;
+            document.getElementById("consultantCounsilSubject2").value = ConsultantInformation[0].CounsilSubject2;
+            document.getElementById("consultantYearOfExprience1").value = ConsultantInformation[0].YearOfExprience1;
+            document.getElementById("consultantYearOfExprience2").value = ConsultantInformation[0].YearOfExprience2;
+
+            for(var i=0; i<sizeTextBox;i++)
+            {
+
+                $(".form-style-test").append("<div class=textDragger id=textBoxDragger" + i +" ><div class=closer></div><textarea  class=textBox id=textBoxTextArea" + i +"></textarea> </div>");
+                var myTextArea = $("#textBoxTextArea" + i);
+                var myDrager=$("#textBoxDragger" + i);
+                myTextArea.width(arrayTextBox[i].Width);
+                myTextArea.height(arrayTextBox[i].Height);
+                myTextArea.val(arrayTextBox[i].Text);
+                var left1=arrayTextBox[i].X;
+                var top1=arrayTextBox[i].Y;
+                myDrager.offset({ top: top1, left: left1 });
+
+                $(".textDragger").draggable({containment: ".range",cancel:"textarea.textBox"});
+            }
 
 
-                
-    
+            for(var i=0; i<sizeLabel;i++)
+            {
+                $(".form-style-test").append("<div class=labelDragger id=labelDragger" + i +" ><div class=closer></div><textarea rows=1 class=labelBox id=labelTextArea" + i +"></textarea> </div>");
+                var myLabel = $("#labelTextArea" + i);
+                var myLabelDragger = $("#labelDragger" + i);
+                myLabel.width(arrayLabel[i].Width);
+                myLabel.val(arrayLabel[i].Text);
+                var left1=arrayLabel[i].X;
+                var top1=arrayLabel[i].Y;
+                myLabelDragger.offset({ top: top1, left: left1 });
 
-
-                var array = @Html.Raw(Json.Encode(ViewBag.textBoxList));
-                var sizeTextBox = @Html.Raw(Json.Encode(ViewBag.size));
-                var arrayLabel = @Html.Raw(Json.Encode(ViewBag.LabelList));
-                var sizeLabel = @Html.Raw(Json.Encode(ViewBag.sizeLabel));
-                var ConsultantInformation=@Html.Raw(Json.Encode(ViewBag.Consultant));
-
-                document.getElementById("consultantFirstName").value = ConsultantInformation[0].FirstName;
-                document.getElementById("consultantLastName").value = ConsultantInformation[0].LastName;
-                document.getElementById("consultantEmail").value = ConsultantInformation[0].Email;
-                document.getElementById("consultantPhone").value = ConsultantInformation[0].Phone;
-                document.getElementById("consultantFax").value = ConsultantInformation[0].Fax;
-                document.getElementById("consultantAdress").value = ConsultantInformation[0].Adress;
-                document.getElementById("consultantCounsilSubject1").value = ConsultantInformation[0].CounsilSubject1;
-                document.getElementById("consultantCounsilSubject2").value = ConsultantInformation[0].CounsilSubject2;
-                document.getElementById("consultantYearOfExprience1").value = ConsultantInformation[0].YearOfExprience1;
-                document.getElementById("consultantYearOfExprience2").value = ConsultantInformation[0].YearOfExprience2;
-
-
-
-
-
-                for(var i=0; i<sizeTextBox;i++)
-                {
-                    var newElement$ = $("<div><textarea id=textarea" + countTextArea +"></textarea></div>")
-                                            
-                                            .draggable({
-                                                cancel: "",
-                                                containment: ".range",
-                                                cursor: "move",
-
-                                            })
-                                            .resizable({
-                                                containment: ".range",
-                                            })
- 
-                                             .appendTo('.form-style-test');
-                    textBox = document.getElementById("textarea" + countTextArea);
-                    textBox.style.width = array[i].Width+"px";
-                    textBox.style.height = array[i].Height+"px";
-                    textBox.style.position= "absolute";
-                    textBox.style.left = (array[i].X-265)+"px"; //-265
-                    textBox.style.top = (array[i].Y-231)+"px"; // -231  
-                    textBox.textContent = array[i].Text;
-                    textBox.trigger('autoresize');
-                    countTextArea++;
-                }
-
-               for(var i=0; i<sizeLabel;i++)
-                {
-                  
-                   var newElement$ =   $("<div><label id=labelNo"+countLabel+" for=name contenteditable=true>EditMe</label></div>")
-                   .draggable({
-                       cancel: "",
-                       containment: ".range",
-                       cursor: "move",
-
-                       start: function () {
-                           $("#labelNo"+countLabel).focus();
-                       },
-                       stop: function () {
-                           $("#labelNo"+countLabel).focus();
-                       }
-                   })
-                                                    .resizable({
-                                                        containment: ".",
-                                                    })
-
-                                                     .appendTo('.form-style-test');
-                    Label = document.getElementById("labelNo" + countLabel);
-                    Label.style.width = arrayLabel[i].Width+"px";
-                    Label.style.height = arrayLabel[i].Height+"px";
-                    Label.style.position= "relative";
-                    Label.style.display= "block";
-                    Label.style.left = (arrayLabel[i].X)+"px";
-                    Label.style.top = (arrayLabel[i].Y)+"px" ; 
-                    Label.innerHTML = arrayLabel[i].Text;
-                    countLabel++;
-                }
-
-
-
-
-
-            });
+                $(".labelDragger").draggable({containment: ".range",cancel:"textarea.labelBox"});
+            }
         }
         window.onload = OnCreate;
-
-
-
     </script>
-
- 
-
-
-
-
-  
-
-
-
-
-
-
-
 
     <script>
 
+        $(document).on('keydown.myPlugin','.labelBox', function(e) {
+            if (e.keyCode == 13) return false;
+
+        });
+
+        $(document).on('click', '.closer', function(e) {
+
+            $(this).parent().remove();
+        });
+
         var sizeTextBox = @Html.Raw(Json.Encode(ViewBag.size));
         var sizeLabel = @Html.Raw(Json.Encode(ViewBag.sizeLabel));
-        var countImage=0;
-        if(sizeTextBox==null)
+
+        if(sizeTextBox == null)
         {
-            var textBoxCount =0;
+            var textBoxCount = 0;
         }
+
         var textBoxCount = sizeTextBox;
+
         if(sizeLabel==null)
         {
             var LabelCount =0;
         }
+
         var LabelCount = sizeLabel;
-    $('input[type="text"], textarea').each(function () {
-        $(this).attr('readonly', 'readonly');
-    });
-    $(function () {
+        var imageCount=0;
+        $(function () {
 
-        //upload an image
-
-       
+            //upload an image
             $('#pictureButton').click(function () {
-             //   $('#uploadme').click();
-                $('#fileinput').click();
-                (function () {
+                imageCount=1;
+                $('#files').click();
+
+
+                $("#files").change(function(e) {
+                    if(imageCount==1)
+                    {
+                        imageCount++;
+                        var filesInput = document.getElementById("files");
+                        var files = event.target.files;
+                        var output = document.getElementById("result");
+
+
+                        for(var i = 0; i< files.length; i++)
+                        {
+                            var file = files[i];
+                            if(!file.type.match('image'))
+                                continue;
+
+                            var picReader = new FileReader();
+
+                            picReader.addEventListener("load",function(event){
+
+                                var picFile = event.target;
+
+                                var div = document.createElement("div");
+
+                                div.innerHTML = "<img class='thumbnail' src='" + picFile.result + "'" +
+                                          "'/>";
+
+                                output.insertBefore(div,null);
+
+                            });
+
+
+                            picReader.readAsDataURL(file);
 
 
 
-                    function previewImage(file) {
-                        var galleryId = "gallery";
-
-                        var gallery = document.getElementById(galleryId);
-                        var divId = "draggable";
-
-                        var draggableDiv = document.getElementById(divId);//rangeId
-                        var imageType = /image.*/;
-
-                        if (!file.type.match(imageType)) {
-                            throw "File Type must be an image";
                         }
-
-                        var thumb = document.createElement("div");
-                        var aDiv = document.createElement("div"); 
-                        aDiv.id="img0";
-                        aDiv.classList.add("draggabletest")
-                        
-                        thumb.classList.add('thumbnail');         //.appendTo('.form-style-test');
-                       
-                        var img = document.createElement("img");
-                        img.file = file;
-                        
-                        thumb.appendChild(img);
-                        gallery.appendChild(thumb);
-                        aDiv.appendChild(gallery);
-                      
-                       ;
-                        // Using FileReader to display the image content
-                        var reader = new FileReader();
-                        reader.onload = (function (aImg) { return function (e) { aImg.src = e.target.result; }; })(img);
-                     
-                        reader.readAsDataURL(file);
-                    }
-
-                    var uploadfiles = document.querySelector('#fileinput');
-                    uploadfiles.addEventListener('change', function () {
-                        var files = this.files;
-                        for (var i = 0; i < files.length; i++) {
-                            previewImage(this.files[i]);
-                        }
-
-                    }, false);
-                })();
-               //$("input").change(function(e) {
-       
-               //     for (var i = 0; i < e.originalEvent.srcElement.files.length; i++) {
-        
-               //         var file = e.originalEvent.srcElement.files[i];
-        
-               //         var img = document.createElement("img");
-               //         var reader = new FileReader();
-               //         reader.onloadend = function() {
-               //             img.width=300;
-               //             img.height=300;
-               //             img.src = reader.result;
-                           
-               //         }
-
-               //         reader.readAsDataURL(file);
-               //         $("input").after(img);
-               //     }
-
-               
-
-
-               // });
-            });
-        
-           
-
-
-       
-        //move TextBox and Label
-            $('#dragButton').click(function () {
-                for(var i=0; i<textBoxCount;i++)
-                {
-                       
-                    $("#textarea"+i).draggable({ disabled: false });
-          
-                }
-
-                for(var i=0; i<LabelCount;i++)
-                {
-                  
-                    
-                    $("#labelNo"+i).draggable({ disabled: false });
-                  
-                        
-                }
-                
-            });
-
-
-
-        //create TextBox With Button
-        $('#textBoxButton').click(function () {
-
-            var newElement$ = $("<div><textarea  id=textarea" +textBoxCount+"></textarea></div>")
-
-                                            .draggable({
-                                                cancel: "",
-                                                containment: ".range",
-                                                cursor: "move",
-
-                                                start: function () {
-                                                    $("#textarea"+textBoxCount).focus();
-                                                },
-                                                stop: function () {
-                                                    $("#textarea"+textBoxCount).focus();
-                                                }
-                                            })
-                                            .resizable({
-                                                containment: ".range",
-                                            })
-
-                                             .appendTo('.form-style-test');
-
-         
-            textBoxCount++;
-        });
-        /* create Label With Button*/
-        $('#labelTextButton').click(function () {
-           
-            var newElement$ =   $("<div><label id=labelNo"+LabelCount+" for=name contenteditable=true>EditMe</label></div>")
-            .draggable({
-                cancel: "",
-                containment: ".range",
-                cursor: "move",
-
-                start: function () {
-                    $("#labelNo"+LabelCount).focus();
-                },
-                stop: function () {
-                    $("#labelNo"+LabelCount).focus();
-                }
-            })
-                                             .resizable({
-                                                 containment: ".",
-                                             })
-
-                                              .appendTo('.form-style-test');
-            LabelCount++;
-        });
-       
-
-
-        var newleft = 0;
-        $('#img0').click(function () {
-           
-            $('.draggable').each(function(i,el) {
-                var $drag = $(el);
-                var $handle = $("").appendTo($drag);
-                TweenLite.set($handle, { top: $drag.width(), left: $drag.height() });
-                //TweenLite.set($drag, { left: newleft+10 });
-  
-                Draggable.create($drag);
-  
-                Draggable.create($handle, {
-                    type:"top,left",
-                    onPress: function(e) {
-                        e.stopPropagation(); // cancel drag
-                    },
-                    onDrag: function(e) {
-                        //var $this = $(this._eventTarget),
-                        //    myImg = $this.parent().find("img");
-                        //console.log(myImg);
-                        TweenLite.set(this.target.parentNode, { width: this.x, height:  this.y});
                     }
                 });
-            });
-        });
 
-        $(document).ready(function () {
-            $('#drag').mousedown(function(){
-                $(document).mousemove(function(event){
-                    $('#drag').css({'left':event.pageX,'top':event.pageY});
-            
+
+
+
+            });
+
+            //create TextBox With Button
+            $('#textBoxButton').click(function () {
+
+                $(".form-style-test").append("<div class=textDragger id=textBoxDragger" + textBoxCount +"><div class=closer></div><textarea class=textBox id=textBoxTextArea" + textBoxCount +"></textarea> </div>");
+                $(".textDragger").draggable({containment: ".range",cancel:"textarea.textBox"});
+                textBoxCount++;
+            });
+
+            /* create Label With Button*/
+            $('#labelTextButton').click(function () {
+
+                $(".form-style-test").append("<div class=labelDragger id=labelDragger" + LabelCount +"><div class=closer></div><textarea class=labelBox id=labelTextArea" + LabelCount +"></textarea> </div>");
+                $(".labelDragger").draggable({containment: ".range",cancel:"textarea.labelBox"});
+                LabelCount++;
+            });
+
+            /*Saving Function*/
+            $('#saveButton').click(function () {
+
+                var textBoxIndex = 0;
+                var LabelIndex = 0;
+                var JSONObject = new Array();
+                var JSONObjectEdit = new Array();
+                var finalTextBoxCount=0;
+                var finalLabelBoxCount = 0;
+
+                while (textBoxIndex < textBoxCount)
+                {
+                    var checkNull=document.getElementById("textBoxTextArea" + textBoxIndex);
+
+                    if(checkNull!=null)
+                    {
+                        var textBoxObj = new Object();
+
+                        finalTextBoxCount++;
+                        textBoxObj.Width = $('#textBoxTextArea' + textBoxIndex).width();
+                        textBoxObj.Height = $('#textBoxTextArea' + textBoxIndex).height();
+                        textBoxObj.X = $('#textBoxDragger' + textBoxIndex).offset().left;
+                        textBoxObj.Y = $('#textBoxDragger' + textBoxIndex).offset().top;
+                        textBoxObj.Text = $('#textBoxTextArea' + textBoxIndex).val();
+                        textBoxObj.Color = " ";
+
+                        JSONObject.push(textBoxObj);
+                    }
+
+                    textBoxIndex++;
+                }
+
+                while (LabelIndex < LabelCount)
+                {
+                    var checkNull=document.getElementById("labelTextArea" + LabelIndex);
+
+                    if(checkNull!=null)
+                    {
+                        var labelObj = new Object();
+
+                        finalLabelBoxCount++;
+                        labelObj.Width = $('#labelTextArea' + LabelIndex).width();
+                        labelObj.Height = $('#labelTextArea' + LabelIndex).height();
+                        labelObj.X = $('#labelDragger' + LabelIndex).offset().left;
+                        labelObj.Y = $('#labelDragger' + LabelIndex).offset().top;
+                        labelObj.Text = $('#labelTextArea' + LabelIndex).val();
+                        JSONObjectEdit.push(labelObj);
+                    }
+
+                    LabelIndex++;
+                }
+
+                textBoxIndex = 0;
+                LabelIndex = 0;
+                alert("Saved!");
+
+                $.ajax({
+                    url: "@Url.Action("SmartProfile", "Account")",
+                    data: JSON.stringify({
+                        _textbox: JSONObject,
+                        _editbox: JSONObjectEdit,
+                        textBoxCount: finalTextBoxCount,
+                        editBoxCount: finalLabelBoxCount
+                    }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    type: "post",
+                    cache: false,
                 });
             });
-            $(document).mouseup(function(){
-                $(this).off('mousemove');
-                $('#drag').css()
-            });  
+
         });
-
-
-
-
-
-
-
-
-
-
-
-
-        /*Saving Function*/
-        $('#saveButton').click(function () {
-
-            var textBoxIndex = 0;
-            var LabelIndex = 0;
-            var JSONObject = new Array();
-            var JSONObjectEdit = new Array();
-
-            while (textBoxIndex < textBoxCount)
-            {
-                var obj = new Object();
-
-
-                obj.Width = $('#textarea' + textBoxIndex).width();
-                obj.Height = $('#textarea' + textBoxIndex).height();
-                obj.X = $('#textarea' + textBoxIndex).offset().left;
-                obj.Y = $('#textarea' + textBoxIndex).offset().top;
-                obj.Text = $('#textarea' + textBoxIndex).val();
-                obj.Color = " ";
-
-                JSONObject.push(obj);
-                textBoxIndex++;
-
-            }
-
-            while (LabelIndex < LabelCount)
-            {
-
-                var objEdit = new Object();
-                objEdit.Width = $('#labelNo' + LabelIndex).width();
-                objEdit.Height = $('#labelNo' + LabelIndex).height();
-                objEdit.X = $('#labelNo' + LabelIndex).offset().left;
-                objEdit.Y = $('#labelNo' + LabelIndex).offset().top;
-                objEdit.Text = $('#labelNo' + LabelIndex).text();
- 
-                JSONObjectEdit.push(objEdit);
-                LabelIndex++;
-            }
-            textBoxIndex = 0;
-            LabelIndex = 0;
-            alert("Saved!");
-            $.ajax({
-                url: "@Url.Action("SmartProfile", "Account")",
-                data: JSON.stringify({
-                    _textbox: JSONObject,
-                    _editbox: JSONObjectEdit,
-                    textBoxCount: textBoxCount,
-                    editBoxCount: LabelCount
-                }),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            type: "post",
-            cache: false,
-            });
-    });
-      
-    });
 
     </script>
-  
 </head>
-<body>
 
+<body>
     <h1>פרופיל חכם</h1>
     <div class="container">
         <div class="row">
             <div class="col-lg-15">
-
-                
-              
-                
-
-                            <input type="file"  id="fileinput" multiple="multiple" accept="image/*" />
-                            <output id="filesInfo"></output>
-                            <input type="file" id="uploadme" accept="image/*" />
-                            <input class="myButton" id="pictureButton" type="button" value="הוספת תמונה" />
-                            <input class="myButton" id="labelTextButton" type="button" value="הוסף תווית" />
-                            <input class="myButton" id="textBoxButton" type="button" value="תיבת טקסט" />
-                            <input class="myButton" id="saveButton" type="button" value="שמור" />
-                              <input class="myButton" id="dragButton" type="button" value="הזז" />
-</div>
+                <input type="file" id="files" multiple="multiple" />
+                <input class="myButton" id="pictureButton" type="button" value="הוספת תמונה" />
+                <input class="myButton" id="labelTextButton" type="button" value="הוסף תווית" />
+                <input class="myButton" id="textBoxButton" type="button" value="תיבת טקסט" />
+                <input class="myButton" id="saveButton" type="button" value="שמור" />
+            </div>
         </div>
+
         <br />
         <br />
+
         <div class="row">
             <div class="col-lg-15">
                 <input id="consultantPhone" type="text" value="" />
@@ -511,6 +286,7 @@
                 @Html.Label("שם פרטי", new { style = "color:#000000" })
             </div>
         </div>
+
         <div class="row">
             <div class="col-lg-15">
                 <input id="consultantCounsilSubject1" type="text" value="" />
@@ -536,31 +312,13 @@
         <br />
         <br />
 
+        <div class="range">
+            <output id="result"></output>
+            <section class="form-style-test"></section>
 
-
-
-
-
-        <div id="rangeId" name="rangeName" class="range">
-            @*<div class='draggable' id="draggable"><img src="https://www.google.com/images/srpr/logo11w.png"></div>*@
-            <section class="form-style-test">
-            </section>
-
-            @*Label*@<section class="form-style-2"> </section>
-
-            @*Need to create for Consultants Table...*@ @*Label*@<section class="form-style-3"> </section>
-            <div id="gallery" class=''></div>
-            @*<div id="dxy" style="width:100px; background-color:red">test</div>*@
-            </div>
-        
-
-    
-   
-
-
-
-
+        </div>
     </div>
+
+
 </body>
 </html>
-
