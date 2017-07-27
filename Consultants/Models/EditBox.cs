@@ -12,18 +12,11 @@ namespace Consultants.Models
     {
         [Key]
         public ObjectId _id { get; set; }
-
         public double Width { get; set; }
-
         public double Height { get; set; }
-
         public String UserName { get; set; }
-
         public String Text { get; set; }
-
-
         public double X { get; set; }
-
         public double Y { get; set; }
 
 

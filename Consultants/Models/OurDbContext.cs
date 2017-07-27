@@ -54,7 +54,14 @@ namespace Consultants.Models
                 return consultants;
             }
         }
-
+        public MongoCollection<Pictures> Pictures
+        {
+            get
+            {
+                var pictures = Database.GetCollection<Pictures>("Pictures");
+                return pictures;
+            }
+        }
 
     }
 }

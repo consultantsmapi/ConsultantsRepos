@@ -187,6 +187,7 @@
     <Compile Include="Models\ConsultantsAccount.cs" />
     <Compile Include="Models\EditBox.cs" />
     <Compile Include="Models\OurDbContext.cs" />
+    <Compile Include="Models\Pictures.cs" />
     <Compile Include="Models\TextBox.cs" />
     <Compile Include="Models\UserAccount.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -32,7 +32,8 @@
         var countLabel=0;
         var sizeTextBox = @Html.Raw(Json.Encode(ViewBag.size));
         var sizeLabel = @Html.Raw(Json.Encode(ViewBag.sizeLabel));
-   
+        var picArray=new Array();
+        var dataPictures = new FormData();
         if(sizeTextBox == null)
         {
             var textBoxCount = 0;
@@ -128,11 +129,14 @@
                     var reader = new FileReader();
                     reader.onload = imageIsLoaded;
                     reader.readAsDataURL(this.files[0]);
+                    picArray.push(this.files[0]);
+                    dataPictures.append("file" + x, files[0]);
                 }
             });
             function imageIsLoaded(e)
-            {                                                                                              
-                $(".form-style-test").append("<div class=imageDragger id=textBoxDragger" + textBoxCount +"><div class=closer></div><img class=thumbnail id=myImage"+imageCount+" src=#  </> </div>");
+            {                    
+                
+                $(".form-style-test").append("<div class=imageDragger id=imageDragger" + imageCount +"><div class=closer></div><img class=thumbnail id=myImage"+imageCount+" src=#  </> </div>");
                 $(".imageDragger").draggable({containment: ".range"});
                 $('#myImage'+imageCount).attr('src', e.target.result);
                 $("#myImage"+imageCount).resizable({containment: ".range"});
@@ -160,14 +164,15 @@
             /*Saving Function*/
             $('#saveButton').click(function ()
             {
-
+                var picIndex=0;
                 var textBoxIndex = 0;
                 var LabelIndex = 0;
+                var JSONObjectPic=new Array();
                 var JSONObject = new Array();
                 var JSONObjectEdit = new Array();
                 var finalTextBoxCount=0;
                 var finalLabelBoxCount = 0;
-
+                var finalPicturesCount=0;
                 while (textBoxIndex < textBoxCount)
                 {
                     var checkNull=document.getElementById("textBoxTextArea" + textBoxIndex);
@@ -210,6 +215,33 @@
                     LabelIndex++;
                 }
 
+                while (picIndex < imageCount)
+                {
+                    var checkNull = document.getElementById("myImage" + picIndex);
+
+                    if (checkNull != null)
+                    {
+                        var picObj = new Object();
+
+                        finalPicturesCount++;
+                        picObj.name = picArray[picIndex].name;
+                        picObj.type = picArray[picIndex].type;
+                        picObj.lastModified = picArray[picIndex].lastModified;         
+                        picObj.X = $('#imageDragger' + picIndex).offset().left;
+                        picObj.Y = $('#imageDragger' + picIndex).offset().top;
+                        picObj.Width = $('#myImage' + picIndex).width();
+                        picObj.Height = $('#myImage' + picIndex).height();
+                        picObj.file = picArray[picIndex];
+                        dataPictures.append(picArray[picIndex]);
+                        JSONObjectPic.push(picObj);
+                    }
+
+                    picIndex++;
+                }
+
+
+                
+                picIndex = 0;
                 textBoxIndex = 0;
                 LabelIndex = 0;
                 alert("Saved!");
@@ -219,6 +251,9 @@
                     data: JSON.stringify({
                         _textbox: JSONObject,
                         _editbox: JSONObjectEdit,
+                        _pictures: JSONObjectPic,
+                        dataPictures:dataPictures,
+                        picturesCount: finalPicturesCount,
                         textBoxCount: finalTextBoxCount,
                         editBoxCount: finalLabelBoxCount
                     }),

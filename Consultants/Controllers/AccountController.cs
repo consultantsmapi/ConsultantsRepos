@@ -357,16 +357,18 @@ namespace Consultants.Controllers
         }
 
         [HttpPost]
-        public ActionResult SmartProfile(List<TextBox> _textbox, List<EditBox> _editbox, int editBoxCount, int textBoxCount)
+        public ActionResult SmartProfile(List<TextBox> _textbox, List<EditBox> _editbox,List<Pictures> _pictures, int editBoxCount, int textBoxCount,int picturesCount,FormCollection dataPictures)
         {
             if (Session["UserName"] != null)
             {
                 var consultantsCollection = Context.Database.GetCollection<ConsultantsAccount>("Consultants");
                 usersQuery = Query<ConsultantsAccount>.Where(s => s.UserName == (Session["UserName"]).ToString());
+                var picturesCollection = Context.Database.GetCollection<Pictures>("Pictures");
                 var TextBoxCollection = Context.Database.GetCollection<TextBox>("TextBox");
                 var LabelCollection = Context.Database.GetCollection<EditBox>("EditBox");
                 var usersCursorLabel = LabelCollection.Remove(usersQuery);
                 var usersCursorTextBox = TextBoxCollection.Remove(usersQuery);
+                var usersCursorPictures = picturesCollection.Remove(usersQuery);
                 var consultantsUsers = consultantsCollection.Find(usersQuery);
 
 
@@ -382,13 +384,18 @@ namespace Consultants.Controllers
                     Context.EditBox.Insert(_editbox[i]);
 
                 }
+                for (int i = 0; i < picturesCount; i++)
+                {
+                    _pictures[i].userName = Session["UserName"].ToString();
+                    Context.Pictures.Insert(_pictures[i]);
+                }
                 TempData["Message"] = "נשמר בהצלחה";
                 return View(consultantsUsers);
             }
             else
             {
-                TempData["Message"] = "נכשל";
-                return View();
+                
+                return RedirectToAction("Login");
 
             }
         }
