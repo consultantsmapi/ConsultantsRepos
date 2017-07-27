@@ -28,7 +28,21 @@
         var countTextArea = 0;
         var textBox;
         var Label;
+        var imageCount=0;
         var countLabel=0;
+        var sizeTextBox = @Html.Raw(Json.Encode(ViewBag.size));
+        var sizeLabel = @Html.Raw(Json.Encode(ViewBag.sizeLabel));
+   
+        if(sizeTextBox == null)
+        {
+            var textBoxCount = 0;
+        }
+        var textBoxCount = sizeTextBox;
+        if(sizeLabel==null)
+        {
+            var LabelCount =0;
+        }
+        var LabelCount = sizeLabel;
 
         function OnCreate()
         {
@@ -86,10 +100,10 @@
     </script>
 
     <script>
+        //Function on lives
 
         $(document).on('keydown.myPlugin','.labelBox', function(e) {
             if (e.keyCode == 13) return false;
-
         });
 
         $(document).on('click', '.closer', function(e) {
@@ -97,74 +111,35 @@
             $(this).parent().remove();
         });
 
-        var sizeTextBox = @Html.Raw(Json.Encode(ViewBag.size));
-        var sizeLabel = @Html.Raw(Json.Encode(ViewBag.sizeLabel));
 
-        if(sizeTextBox == null)
-        {
-            var textBoxCount = 0;
-        }
-
-        var textBoxCount = sizeTextBox;
-
-        if(sizeLabel==null)
-        {
-            var LabelCount =0;
-        }
-
-        var LabelCount = sizeLabel;
-        var imageCount=0;
+      
         $(function () {
-
-            //upload an image
-            $('#pictureButton').click(function () {
-                imageCount=1;
+        
+            $('#pictureButton').click(function ()
+            {
                 $('#files').click();
-
-
-                $("#files").change(function(e) {
-                    if(imageCount==1)
-                    {
-                        imageCount++;
-                        var filesInput = document.getElementById("files");
-                        var files = event.target.files;
-                        var output = document.getElementById("result");
-
-
-                        for(var i = 0; i< files.length; i++)
-                        {
-                            var file = files[i];
-                            if(!file.type.match('image'))
-                                continue;
-
-                            var picReader = new FileReader();
-
-                            picReader.addEventListener("load",function(event){
-
-                                var picFile = event.target;
-
-                                var div = document.createElement("div");
-
-                                div.innerHTML = "<img class='thumbnail' src='" + picFile.result + "'" +
-                                          "'/>";
-
-                                output.insertBefore(div,null);
-
-                            });
-
-
-                            picReader.readAsDataURL(file);
-
-
-
-                        }
-                    }
-                });
-
-
-
-
+             
             });
+
+            //Create an image
+            $("#files").change(function ()
+            {
+                if (this.files && this.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = imageIsLoaded;
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
+            function imageIsLoaded(e)
+            {                                                                                              
+                $(".form-style-test").append("<div class=imageDragger id=textBoxDragger" + textBoxCount +"><div class=closer></div><img class=thumbnail id=myImage"+imageCount+" src=#  </> </div>");
+                $(".imageDragger").draggable({containment: ".range"});
+                $('#myImage'+imageCount).attr('src', e.target.result);
+                $("#myImage"+imageCount).resizable({containment: ".range"});
+                imageCount++;
+            };     
+
+
 
             //create TextBox With Button
             $('#textBoxButton').click(function () {
@@ -183,7 +158,8 @@
             });
 
             /*Saving Function*/
-            $('#saveButton').click(function () {
+            $('#saveButton').click(function ()
+            {
 
                 var textBoxIndex = 0;
                 var LabelIndex = 0;
@@ -256,6 +232,8 @@
         });
 
     </script>
+
+
 </head>
 
 <body>
@@ -263,7 +241,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-15">
-                <input type="file" id="files" multiple="multiple" />
+                <input type="file" accept="image/*" id="files" multiple="multiple" />
                 <input class="myButton" id="pictureButton" type="button" value="הוספת תמונה" />
                 <input class="myButton" id="labelTextButton" type="button" value="הוסף תווית" />
                 <input class="myButton" id="textBoxButton" type="button" value="תיבת טקסט" />
