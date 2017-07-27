@@ -7746,6 +7746,19 @@ form-style-test{
     position:absolute;
      
 }
+.imageDragger {
+   
+     left:-5px;
+   background-size:contain;
+    background-image:url(moveIco.png);
+     height:20px;
+      width:20px;
+   display: block;  
+    cursor:move;
+    position:absolute;
+     
+}
+
 
 .closer
 { 

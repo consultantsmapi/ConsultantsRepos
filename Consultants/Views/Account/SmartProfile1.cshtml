@@ -1,0 +1,387 @@
+﻿@model Consultants.Models.ConsultantsAccount
+
+    @{
+        ViewBag.Title = "פרופיל חכם";
+    }
+
+    @if (Session["UserName"] != null)
+    {
+        <h4>Hello @Session["UserName"].ToString()</h4>
+    }
+
+    <html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css" />
+        <link rel="stylesheet" type="text/css" href="~/Content/bootstrap-responsive.css" />
+
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"> </script>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <title>פרופיל חכם</title>
+        <script type="text/javascript">
+            var countTextArea = 0;
+            var textBox;
+            var Label;
+            var countLabel=0;
+
+            function OnCreate() {
+                $(document).ready(function () {
+
+
+
+
+
+
+                    var array = @Html.Raw(Json.Encode(ViewBag.textBoxList));
+                    var sizeTextBox = @Html.Raw(Json.Encode(ViewBag.size));
+                    var arrayLabel = @Html.Raw(Json.Encode(ViewBag.LabelList));
+                    var sizeLabel = @Html.Raw(Json.Encode(ViewBag.sizeLabel));
+                    var ConsultantInformation=@Html.Raw(Json.Encode(ViewBag.Consultant));
+
+                    document.getElementById("consultantFirstName").value = ConsultantInformation[0].FirstName;
+                    document.getElementById("consultantLastName").value = ConsultantInformation[0].LastName;
+                    document.getElementById("consultantEmail").value = ConsultantInformation[0].Email;
+                    document.getElementById("consultantPhone").value = ConsultantInformation[0].Phone;
+                    document.getElementById("consultantFax").value = ConsultantInformation[0].Fax;
+                    document.getElementById("consultantAdress").value = ConsultantInformation[0].Adress;
+                    document.getElementById("consultantCounsilSubject1").value = ConsultantInformation[0].CounsilSubject1;
+                    document.getElementById("consultantCounsilSubject2").value = ConsultantInformation[0].CounsilSubject2;
+                    document.getElementById("consultantYearOfExprience1").value = ConsultantInformation[0].YearOfExprience1;
+                    document.getElementById("consultantYearOfExprience2").value = ConsultantInformation[0].YearOfExprience2;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    for(var i=0; i<sizeTextBox;i++)
+                    {
+
+                        textBox = document.getElementById();
+                        textBox.style.width = array[i].Width+"px";
+                        textBox.style.height = array[i].Height+"px";
+                        textBox.style.position= "absolute";
+                        textBox.style.left = (array[i].X)+"px"; //
+                        textBox.style.top = (array[i].Y)+"px"; //
+                        textBox.textContent = array[i].Text;
+                        textBox.trigger('autoresize');
+                        countTextArea++;
+                    }
+
+                    for(var i=0; i<sizeLabel;i++)
+                    {
+
+                        var newElement$ =   $("<div><label id=labelNo"+countLabel+" for=name contenteditable=true>EditMe</label></div>")
+                        .draggable({
+                            cancel: "",
+                            containment: ".range",
+                            cursor: "move",
+
+                            start: function () {
+                                $("#labelNo"+countLabel).focus();
+                            },
+                            stop: function () {
+                                $("#labelNo"+countLabel).focus();
+                            }
+                        })
+                                                         .resizable({
+                                                             containment: ".",
+                                                         })
+
+                                                          .appendTo('.form-style-test');
+                        Label = document.getElementById("labelNo" + countLabel);
+                        Label.style.width = arrayLabel[i].Width+"px";
+                        Label.style.height = arrayLabel[i].Height+"px";
+                        Label.style.position= "relative";
+                        Label.style.display= "block";
+                        Label.style.left = (arrayLabel[i].X)+"px";
+                        Label.style.top = (arrayLabel[i].Y)+"px" ;
+                        Label.innerHTML = arrayLabel[i].Text;
+                        countLabel++;
+                    }
+
+
+
+
+
+                });
+            }
+            window.onload = OnCreate;
+
+
+
+        </script>
+
+
+        <script >
+
+
+            $(function () {
+                //create TextBox With Button
+                //$('#textBoxButton').click(function () {
+                var flag=false;
+
+                    //var  textboxInput = document.getElementById("theText").value;
+
+                    var canvas = document.getElementById("canvas");
+                    var ctx = canvas.getContext("2d");
+
+
+                    var $canvas = $("#canvas");
+                    var canvasOffset = $canvas.offset();
+                    var offsetX = canvasOffset.left;
+                    var offsetY = canvasOffset.top;
+                    var scrollX = $canvas.scrollLeft();
+                    var scrollY = $canvas.scrollTop();
+
+                // variables to save last mouse position
+                // used to see how far the user dragged the mouse
+                // and then move the text by that distance
+                    var startX;
+                    var startY;
+
+                // an array to hold text objects
+                    var texts = [];
+
+                // this var will hold the index of the hit-selected text
+                    var selectedText = -1;
+
+                // clear the canvas & redraw all texts
+                    function draw() {
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        for (var i = 0; i < texts.length; i++) {
+                            var text = texts[i];
+                            ctx.fillText(text.text, text.x, text.y);
+                        }
+                    }
+
+                // test if x,y is inside the bounding box of texts[textIndex]
+                    function textHittest(x, y, textIndex) {
+                        var text = texts[textIndex];
+                        return (x >= text.x && x <= text.x + text.width && y >= text.y - text.height && y <= text.y);
+                    }
+
+                // handle mousedown events
+                // iterate through texts[] and see if the user
+                // mousedown'ed on one of them
+                // If yes, set the selectedText to the index of that text
+                    function handleMouseDown(e) {
+                        flag=true;
+                        e.preventDefault();
+                        startX = parseInt(e.clientX - offsetX);
+                        startY = parseInt(e.clientY - offsetY);
+                        // Put your mousedown stuff here
+                        for (var i = 0; i < texts.length; i++) {
+                            if (textHittest(startX, startY, i)) {
+                                selectedText = i;
+                            }
+                        }
+
+                    }
+
+                // done dragging
+                    function handleMouseUp(e) {
+                        e.preventDefault();
+                        selectedText = -1;
+                    }
+
+                // also done dragging
+                    function handleMouseOut(e) {
+                        e.preventDefault();
+                        selectedText = -1;
+                    }
+
+                // handle mousemove events
+                // calc how far the mouse has been dragged since
+                // the last mousemove event and move the selected text
+                // by that distance
+                    function handleMouseMove(e) {
+                        if (selectedText < 0) {
+                            return;
+                        }
+                        e.preventDefault();
+                        mouseX = parseInt(e.clientX - offsetX);
+                        mouseY = parseInt(e.clientY - offsetY);
+
+                        // Put your mousemove stuff here
+                        var dx = mouseX - startX;
+                        var dy = mouseY - startY;
+                        startX = mouseX;
+                        startY = mouseY;
+
+                        var text = texts[selectedText];
+                        text.x += dx;
+                        text.y += dy;
+                        draw();
+                    }
+
+                // listen for mouse events
+
+                    $("#canvas").mousedown(function (e) {
+                        handleMouseDown(e);
+                    });
+                    if(flag==true)
+                    {
+                        flag=false;
+                        $("#canvas").mousemove(function (e) {
+                        handleMouseMove(e);
+                        });
+
+                    }
+
+                    $("#canvas").mouseup(function (e) {
+                        handleMouseUp(e);
+                    });
+                    $("#canvas").mouseout(function (e) {
+                        handleMouseOut(e);
+                    });
+
+                    $("#submit").click(function () {
+
+                        // calc the y coordinate for this text on the canvas
+                        var y = texts.length * 20 + 20;
+
+                        // get the text from the input element
+                        var text = {
+                            text: $("#theText").val(),
+                            x: 20,
+                            y: y
+                        };
+
+                        // calc the size of this text for hit-testing purposes
+                        ctx.font = "16px verdana";
+                        text.width = ctx.measureText(text.text).width;
+                        text.height = 16;
+
+                        // put this new text in the texts array
+                        texts.push(text);
+
+                        // redraw everything
+                        draw();
+
+                    });
+
+
+                    //ctx.font = "bold 10px Arial";
+                    //ctx.fillText(textboxInput,10,50);
+
+
+
+
+                });
+
+        //    });
+
+
+
+
+
+
+
+        </script>
+
+
+    </head>
+    <body>
+
+        <h1>פרופיל חכם</h1>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-15">
+
+
+
+
+
+                    <input type="file" id="fileinput" multiple="multiple" accept="image/*" />
+                    <output id="filesInfo"></output>
+                    <input type="file" id="uploadme" accept="image/*" />
+                    <input class="myButton" id="pictureButton" type="button" value="הוספת תמונה" />
+                    <input class="myButton" id="labelTextButton" type="button" value="הוסף תווית" />
+                    <input class="myButton" id="textBoxButton" type="button" value="תיבת טקסט" />
+                    <input class="myButton" id="saveButton" type="button" value="שמור" />
+                    <input class="myButton" id="dragButton" type="button" value="הזז" />
+                </div>
+            </div>
+            <br />
+            <br />
+            <div class="row">
+                <div class="col-lg-15">
+                    <input id="consultantPhone" type="text" value="" />
+                    @Html.Label("נייד", new { style = "color:#000000" })
+                    <input id="consultantAdress" type="text" value="" />
+                    @Html.Label("כתובת", new { style = "color:#000000" })
+                    <input id="consultantLastName" type="text" value="" />
+                    @Html.Label("שם משפחה", new { style = "color:#000000" })
+                    <input id="consultantFirstName" type="text" value="" />
+                    @Html.Label("שם פרטי", new { style = "color:#000000" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-15">
+                    <input id="consultantCounsilSubject1" type="text" value="" />
+                    @Html.Label("תחום יעוץ 1", new { style = "color:#000000" })
+                    <input id="consultantEmail" type="text" value="" />
+                    @Html.Label("אימייל", new { style = "color:#000000" })
+                    <input id="consultantFax" type="text" value="" />
+                    @Html.Label("פקס", new { style = "color:#000000" })
+                    <input id="consultantHomePhone" type="text" value="" />
+                    @Html.Label("טלפון", new { style = "color:#000000" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-15">
+                    <input id="consultantYearOfExprience2" type="text" value="" />
+                    @Html.Label("שנות נסיון 2", new { style = "color:#000000" })
+                    <input id="consultantCounsilSubject2" type="text" value="" />
+                    @Html.Label("תחום יעוץ 2", new { style = "color:#000000" })
+                    <input id="consultantYearOfExprience1" type="text" value="" />
+                    @Html.Label("שנות נסיון 1", new { style = "color:#000000" })
+                </div>
+            </div>
+            <br />
+            <br />
+
+
+
+
+
+        <div >
+            <h4>Add text to canvas and drag it</h4>
+            <input id="theText" type="text">
+            <button id="submit">Draw text on canvas</button><br>
+
+             <canvas id="canvas"></canvas>
+
+        </div>
+
+
+
+
+
+
+
+        </div>
+    </body>
+    </html>

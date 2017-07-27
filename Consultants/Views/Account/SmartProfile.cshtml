@@ -99,7 +99,7 @@
 
         var sizeTextBox = @Html.Raw(Json.Encode(ViewBag.size));
         var sizeLabel = @Html.Raw(Json.Encode(ViewBag.sizeLabel));
-
+        var divImageCount=0;
         if(sizeTextBox == null)
         {
             var textBoxCount = 0;
@@ -142,19 +142,25 @@
                             picReader.addEventListener("load",function(event){
 
                                 var picFile = event.target;
-
-                                var div = document.createElement("div");
-
-                                div.innerHTML = "<img class='thumbnail' src='" + picFile.result + "'" +
-                                          "'/>";
-
-                                output.insertBefore(div,null);
-
+                              
+                              
+                                
+                  
+                                //div.innerHTML = "<div class=closer></div><img class='thumbnail' src='" + picFile.result + "'" +"'/>";
+                                $(".form-style-test").append("<div class=imageDragger id=imageDragger" + divImageCount +"><div class=closer></div><img class='thumbnail' src='" + picFile.result + "'" +"'/></div>");
+                              
+                            
+                                $(".imageDragger").draggable({containment: ".range",cancel:""});
+                               
+                         
+                               // output.insertBefore(dragDiv,null);
+                               
+                              
                             });
 
 
                             picReader.readAsDataURL(file);
-
+                            divImageCount++;
 
 
                         }
@@ -263,7 +269,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-15">
-                <input type="file" id="files" multiple="multiple" />
+                <input type="file" id="files" accept="*/image" multiple="multiple" />
                 <input class="myButton" id="pictureButton" type="button" value="הוספת תמונה" />
                 <input class="myButton" id="labelTextButton" type="button" value="הוסף תווית" />
                 <input class="myButton" id="textBoxButton" type="button" value="תיבת טקסט" />
