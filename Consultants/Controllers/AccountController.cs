@@ -79,14 +79,15 @@ namespace Consultants.Controllers
         }
 
         [HttpPost]
-        public ActionResult ConsultantsRegister(ConsultantsAccount _useraccount)
+        public ActionResult ConsultantsRegister(ConsultantsAccount _useraccount, HttpPostedFileBase file1, HttpPostedFileBase file2)
         {
             if (ModelState.IsValid)
             {
+
                 var collection = Context.Database.GetCollection<ConsultantsAccount>("Consultants");
                 consulQuery = Query<ConsultantsAccount>.Where(s => s.UserName == _useraccount.UserName);
                 var model = collection.FindOne(consulQuery);
-  
+                
                 if (model == null)
                 {
                     string name = Request.Form["check"];
@@ -119,6 +120,7 @@ namespace Consultants.Controllers
         [HttpPost]
         public ActionResult Login(UserAccount user)
         {
+            
             var usersCollection = Context.Database.GetCollection<UserAccount>("Users");
             var consultantsCollection = Context.Database.GetCollection<ConsultantsAccount>("Consultants");
             usersQuery = Query<UserAccount>.Where(s => s.UserName == user.UserName && s.Password == user.Password);

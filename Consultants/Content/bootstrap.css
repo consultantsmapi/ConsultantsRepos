@@ -6768,6 +6768,12 @@ button.close {
 .right-buttons-userregister{
     padding-left: 115px;
 }
+
+.file-buttons-consultRegister{
+    padding-left:35%;
+
+    padding-bottom:25px;
+}
 .right-buttons-consultRegister
 {
     padding-left: 115px;
@@ -7669,8 +7675,8 @@ select {
     }
 
 input[type=file] {
-    width: 1px;
-    visibility: hidden;
+    /*width: 1px;*/
+   /* visibility: hidden;*/
 }
 
 input[type="labelBox"] {
@@ -7807,3 +7813,43 @@ h6 {
 {
     text-align:center;
 }
+
+.custom-file-input {
+
+  color: cornflowerblue;
+  border: 1px dashed rgba(254,193,81,1);
+  vertical-align: middle;
+}
+.custom-file-input::-webkit-file-upload-button {
+  visibility: hidden;
+}
+.custom-file-input::before {
+  
+  content: 'Browse';
+  color: #666;
+  display: inline-block;
+  background: #fff;
+  border: 2px solid #999;
+  border-radius: 3px;
+  margin: -3px 0 -3px -3px;
+  padding: 5px 20px;
+  outline: none;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  cursor: pointer;
+  text-align: center;
+  text-shadow: 1px 1px #fff;
+  font-weight: 700;
+  font-size: 10pt;
+}
+.custom-file-input:hover::before {
+  border-color: rgba(254,193,81,1);
+}
+.custom-file-input:active {
+  outline: 0;
+}
+.custom-file-input:active::before {
+  background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9); 
+}
+
+

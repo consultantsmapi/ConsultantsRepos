@@ -17,8 +17,9 @@
         <div class="row">
             <div id="content-reg" class="col-lg-offset-5">
                 <h1>הרשמה כיועץ</h1>
-                @using (Html.BeginForm())
+                @using (Html.BeginForm("ConsultantsRegister","account",FormMethod.Post, new { enctype = "multipart/form-data" }))
                 {
+                 
                     <div class="row">
                         <div class="col-lg-6">
                             @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { type = "text", placeholder = "שם פרטי", id = "username", required = "" } })
@@ -56,6 +57,11 @@
                         </div>
                     </div>
                     <br />
+                    <div class="row file-buttons-consultRegister">                
+                        <input type="file" name="file1" id="upload" class="custom-file-input">
+                        <br/>
+                        <input type="file" name="file2" id="upload2" class="custom-file-input">
+                    </div>
                         <div class="row">
                             <b>האם לקבל דיוור ממפ"י</b>
                             <input id="checkbox" name="check" type="checkbox" value="true" />
@@ -65,10 +71,11 @@
                             <input type="button" value="חזור" onclick="location.href='@Url.Action("Login","account")'" }) />
                             <span style="color:red;">@TempData["Message"]</span>
                         </div>
-                }
-            </div>
+                        }
+                    </div>
         </div>
     </div>
+      
 </body>
 </html>
 
