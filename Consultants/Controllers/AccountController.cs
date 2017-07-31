@@ -86,21 +86,7 @@ namespace Consultants.Controllers
                 var collection = Context.Database.GetCollection<ConsultantsAccount>("Consultants");
                 consulQuery = Query<ConsultantsAccount>.Where(s => s.UserName == _useraccount.UserName);
                 var model = collection.FindOne(consulQuery);
-                //HttpPostedFileBase file;
-
-                //if (file != null && file.ContentLength > 0)
-                //    try
-                //    {
-                //        string path = Path.Combine(Server.MapPath("~/Images"),
-                //                                   Path.GetFileName(file.FileName));
-                //        file.SaveAs(path);
-                //        ViewBag.Message = "File uploaded successfully";
-                //    }
-                //    catch (Exception ex)
-                //    {
-                //        ViewBag.Message = "ERROR:" + ex.Message.ToString();
-                //    }
-
+  
                 if (model == null)
                 {
                     string name = Request.Form["check"];
@@ -361,9 +347,13 @@ namespace Consultants.Controllers
                 ViewBag.sizeLabel = sizeLabel;
                 ViewBag.pictureList = (pictureList);
                 ViewBag.sizePicture = sizePicture;
+                return View();
             }
-
-            return View();
+            
+            else
+            {
+                return RedirectToAction("Login");
+            }
         }
 
         [HttpPost]
@@ -398,12 +388,12 @@ namespace Consultants.Controllers
                     _pictures[i].UserName = Session["UserName"].ToString();
                     Context.Pictures.Insert(_pictures[i]);
                 }
-                TempData["Message"] = "נשמר בהצלחה";
+            
                 return View(consultantsUsers);
             }
             else
             {
-                
+
                 return RedirectToAction("Login");
 
             }

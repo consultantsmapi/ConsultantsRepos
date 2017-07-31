@@ -118,6 +118,7 @@ optgroup,
 select,
 
 button {
+    text-align:right;
   overflow: visible;
 }
 button,
@@ -130,6 +131,7 @@ input[type="reset"],
 input[type="submit"] {
   -webkit-appearance: button;
   cursor: pointer;
+  text-align:center;
 }
 button[disabled],
 html input[disabled] {
@@ -6796,7 +6798,8 @@ button.close {
     -o-box-shadow: 0 1px 0 #fff inset;
     box-shadow: 0 1px 0 #fff inset;
     border: 1px solid #c4c6ca;
-    margin: 0 auto;
+    margin: auto;
+    margin-left:auto;
     padding: 25px 0 0;
     position: relative;
     text-align: center;
@@ -7550,14 +7553,14 @@ button.close {
     position:absolute;
     margin: auto;
     width: 1150px;
-    height: 900px;
+    height: 1500px;
     overflow: hidden;
     border-top: 2px dashed #046ca3;
     border-bottom: 2px dashed #046ca3;
     border-right: 2px dashed #046ca3;
     border-left: 2px dashed #046ca3;
-  
-    margin-bottom: 1px;
+    
+    margin-bottom: 50px;
 }
 
 
@@ -7779,4 +7782,28 @@ form-style-test{
     cursor:move;
     position:absolute;
      
+}
+
+h5 {
+    -webkit-text-stroke: 2px #1311a9;
+    color: #39CCCC;
+    font-family: 'Raleway',sans-serif;
+    font-size: 62px;
+    font-weight: 800;
+    line-height: 72px;
+    margin: 0 0 24px;
+    text-align: center;
+}
+
+h6 {
+    -webkit-text-stroke: 2px #1311a9;
+    color: #65d5e5;
+    font-size: 48px;
+    font-family: 'Signika', sans-serif;
+    padding-bottom: 10px;
+}
+
+.inputSmartForm
+{
+    text-align:center;
 }
