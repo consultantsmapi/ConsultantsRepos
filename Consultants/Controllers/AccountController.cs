@@ -323,16 +323,19 @@ namespace Consultants.Controllers
             {
                 var size = 0;
                 var sizeLabel = 0;
-
+                var sizePicture = 0;
                 var consultantsCollection = Context.Database.GetCollection<ConsultantsAccount>("Consultants");
                 var TextBoxCollection = Context.Database.GetCollection<TextBox>("TextBox");
                 var LabelCollection = Context.Database.GetCollection<EditBox>("EditBox");
+                var pictureCollection= Context.Database.GetCollection<Pictures>("Pictures");
                 usersQuery = Query<ConsultantsAccount>.Where(s => s.UserName == (Session["UserName"]).ToString());
                 var usersCursor = TextBoxCollection.Find(usersQuery);
                 var usersCursorLabel = LabelCollection.Find(usersQuery);
+                var usersCursorPictures = pictureCollection.Find(usersQuery);
                 var Consultant = consultantsCollection.Find(usersQuery);
                 var textBoxList = new List<TextBox>();
                 var LabelList = new List<EditBox>();
+                var pictureList = new List<Pictures>();
 
                 foreach (var users in usersCursor)
                 {
@@ -345,19 +348,26 @@ namespace Consultants.Controllers
                     LabelList.Add(item);
                     sizeLabel++;
                 }
+                foreach (var item in usersCursorPictures)
+                {
+                    pictureList.Add(item);
+                    sizePicture++;
+                }
 
                 ViewBag.Consultant = Consultant;
                 ViewBag.textBoxList = (textBoxList);
                 ViewBag.size = size;
                 ViewBag.LabelList = (LabelList);
                 ViewBag.sizeLabel = sizeLabel;
+                ViewBag.pictureList = (pictureList);
+                ViewBag.sizePicture = sizePicture;
             }
 
             return View();
         }
 
         [HttpPost]
-        public ActionResult SmartProfile(List<TextBox> _textbox, List<EditBox> _editbox,List<Pictures> _pictures, int editBoxCount, int textBoxCount,int picturesCount,FormCollection dataPictures)
+        public ActionResult SmartProfile(List<TextBox> _textbox, List<EditBox> _editbox,List<Pictures> _pictures, int editBoxCount, int textBoxCount,int picturesCount)
         {
             if (Session["UserName"] != null)
             {
@@ -370,8 +380,7 @@ namespace Consultants.Controllers
                 var usersCursorTextBox = TextBoxCollection.Remove(usersQuery);
                 var usersCursorPictures = picturesCollection.Remove(usersQuery);
                 var consultantsUsers = consultantsCollection.Find(usersQuery);
-
-
+             
                 for (int i = 0; i < textBoxCount; i++)
                 {
                     _textbox[i].UserName = Session["UserName"].ToString();
@@ -386,7 +395,7 @@ namespace Consultants.Controllers
                 }
                 for (int i = 0; i < picturesCount; i++)
                 {
-                    _pictures[i].userName = Session["UserName"].ToString();
+                    _pictures[i].UserName = Session["UserName"].ToString();
                     Context.Pictures.Insert(_pictures[i]);
                 }
                 TempData["Message"] = "נשמר בהצלחה";

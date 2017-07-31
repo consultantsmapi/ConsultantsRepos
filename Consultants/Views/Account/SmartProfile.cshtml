@@ -32,6 +32,7 @@
         var countLabel=0;
         var sizeTextBox = @Html.Raw(Json.Encode(ViewBag.size));
         var sizeLabel = @Html.Raw(Json.Encode(ViewBag.sizeLabel));
+        var sizePicture = @Html.Raw(Json.Encode(ViewBag.sizePicture));
         var picArray=new Array();
         var dataPictures = new FormData();
         if(sizeTextBox == null)
@@ -44,7 +45,11 @@
             var LabelCount =0;
         }
         var LabelCount = sizeLabel;
-
+        if(sizePicture==null)
+        {
+            var PictureCount =0;
+        }
+        var imageCount = sizePicture;
         function OnCreate()
         {
 
@@ -53,7 +58,8 @@
             var arrayLabel = @Html.Raw(Json.Encode(ViewBag.LabelList));
             var sizeLabel = @Html.Raw(Json.Encode(ViewBag.sizeLabel));
             var ConsultantInformation=@Html.Raw(Json.Encode(ViewBag.Consultant));
-
+            var arrayPictures=@Html.Raw(Json.Encode(ViewBag.pictureList));
+            var sizePicture = @Html.Raw(Json.Encode(ViewBag.sizePicture));
             document.getElementById("consultantFirstName").value = ConsultantInformation[0].FirstName;
             document.getElementById("consultantLastName").value = ConsultantInformation[0].LastName;
             document.getElementById("consultantEmail").value = ConsultantInformation[0].Email;
@@ -86,16 +92,33 @@
             for(var i=0; i<sizeLabel;i++)
             {
                 $(".form-style-test").append("<div class=labelDragger id=labelDragger" + i +" ><div class=closer></div><textarea rows=1 class=labelBox id=labelTextArea" + i +"></textarea> </div>");
-                var myLabel = $("#labelTextArea" + i);
+              
                 var myLabelDragger = $("#labelDragger" + i);
                 myLabel.width(arrayLabel[i].Width);
+     
                 myLabel.val(arrayLabel[i].Text);
                 var left1=arrayLabel[i].X;
                 var top1=arrayLabel[i].Y;
                 myLabelDragger.offset({ top: top1, left: left1 });
-
                 $(".labelDragger").draggable({containment: ".range",cancel:"textarea.labelBox"});
             }
+            for(var i=0; i<sizePicture;i++)
+            {
+            
+                $(".form-style-test").append("<div class=imageDragger id=imageDragger" + i +"><div class=closer></div><img class=thumbnail id=myImage"+i+" src="+arrayPictures[i].base64Name+" </> </div>");
+                var myPicture = $("#myImage" + i);
+                var myPictureDragger = $("#imageDragger" + i);
+                myPicture.width(arrayPictures[i].Width);
+                myPicture.height(arrayPictures[i].Height);
+                var left1=arrayPictures[i].X;
+                var top1=arrayPictures[i].Y;
+                myPictureDragger.offset({ top: top1, left: left1 });
+                $(".imageDragger").draggable({containment: ".range"});
+                $("#myImage"+i).resizable({containment: ".range", autoHide: true});
+            
+            }
+
+
         }
         window.onload = OnCreate;
     </script>
@@ -125,12 +148,13 @@
             //Create an image
             $("#files").change(function ()
             {
-                if (this.files && this.files[0]) {
+                if (this.files && this.files[0]) 
+                {
                     var reader = new FileReader();
                     reader.onload = imageIsLoaded;
                     reader.readAsDataURL(this.files[0]);
                     picArray.push(this.files[0]);
-                    dataPictures.append("file" + x, files[0]);
+                 
                 }
             });
             function imageIsLoaded(e)
@@ -139,7 +163,7 @@
                 $(".form-style-test").append("<div class=imageDragger id=imageDragger" + imageCount +"><div class=closer></div><img class=thumbnail id=myImage"+imageCount+" src=#  </> </div>");
                 $(".imageDragger").draggable({containment: ".range"});
                 $('#myImage'+imageCount).attr('src', e.target.result);
-                $("#myImage"+imageCount).resizable({containment: ".range"});
+                $("#myImage"+imageCount).resizable({containment: ".range", autoHide: true});
                 imageCount++;
             };     
 
@@ -151,6 +175,8 @@
                 $(".form-style-test").append("<div class=textDragger id=textBoxDragger" + textBoxCount +"><div class=closer></div><textarea class=textBox id=textBoxTextArea" + textBoxCount +"></textarea> </div>");
                 $(".textDragger").draggable({containment: ".range",cancel:"textarea.textBox"});
                 textBoxCount++;
+            
+          
             });
 
             /* create Label With Button*/
@@ -222,17 +248,13 @@
                     if (checkNull != null)
                     {
                         var picObj = new Object();
-
                         finalPicturesCount++;
-                        picObj.name = picArray[picIndex].name;
-                        picObj.type = picArray[picIndex].type;
-                        picObj.lastModified = picArray[picIndex].lastModified;         
+              
                         picObj.X = $('#imageDragger' + picIndex).offset().left;
                         picObj.Y = $('#imageDragger' + picIndex).offset().top;
                         picObj.Width = $('#myImage' + picIndex).width();
                         picObj.Height = $('#myImage' + picIndex).height();
-                        picObj.file = picArray[picIndex];
-                        dataPictures.append(picArray[picIndex]);
+                        picObj.base64Name=document.getElementById("myImage"+picIndex).src;
                         JSONObjectPic.push(picObj);
                     }
 
@@ -252,7 +274,7 @@
                         _textbox: JSONObject,
                         _editbox: JSONObjectEdit,
                         _pictures: JSONObjectPic,
-                        dataPictures:dataPictures,
+                    
                         picturesCount: finalPicturesCount,
                         textBoxCount: finalTextBoxCount,
                         editBoxCount: finalLabelBoxCount
@@ -262,6 +284,7 @@
                     type: "post",
                     cache: false,
                 });
+                
             });
 
         });
@@ -276,7 +299,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-15">
-                <input type="file" accept="image/*" id="files" multiple="multiple" />
+                <input type="file" accept="image/*" id="files" multiple="multiple" name="allfiles" />
                 <input class="myButton" id="pictureButton" type="button" value="הוספת תמונה" />
                 <input class="myButton" id="labelTextButton" type="button" value="הוסף תווית" />
                 <input class="myButton" id="textBoxButton" type="button" value="תיבת טקסט" />
@@ -324,12 +347,14 @@
         </div>
         <br />
         <br />
-
+        @using (Html.BeginForm("SmartProfile", "Account", FormMethod.Post,new { id = "myForm", enctype = "multipart/form-data"}))
+        {
         <div class="range">
             <output id="result"></output>
             <section class="form-style-test"></section>
 
         </div>
+         }
     </div>
 
 
