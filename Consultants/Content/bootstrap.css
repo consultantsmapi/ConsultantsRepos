@@ -7550,7 +7550,7 @@ button.close {
     }
 
 .range {
-    position:absolute;
+    position: relative;
     margin: auto;
     width: 1150px;
     height: 1500px;

@@ -67,7 +67,7 @@
             document.getElementById("consultantCounsilSubject2").value = ConsultantInformation[0].CounsilSubject2;
             document.getElementById("consultantYearOfExprience1").value = ConsultantInformation[0].YearOfExprience1;
             document.getElementById("consultantYearOfExprience2").value = ConsultantInformation[0].YearOfExprience2;
-
+            var x = $("#rangeOfSmartFrom").position();
             for(var i=0; i<sizeTextBox;i++)
             {
 
@@ -79,8 +79,10 @@
                 myTextArea.val(arrayTextBox[i].Text);
                 var left1=arrayTextBox[i].X;
                 var top1=arrayTextBox[i].Y;
-                myDrager.offset({ top: top1, left: left1 });
-
+             
+                document.getElementById('textBoxDragger'+i).style.position = "absolute";
+                document.getElementById('textBoxDragger'+i).style.top =top1+'px';
+                document.getElementById('textBoxDragger'+i).style.left = left1+'px';
                 $(".textDragger").draggable({containment: ".range",cancel:"textarea.textBox"});
             }
 
@@ -91,11 +93,12 @@
                 var myLabel = $("#labelTextArea" + i);
                 var myLabelDragger = $("#labelDragger" + i);
                 myLabel.width(arrayLabel[i].Width);
-     
                 myLabel.val(arrayLabel[i].Text);
                 var left1=arrayLabel[i].X;
                 var top1=arrayLabel[i].Y;
-                myLabelDragger.offset({ top: top1, left: left1 });
+                document.getElementById('labelDragger'+i).style.position = "absolute";
+                document.getElementById('labelDragger'+i).style.top =top1+'px';
+                document.getElementById('labelDragger'+i).style.left = left1+'px';
                 $(".labelDragger").draggable({containment: ".range",cancel:"textarea.labelBox"});
             }
             for(var i=0; i<sizePicture;i++)
@@ -108,7 +111,9 @@
                 myPicture.height(arrayPictures[i].Height);
                 var left1=arrayPictures[i].X;
                 var top1=arrayPictures[i].Y;
-                myPictureDragger.offset({ top: top1, left: left1 });
+                document.getElementById('imageDragger'+i).style.position = "absolute";
+                document.getElementById('imageDragger'+i).style.top =top1+'px';
+                document.getElementById('imageDragger'+i).style.left = left1+'px';
                 $(".imageDragger").draggable({containment: ".range"});
                 $("#myImage"+i).resizable({containment: ".range", autoHide: true});
             
@@ -131,13 +136,15 @@
             $(this).parent().remove();
         });
 
-
+      
       
         $(function () {
-        
+       
+
             $('#pictureButton').click(function ()
             {
-                $('#files').click();
+               
+              $('#files').click();
              
             });
 
@@ -169,9 +176,15 @@
             $('#textBoxButton').click(function () {
 
                 $(".form-style-test").append("<div class=textDragger id=textBoxDragger" + textBoxCount +"><div class=closer></div><textarea class=textBox id=textBoxTextArea" + textBoxCount +"></textarea> </div>");
-                $(".textDragger").draggable({containment: ".range",cancel:"textarea.textBox"});
+                $(".textDragger").draggable({containment: ".range",cancel:"textarea.textBox", create: function( event, ui )
+                {
+                    $(this).css({
+                        top: $(this).position().top,
+                        bottom: "auto"
+                    });
+                }});
                 textBoxCount++;
-            
+               
           
             });
 
@@ -186,6 +199,7 @@
             /*Saving Function*/
             $('#saveButton').click(function ()
             {
+                var x = $("#rangeOfSmartFrom").position();
                 var picIndex=0;
                 var textBoxIndex = 0;
                 var LabelIndex = 0;
@@ -206,8 +220,8 @@
                         finalTextBoxCount++;
                         textBoxObj.Width = $('#textBoxTextArea' + textBoxIndex).width();
                         textBoxObj.Height = $('#textBoxTextArea' + textBoxIndex).height();
-                        textBoxObj.X = $('#textBoxDragger' + textBoxIndex).offset().left;
-                        textBoxObj.Y = $('#textBoxDragger' + textBoxIndex).offset().top;
+                        textBoxObj.X=   $('#textBoxDragger' + textBoxIndex).position().left;
+                        textBoxObj.Y = $('#textBoxDragger' + textBoxIndex).position().top;
                         textBoxObj.Text = $('#textBoxTextArea' + textBoxIndex).val();
                         textBoxObj.Color = " ";
 
@@ -228,8 +242,8 @@
                         finalLabelBoxCount++;
                         labelObj.Width = $('#labelTextArea' + LabelIndex).width();
                         labelObj.Height = $('#labelTextArea' + LabelIndex).height();
-                        labelObj.X = $('#labelDragger' + LabelIndex).offset().left;
-                        labelObj.Y = $('#labelDragger' + LabelIndex).offset().top;
+                        labelObj.X = $('#labelDragger' + LabelIndex).position().left;
+                        labelObj.Y = $('#labelDragger' + LabelIndex).position().top;
                         labelObj.Text = $('#labelTextArea' + LabelIndex).val();
                         JSONObjectEdit.push(labelObj);
                     }
@@ -246,8 +260,8 @@
                         var picObj = new Object();
                         finalPicturesCount++;
               
-                        picObj.X = $('#imageDragger' + picIndex).offset().left;
-                        picObj.Y = $('#imageDragger' + picIndex).offset().top;
+                        picObj.X = $('#imageDragger' + picIndex).position().left;
+                        picObj.Y = $('#imageDragger' + picIndex).position().top;
                         picObj.Width = $('#myImage' + picIndex).width();
                         picObj.Height = $('#myImage' + picIndex).height();
                         picObj.base64Name=document.getElementById("myImage"+picIndex).src;
@@ -350,7 +364,7 @@
         <br />
         <br />
 
-        <div class="range">
+        <div id="rangeOfSmartFrom"class="range">
 
             <section class="form-style-test"></section>
         </div>
