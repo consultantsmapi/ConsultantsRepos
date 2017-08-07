@@ -193,6 +193,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bg.jpg" />
+    <Content Include="Content\cream_pixels_%402X.png" />
     <Content Include="Content\moveIco.png" />
     <Content Include="Content\bootstrap-responsive.css" />
     <Content Include="Content\bootstrap-responsive.min.css" />

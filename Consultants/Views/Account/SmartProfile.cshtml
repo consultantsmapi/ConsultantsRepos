@@ -305,16 +305,60 @@
 </head>
 
 <body>
-    <h6>Smart Profile</h6>
-    @if (Session["UserName"] != null)
-    {
-        <h5 >Hello @Session["UserName"].ToString()</h5>
-    }
+    <h2 id="smartProfileHeader">Smart Profile</h2>
+    <hr class="brace">
 
-  
     <div class="container">
+        <div class="login-box animated fadeInUp">
+            <div class="box-header">
+                <h2 id="header">פרטים אישים</h2>
+            </div>
+            <input class="inputSmartForm" id="consultantHomePhone" type="text" readonly />
+            <label>:פלאפון</label>
+            <input class="inputSmartForm" id="consultantPhone" type="text" readonly />
+            <label>:טלפון</label>
+            <input class="inputSmartForm" id="consultantLastName" type="text" readonly />
+            <label>:שם משפחה</label>
+            <input class="inputSmartForm" id="consultantFirstName" type="text" readonly />
+            <label>:שם פרטי</label>
+        
+            <br />
+      
+            <input class="inputSmartForm" id="consultantAdress" type="text" readonly />
+            <label>:כתובת</label>        
+            <input class="inputSmartForm" id="consultantEmail" type="text" readonly />
+            <label>:אימיל</label>
+            <input class="inputSmartForm" id="consultantFax" type="text" readonly />
+            <label>:פקס</label>       
+
+            <br/>
+            <input class="inputSmartForm" id="consultantYearOfExprience1" type="text" readonly />
+            <label>:שנות ניסיון 1</label>   
+            
+            <input class="inputSmartForm" id="consultantCounsilSubject1" type="text" readonly />
+            <label>:תחום יעוץ 1</label>     
+            <br />
+            <input class="inputSmartForm" id="consultantYearOfExprience2" type="text" readonly />
+            <label>:שנות ניסיון 1</label>   
+            
+            <input class="inputSmartForm" id="consultantCounsilSubject2" type="text" readonly />
+            <label>:תחום יעוץ 1</label>     
+              
+                    
+                   
+
+        </div>
+    
+        <br />
+        <br />
+
+        <hr />
+        <div>
+       
         <div class="row">
             <div class="col-lg-15">
+
+              
                 <input type="file" accept="image/*" id="files" multiple="multiple" name="allfiles" style="visibility:hidden;" />
                 <input class="myButton" id="pictureButton" type="button" value="הוספת תמונה" />
                 <input class="myButton" id="labelTextButton" type="button" value="הוסף תווית" />
@@ -322,49 +366,10 @@
                 <input class="myButton" id="saveButton" type="button" value="שמור" />
             </div>
         </div>
-
         <br />
         <br />
 
-        <div class="row">
-            <div class="col-lg-15">
-                <input class="inputSmartForm" id="consultantPhone" type="text" readonly />
-                @Html.Label("נייד", new { style = "color:#000000" })
-                <input class="inputSmartForm" id="consultantAdress" type="text" readonly/>
-                @Html.Label("כתובת", new { style = "color:#000000" })
-                <input class="inputSmartForm" id="consultantLastName" type="text" readonly/>
-                @Html.Label("שם משפחה", new { style = "color:#000000" })
-                <input class="inputSmartForm" id="consultantFirstName" type="text" readonly/>
-                @Html.Label("שם פרטי", new { style = "color:#000000" })
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-lg-15">
-                <input class="inputSmartForm" id="consultantCounsilSubject1" type="text"  readonly/>
-                @Html.Label("תחום יעוץ 1", new { style = "color:#000000" })
-                <input class="inputSmartForm" id="consultantEmail" type="text"   readonly/>
-                @Html.Label("אימייל", new { style = "color:#000000" })
-                <input class="inputSmartForm" id="consultantFax" type="text"  readonly/>
-                @Html.Label("פקס", new { style = "color:#000000" })
-                <input class="inputSmartForm" id="consultantHomePhone" type="text" readonly />
-                @Html.Label("טלפון", new { style = "color:#000000" })
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-15">
-                <input class="inputSmartForm" id="consultantYearOfExprience2" type="text"  readonly />
-                @Html.Label("שנות נסיון 2", new { style = "color:#000000" })
-                <input class="inputSmartForm" id="consultantCounsilSubject2" type="text"  readonly/>
-                @Html.Label("תחום יעוץ 2", new { style = "color:#000000" })
-                <input class="inputSmartForm" id="consultantYearOfExprience1" type="text"  readonly/>
-                @Html.Label("שנות נסיון 1", new { style = "color:#000000," })
-            </div>
-        </div>
-        <br />
-        <br />
-
-        <div id="rangeOfSmartFrom"class="range">
+        <div id="rangeOfSmartFrom" class="range">
 
             <section class="form-style-test"></section>
         </div>

@@ -19,9 +19,11 @@
                 <h1>הרשמה כיועץ</h1>
                 @using (Html.BeginForm("ConsultantsRegister","account",FormMethod.Post, new { enctype = "multipart/form-data" }))
                 {
+
                  
                     <div class="row">
                         <div class="col-lg-6">
+                            
                             @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { type = "text", placeholder = "שם פרטי", id = "username", required = "" } })
                             <br />
                             @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { type = "text", placeholder = "שם משפחה", id = "username", required = "" } })
