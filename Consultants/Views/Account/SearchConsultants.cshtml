@@ -1,4 +1,6 @@
 ﻿@model Consultants.Models.UserAccount
+@using Consultants.Models;
+
 
 @{
     ViewBag.Title = "חיפוש יועצים";
@@ -6,7 +8,7 @@
 
 @if (Session["UserName"] != null)
 
-{ <h4>Hello @Session["UserName"].ToString()</h4> }
+{ <h1>Hello @Session["UserName"].ToString()</h1> }
 
 <head>
     <meta name="viewport" content="width=device-width" />
@@ -17,29 +19,90 @@
 </head>
 
 <script type="text/javascript">
-    function OnCreate() {
-        var type = @Html.Raw(Json.Encode(ViewBag.type));
+   
+        function OnCreate() {
+            var type = @Html.Raw(Json.Encode(ViewBag.type));
 
-        if (type=="user")
-        {
-            document.getElementById("SmartProfile").style.display="none";
-        }
-    }
-    window.onload = OnCreate;
-</script>
-
-<body>
-    <div class="container center-page">
-        <div id="content-login">
-            @using (Html.BeginForm())
+            if (type=="user")
             {
-                <div class="row right-buttons-Loggedin">
-                    <input class="container" type="submit" value="שינוי סיסמא" formaction="@Url.Action("ChangePassword")" }) />
-                    <input type="button"  id="SmartProfile" name="טופס חכם" value="smartform" onclick="location.href='@Url.Action("SmartProfile","account")'" }) />
-                </div>
+                document.getElementById("SmartProfile").style.display="none";
             }
+           
+        }
+             window.onload = OnCreate;
+</script>
+<script>
+    
+    $(function () {
+       
+        $("#search").click(function ()
+        {
+            var x=document.getElementById("consulat").value;
+            alert("Saved!");
+        
+            $.ajax({
+                url: "@Url.Action("SearchConsultants", "Account")",
+                data: JSON.stringify({
+                
+                    _x: x
+                }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                type: "post",
+                cache: false,
+            });
+        });
+    });
+
+</script>
+<body>
+    <div class="container">
+        <input class="myButton" type="button" value="שינוי סיסמא" onclick="location.href='@Url.Action("ChangePassword")'" }) />
+        <input class="myButton" type="button" id="SmartProfile" name="טופס חכם" value="smartform" onclick="location.href='@Url.Action("SmartProfile","account")'" }) />
+        <input class="myButton" type="submit" id="search"  value="חפש" />
+        <div class="login-box animated fadeInUp">
+            <div class="box-header">
+                <h2 id="header">חיפוש יועצים</h2>
+            </div>
+            <input  id="consulat" type="text"  />
+            <label>:שם משפחה</label>
         </div>
-    </div>
+                <h2 id="header">פרטים אישים</h2>
+                <div id="wrapper">
+                    <h1>Consulats results query:</h1>
+
+                    <table id="keywords" cellspacing="0" cellpadding="0">
+                        <thead>
+                            <tr>
+                                <th><span>Keywords</span></th>
+                                <th><span>Impressions</span></th>
+                                <th><span>Clicks</span></th>
+                                <th><span>CTR</span></th>
+                                <th><span>Rank</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (ViewBag.my_cons != null)
+                            {
+                                foreach (String userstring in ViewBag.my_cons)
+                                {
+                            <tr>
+                                <td class="lalign">@userstring</td>
+                                <td>@userstring</td>
+                                <td>@userstring</td>
+                                <td>@userstring</td>
+                                <td>@userstring</td>
+                            </tr>
+                                }
+                            }
+
+
+                        </tbody>
+                    </table>
+                </div>
+
+
+            </div>
 </body>
 
 

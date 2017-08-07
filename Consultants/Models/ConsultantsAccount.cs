@@ -5,11 +5,13 @@ using System.Web;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System.ComponentModel.DataAnnotations;
+using System.Collections;
 
 namespace Consultants.Models
 {
-    public class ConsultantsAccount
+    public class ConsultantsAccount 
     {
+        
         [Key]
         public ObjectId _id { get; set; }
 
@@ -70,6 +72,8 @@ namespace Consultants.Models
         public String YearOfExprience2 { get; set; }
 
         public int CheckBox { get; set; }
+
+    
     }
 
 

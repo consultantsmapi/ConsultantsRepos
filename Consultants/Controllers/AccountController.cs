@@ -231,21 +231,33 @@ namespace Consultants.Controllers
 
                 }
                 ViewBag.type = type;
+             
+                if (TempData["foo"] != null)
+                {
+                    ConsultantsAccount x = (ConsultantsAccount)TempData["foo"];
+                    ViewBag.my_cons = new List<String>() { x.UserName.ToString(),x.FirstName.ToString(), x.Email.ToString() };
+                }
             }
-
+            ModelState.Clear();
             return View();
         }
 
         [HttpPost]
-        public ActionResult SearchConsultants(UserAccount user)
+        public ActionResult SearchConsultants(String _x)
         {
             if (Session["UserName"] != null)
             {
-                var collection = Context.Database.GetCollection<UserAccount>("Users");
-                usersQuery = Query<UserAccount>.Where(s => s.UserName == Session["UserName"].ToString());
+                ModelState.Clear();
+                var collection = Context.Database.GetCollection<ConsultantsAccount>("Consultants");
+                usersQuery = Query<ConsultantsAccount>.Where(s => s.UserName == _x);
                 var acc1 = collection.FindOne(usersQuery);
-
-                return View();
+                if (acc1 != null)
+                {
+                   
+                    TempData["foo"] = acc1;
+                }
+            
+                return View(acc1);
             }
 
             else
