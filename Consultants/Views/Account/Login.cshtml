@@ -14,15 +14,17 @@
 
 
 <body>
-    <div class="container center-page">
-        <div class="row">
-            <div id="content-login" class="col-lg-offset-5">
+
+    <div class="center-page" >
+       
+            <div id="content-login" class="col-lg-offset-4">
                 <h1>כניסה</h1>
                 @using (Html.BeginForm())
                 {
                     <div class="col-lg-20">
                         @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { type = "text", placeholder = "שם משתמש", id = "username", requried = "" } })     
                         @Html.EditorFor(model => model.Password, new { htmlAttributes = new { type = "password", placeholder = "סיסמא", id = "password", requried = "" } })
+
                     </div>
                     <div class="row right-buttons">
                         <input type="submit" value="כניסה" />
@@ -34,7 +36,7 @@
                     <a href="@Url.Action("ForgotPassword","account")">שכחתי את הסיסמא</a>
                 <br/>
                 <span style="color:red;">@TempData["Message"]</span>
-            </div>
+
 
         </div>
     </div>

@@ -127,7 +127,7 @@ namespace Consultants.Controllers
             consulQuery = Query<ConsultantsAccount>.Where(s => s.UserName == user.UserName && s.Password == user.Password);
             var model1 = usersCollection.FindOne(usersQuery);
             var model2 = consultantsCollection.FindOne(consulQuery);
-
+    
             if (model1 != null || model2 != null)
             {
                 if (model1 != null)
@@ -204,8 +204,8 @@ namespace Consultants.Controllers
 
             return View();
         }
-
-        public ActionResult SearchConsultants()
+        
+        public ActionResult SearchConsultants(ConsultantsAccount x)
         {
             if (Session["UserName"] != null)
             {
@@ -231,15 +231,37 @@ namespace Consultants.Controllers
 
                 }
                 ViewBag.type = type;
-             
-                if (TempData["foo"] != null)
+
+                var consultants = new List<ConsultantsAccount>();
+                var usersCursor = consultantsCollection.FindAll().ToList();
+                var sizecons = 0;
+
+                if (TempData["acc1"] != null)
                 {
-                    ConsultantsAccount x = (ConsultantsAccount)TempData["foo"];
-                    ViewBag.my_cons = new List<String>() { x.UserName.ToString(),x.FirstName.ToString(), x.Email.ToString() };
+                    var invalidFiles = (ConsultantsAccount)TempData["acc1"];
+                   
+                        consultants.Add(invalidFiles);
+                        sizecons++;
+
+                    
                 }
+                else
+                {
+                    foreach (var item in usersCursor)
+                    {
+                        consultants.Add(item);
+                        sizecons++;
+                       
+                    }
+                }
+                ViewBag.my_cons = consultants;
+                ViewBag.my_cons_size = sizecons;
+                return View();
             }
-            ModelState.Clear();
-            return View();
+          else
+            {
+                return RedirectToAction("Login");
+            }
         }
 
         [HttpPost]
@@ -247,17 +269,15 @@ namespace Consultants.Controllers
         {
             if (Session["UserName"] != null)
             {
-                ModelState.Clear();
+                
                 var collection = Context.Database.GetCollection<ConsultantsAccount>("Consultants");
                 usersQuery = Query<ConsultantsAccount>.Where(s => s.UserName == _x);
-                var acc1 = collection.FindOne(usersQuery);
-                if (acc1 != null)
-                {
-                   
-                    TempData["foo"] = acc1;
-                }
-            
-                return View(acc1);
+                ConsultantsAccount acc1 = collection.FindOne(usersQuery);
+                
+                ViewBag.my_cons = acc1;
+                TempData["acc1"] = acc1;
+                var redirectUrl = new UrlHelper(Request.RequestContext).Action("SearchConsultants", "Account");
+                return Json(new { Url = redirectUrl });
             }
 
             else
@@ -316,6 +336,15 @@ namespace Consultants.Controllers
             return View();
 
         }
+
+        public ActionResult Logout()
+        {
+            Session.Abandon();
+            return RedirectToAction("Login");
+        }
+
+
+
         [HttpGet]
         public ActionResult SmartProfile()
         {

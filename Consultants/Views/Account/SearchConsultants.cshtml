@@ -1,15 +1,6 @@
 ﻿@model Consultants.Models.UserAccount
 @using Consultants.Models;
 
-
-@{
-    ViewBag.Title = "חיפוש יועצים";
-}
-
-@if (Session["UserName"] != null)
-
-{ <h1>Hello @Session["UserName"].ToString()</h1> }
-
 <head>
     <meta name="viewport" content="width=device-width" />
     <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css" />
@@ -19,47 +10,65 @@
 </head>
 
 <script type="text/javascript">
-   
-        function OnCreate() {
+
+    window.onload=function OnCreate() 
+    {
             var type = @Html.Raw(Json.Encode(ViewBag.type));
 
             if (type=="user")
             {
                 document.getElementById("SmartProfile").style.display="none";
             }
-           
-        }
-             window.onload = OnCreate;
-</script>
+            var cons = @Html.Raw(Json.Encode(ViewBag.my_cons));
+            var i=0;
+            while(cons[i]!=null)
+            {
+
+                $(".mytable").append("  <tr><td class=lalign>"+cons[i].FirstName + "</td><td>"+cons[i].LastName+"</td><td>"+cons[i].Email+"</td><td>"+cons[i].Phone+"</td><td>"+cons[i].Adress+"</td></tr>");
+                i++;
+            }       
+       }
+        </script>     
 <script>
     
     $(function () {
        
         $("#search").click(function ()
         {
+            
             var x=document.getElementById("consulat").value;
             alert("Saved!");
-        
+       
             $.ajax({
+                type: "post",
                 url: "@Url.Action("SearchConsultants", "Account")",
                 data: JSON.stringify({
-                
-                    _x: x
+                    _x:x
                 }),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
-                type: "post",
-                cache: false,
+                success: function (response)
+                {
+                  
+                    window.location.href = response.Url;
+                },
+                error: function () 
+                {
+                    alert("error");
+                }
             });
+          
         });
     });
 
 </script>
 <body>
-    <div class="container">
+
+         <h2 id="smartProfileHeader">Hello @Session["UserName"].ToString()</h2> 
+    <div class="center-buttons">
         <input class="myButton" type="button" value="שינוי סיסמא" onclick="location.href='@Url.Action("ChangePassword")'" }) />
         <input class="myButton" type="button" id="SmartProfile" name="טופס חכם" value="smartform" onclick="location.href='@Url.Action("SmartProfile","account")'" }) />
-        <input class="myButton" type="submit" id="search"  value="חפש" />
+    </div>
         <div class="login-box animated fadeInUp">
             <div class="box-header">
                 <h2 id="header">חיפוש יועצים</h2>
@@ -67,42 +76,29 @@
             <input  id="consulat" type="text"  />
             <label>:שם משפחה</label>
         </div>
-                <h2 id="header">פרטים אישים</h2>
-                <div id="wrapper">
-                    <h1>Consulats results query:</h1>
+    <div class="center-buttons">
+        <input class="myButton" type="submit" id="search" value="חפש" />
+    </div>
+        <div id="wrapper">
+            <h1>Consulats results query:</h1>
 
-                    <table id="keywords" cellspacing="0" cellpadding="0">
-                        <thead>
-                            <tr>
-                                <th><span>Keywords</span></th>
-                                <th><span>Impressions</span></th>
-                                <th><span>Clicks</span></th>
-                                <th><span>CTR</span></th>
-                                <th><span>Rank</span></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (ViewBag.my_cons != null)
-                            {
-                                foreach (String userstring in ViewBag.my_cons)
-                                {
-                            <tr>
-                                <td class="lalign">@userstring</td>
-                                <td>@userstring</td>
-                                <td>@userstring</td>
-                                <td>@userstring</td>
-                                <td>@userstring</td>
-                            </tr>
-                                }
-                            }
+            <table class="mytable" id="keywords" cellspacing="0" cellpadding="0">
 
+                <thead>
 
-                        </tbody>
-                    </table>
-                </div>
+                    <tr>
+                        <th><span>שם יועץ</span></th>
+                        <th><span>תחום</span></th>
+                        <th><span>טלפון</span></th>
+                        <th><span>אימיל</span></th>
+                        <th><span>אתר</span></th>
+                    </tr>
 
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
 
-            </div>
 </body>
 
 
