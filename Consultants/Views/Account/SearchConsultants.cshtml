@@ -1,17 +1,19 @@
 ﻿@model Consultants.Models.UserAccount
 @using Consultants.Models;
 
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css" />
-    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap-responsive.css" />
- 
-    <title></title>
-</head>
-
+<
 <script type="text/javascript">
+    $(function(){
+        function moveToSmartForm(x)
+        {
+            alert(x);
+        }
 
-    window.onload=function OnCreate() 
+
+    });
+
+
+    window.onload=function OnCreate()
     {
             var type = @Html.Raw(Json.Encode(ViewBag.type));
 
@@ -24,20 +26,27 @@
             while(cons[i]!=null)
             {
 
-                $(".mytable").append("  <tr><td class=lalign>"+cons[i].FirstName + "</td><td>"+cons[i].LastName+"</td><td>"+cons[i].Email+"</td><td>"+cons[i].Phone+"</td><td>"+cons[i].Adress+"</td></tr>");
+                $(".mytable").append("  <tr><td class=lalign>"+cons[i].FirstName + "</td><td>"+cons[i].LastName+"</td><td>"+cons[i].Email+"</td><td>"+cons[i].Phone+"</td><td><a class=aref id="+cons[i].UserName+">"+cons[i].UserName+"</a></td></tr>");
                 i++;
-            }       
+            }
        }
         </script>     
 <script>
+    $(document).on('click', '.aref', function () {
+        var id = $(this).attr('id');
+        alert(id);
+        // your function here
+    });
     
+
+
     $(function () {
        
         $("#search").click(function ()
         {
             
             var x=document.getElementById("consulat").value;
-            alert("Saved!");
+
        
             $.ajax({
                 type: "post",
@@ -66,8 +75,8 @@
 
          <h2 id="smartProfileHeader">Hello @Session["UserName"].ToString()</h2> 
     <div class="center-buttons">
-        <input class="myButton" type="button" value="שינוי סיסמא" onclick="location.href='@Url.Action("ChangePassword")'" }) />
-        <input class="myButton" type="button" id="SmartProfile" name="טופס חכם" value="smartform" onclick="location.href='@Url.Action("SmartProfile","account")'" }) />
+
+
     </div>
         <div class="login-box animated fadeInUp">
             <div class="box-header">
@@ -80,7 +89,7 @@
         <input class="myButton" type="submit" id="search" value="חפש" />
     </div>
         <div id="wrapper">
-            <h1>Consulats results query:</h1>
+            <h1 style="text-align:center">Consulats results query:</h1>
 
             <table class="mytable" id="keywords" cellspacing="0" cellpadding="0">
 
