@@ -79,15 +79,14 @@ namespace Consultants.Controllers
         }
 
         [HttpPost]
-        public ActionResult ConsultantsRegister(ConsultantsAccount _useraccount, HttpPostedFileBase file1, HttpPostedFileBase file2)
+        public ActionResult ConsultantsRegister(ConsultantsAccount _useraccount, HttpPostedFileBase file1, HttpPostedFileBase file2,String checkboxSelectCombo)
         {
-            if (ModelState.IsValid)
-            {
+          
 
                 var collection = Context.Database.GetCollection<ConsultantsAccount>("Consultants");
                 consulQuery = Query<ConsultantsAccount>.Where(s => s.UserName == _useraccount.UserName);
                 var model = collection.FindOne(consulQuery);
-                
+
                 if (model == null)
                 {
                     string name = Request.Form["check"];
@@ -103,11 +102,8 @@ namespace Consultants.Controllers
                     return RedirectToAction("Login");
                 }
 
-                else
-                {
-                    ViewBag.Message = "";
-                }
-            }
+            
+           
 
             return View();
         }

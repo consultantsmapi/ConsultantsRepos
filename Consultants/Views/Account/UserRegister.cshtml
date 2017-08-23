@@ -28,7 +28,6 @@
                             @Html.EditorFor(model => model.Email, new { htmlAttributes = new { type = "text", placeholder = "אימייל", id = "username" } })
                             @Html.ValidationMessageFor(model => model.Email)
 
-
                         </div>
                         <div class="col-lg-6">
                   
@@ -47,6 +46,8 @@
                         <input type="button" value="חזור" onclick="location.href='@Url.Action("Login","account")'" }) />
                         <span style="color:red;">@TempData["Message"]</span>
                     </div>
+                  
+                
                 }
             </div>
     

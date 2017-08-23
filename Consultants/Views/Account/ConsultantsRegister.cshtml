@@ -9,20 +9,84 @@
     <meta name="viewport" content="width=device-width" />
     <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css" />
     <link rel="stylesheet" type="text/css" href="~/Content/bootstrap-responsive.css" />
+    <!-- Ignite UI Required Combined CSS Files -->
+    <link href="http://cdn-na.infragistics.com/igniteui/2017.1/latest/css/themes/infragistics/infragistics.theme.css" rel="stylesheet" />
+    <link href="http://cdn-na.infragistics.com/igniteui/2017.1/latest/css/structure/infragistics.css" rel="stylesheet" />
+
+    <script src="http://ajax.aspnetcdn.com/ajax/modernizr/modernizr-2.8.3.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
+    <!-- Ignite UI Required Combined JavaScript Files -->
+    <script src="http://cdn-na.infragistics.com/igniteui/2017.1/latest/js/infragistics.core.js"></script>
+    <script src="http://cdn-na.infragistics.com/igniteui/2017.1/latest/js/infragistics.lob.js"></script>
     <title>הרשמה כיועץ</title>
+
+    <script>
+
+        
+
+        var colors = [
+            { Name: "jQuery/HTML5/ASP.NET MVC Controls" },
+            { Name: "ASP.NET Controls" },
+            { Name: "Windows Forms Controls" },
+            { Name: "WPF Controls" },
+            { Name: "Android Native mobile controls" },
+            { Name: "iOS Controls" },
+            { Name: "SharePlus" },
+            { Name: "ReportPlus" },
+            { Name: "Indigo Studio" }
+        ];
+
+        $(function () {
+         
+            $("#checkboxSelectCombo").igCombo({
+                width: 300,
+                dataSource: colors,
+
+                textKey: "Name",
+                valueKey: "Name",
+                multiSelection: {
+                    enabled: true,
+                    showCheckboxes: true
+                },
+                dropDownOrientation: "bottom"
+            });
+            $('#pictureButton').click(function () {
+                jQuery.get('counsilSubjectsTxt.txt', function (data) {
+                    alert(data);
+                    //process text file line by line
+                    
+                });
+
+            });
+
+        });
+        
+       
+    </script>
+
 </head>
 
-<body>
-  
-            <div id="content-reg" class="col-lg-offset-3">
-                <h1>הרשמה כיועץ</h1>
-                @using (Html.BeginForm("ConsultantsRegister","account",FormMethod.Post, new { enctype = "multipart/form-data" }))
-                {
 
-                 
+
+<body>
+   
+            <div id="content-reg" class="col-lg-offset-3">
+               
+               
+             
+                <input class="myButton" id="pictureButton" type="button" value="הוספת תמונה" />
+
+                <h1>הרשמה כיועץ</h1>
+              
+                @using (Html.BeginForm("ConsultantsRegister", "account", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+               
+
                     <div class="row">
                         <div class="col-lg-6">
-                            
+                       
                             @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { type = "text", placeholder = "שם פרטי", id = "username", required = "" } })
                             <br />
                             @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { type = "text", placeholder = "שם משפחה", id = "username", required = "" } })
@@ -36,7 +100,7 @@
                             <br />
                             @Html.EditorFor(model => model.Fax, new { htmlAttributes = new { type = "text", placeholder = "מספר פקס", id = "username", required = "" } })
                             <br />
-                            @Html.EditorFor(model => model.Adress, new { htmlAttributes = new { type = "text", placeholder = "כתובת", id = "username", required = "" } })
+                           
                             <br />
                         </div>
 
@@ -53,16 +117,21 @@
                             <br />
                             @Html.EditorFor(model => model.CounsilSubject2, new { htmlAttributes = new { type = "text", placeholder = " תחום יעוץ 2", id = "username", required = "" } })
                             <br />
-                            @Html.EditorFor(model => model.YearOfExprience2, new { htmlAttributes = new { type = "text", placeholder = " שנות נסיון 2", id = "username", required = "" } })
-                            <br />
+                                               
                         </div>
                     </div>
+                 
+                    <h4>בחירת תחומי ייעוץ</h4>
+                    <input name ="checkboxSelectCombo" id="checkboxSelectCombo">
                     <br />
-                    <div class="row file-buttons-consultRegister">                
+                    <br/>
+                    <div class="row file-buttons-consultRegister">    
+                      
                         <input type="file" name="file1" id="upload" class="custom-file-input">
                         <br/>
                         <input type="file" name="file2" id="upload2" class="custom-file-input">
                     </div>
+             
                         <div class="row">
                             <b>האם לקבל דיוור ממפ"י</b>
                             <input id="checkbox" name="check" type="checkbox" value="true" />
@@ -72,9 +141,12 @@
                             <input type="button" value="חזור" onclick="location.href='@Url.Action("Login","account")'" }) />
                             <span style="color:red;">@TempData["Message"]</span>
                         </div>
-                        }
+                      
+
+                }
+            
                     </div>
-   
+           
       
 </body>
 </html>

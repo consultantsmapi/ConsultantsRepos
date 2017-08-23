@@ -43,19 +43,36 @@ namespace Consultants.Models
         [DataType(DataType.PhoneNumber)]
         public String HomePhone { get; set; }
 
-
         [DataType(DataType.PhoneNumber)]
         public String Fax { get; set; }
 
+        [Required(ErrorMessage = "נדרש כתובת")]
+        [DataType(DataType.Text)]
+        public String City { get; set; }
 
         [Required(ErrorMessage = "נדרש כתובת")]
         [DataType(DataType.Text)]
-        public String Adress { get; set; }
+        public String Street { get; set; }
 
+        [Required(ErrorMessage = "נדרש כתובת")]
+        [DataType(DataType.Text)]
+        public String HouseNumber { get; set; }
+
+        [Required(ErrorMessage = "נדרש כתובת")]
+        [DataType(DataType.Text)]
+        public String ApartmentNumber { get; set; }
+
+        [Required(ErrorMessage = "נדרש כתובת")]
+        [DataType(DataType.Text)]
+        public String Postal_Code { get; set; }
 
         [Required(ErrorMessage = "נדרש  תחום יעוץ")]
         [DataType(DataType.Text)]
         public String CounsilSubject1 { get; set; }
+
+        [Required(ErrorMessage = "נדרש  תחום יעוץ")]
+        [DataType(DataType.Text)]
+        public String Birthday { get; set; }
 
         [DataType(DataType.Text)]
         public String CounsilSubject2 { get; set; }
@@ -68,9 +85,6 @@ namespace Consultants.Models
 
         [DataType(DataType.Upload)]
         public String Documents2 { get; set; }
-
-        public String YearOfExprience2 { get; set; }
-
         public int CheckBox { get; set; }
 
     
