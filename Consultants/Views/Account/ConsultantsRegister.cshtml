@@ -24,8 +24,6 @@
 
     <script>
 
-        
-
         var colors = [
             { Name: "jQuery/HTML5/ASP.NET MVC Controls" },
             { Name: "ASP.NET Controls" },
@@ -37,34 +35,30 @@
             { Name: "ReportPlus" },
             { Name: "Indigo Studio" }
         ];
-
         $(function () {
-         
+ 
+
             $("#checkboxSelectCombo").igCombo({
                 width: 300,
-                dataSource: colors,
+                dataSource:@Html.Raw(Json.Encode(ViewBag.SubjectList)),
 
                 textKey: "Name",
-                valueKey: "Name",
+                valueKey: "ID",
                 multiSelection: {
                     enabled: true,
                     showCheckboxes: true
                 },
                 dropDownOrientation: "bottom"
             });
-            $('#pictureButton').click(function () {
-                jQuery.get('counsilSubjectsTxt.txt', function (data) {
-                    alert(data);
-                    //process text file line by line
-                    
-                });
+
+
+            $('#pictureButton').click(function ()
+            {
 
             });
 
         });
-        
-       
-    </script>
+</script>
 
 </head>
 

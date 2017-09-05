@@ -188,13 +188,13 @@
     <Compile Include="Models\EditBox.cs" />
     <Compile Include="Models\OurDbContext.cs" />
     <Compile Include="Models\Pictures.cs" />
+    <Compile Include="Models\SubjectConsultant.cs" />
     <Compile Include="Models\TextBox.cs" />
     <Compile Include="Models\UserAccount.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bg.jpg" />
-    <Content Include="Content\counsilSubjectsTxt.txt" />
     <Content Include="Content\cream_pixels_%402X.png" />
     <Content Include="Content\moveIco.png" />
     <Content Include="Content\bootstrap-responsive.css" />
@@ -220,6 +220,8 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Content\try1.json" />
+    <Content Include="Content\counsilSubjects.json" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />

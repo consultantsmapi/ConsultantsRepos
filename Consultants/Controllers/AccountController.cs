@@ -13,6 +13,10 @@ using WebMatrix.WebData;
 using System.Net.Mail;
 using System.Web.Helpers;
 using MongoDB.Bson.IO;
+using Newtonsoft.Json.Linq;
+using System.IO;
+using Newtonsoft.Json;
+using System.Web.Script.Serialization;
 
 namespace Consultants.Controllers
 {
@@ -75,6 +79,12 @@ namespace Consultants.Controllers
 
         public ActionResult ConsultantsRegister()
         {
+            string file = Server.MapPath("~/Content/counsilSubjects.json");
+            //deserialize JSON from file  
+            string Json = System.IO.File.ReadAllText(file);
+            JavaScriptSerializer ser = new JavaScriptSerializer();
+            var personlist = ser.Deserialize<List<SubjectConsultant>>(Json);
+            ViewBag.SubjectList = personlist;        
             return View();
         }
 
