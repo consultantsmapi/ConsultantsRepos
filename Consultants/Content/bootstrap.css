@@ -8115,3 +8115,20 @@ html .demo-container h3 {
 .RadComboBox .rcbLabel {
     padding-top: 5px;
 }
+
+.ui-igcombo-list {
+    text-align:right;
+}
+
+.ui-igcombo-list ul > li 
+{
+   
+    height: auto!important;
+}
+.ui-igcombo-listitemtextwithcheckbox{
+  padding:5px;
+  border-bottom:1px solid black;
+     white-space: normal!important;
+    float:right;
+ 
+}
