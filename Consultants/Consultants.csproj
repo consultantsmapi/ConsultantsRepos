@@ -195,6 +195,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bg.jpg" />
+    <Content Include="Content\counsilSubjects.txt" />
     <Content Include="Content\cream_pixels_%402X.png" />
     <Content Include="Content\moveIco.png" />
     <Content Include="Content\bootstrap-responsive.css" />
@@ -205,6 +206,8 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\removeIco.png" />
     <Content Include="Content\sayagata-400px.png" />
+    <Content Include="Content\Subjects.txt" />
+    <Content Include="Content\try2.txt" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -220,8 +223,6 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
-    <Content Include="Content\try1.json" />
-    <Content Include="Content\counsilSubjects.json" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />

@@ -24,22 +24,9 @@
 
     <script>
 
-        var colors = [
-            { Name: "jQuery/HTML5/ASP.NET MVC Controls" },
-            { Name: "ASP.NET Controls" },
-            { Name: "Windows Forms Controls" },
-            { Name: "WPF Controls" },
-            { Name: "Android Native mobile controls" },
-            { Name: "iOS Controls" },
-            { Name: "SharePlus" },
-            { Name: "ReportPlus" },
-            { Name: "Indigo Studio" }
-        ];
         $(function () {
- 
-
             $("#checkboxSelectCombo").igCombo({
-                width: 300,
+                width: 400,
                 dataSource:@Html.Raw(Json.Encode(ViewBag.SubjectList)),
 
                 textKey: "Name",
@@ -52,10 +39,7 @@
             });
 
 
-            $('#pictureButton').click(function ()
-            {
-
-            });
+ 
 
         });
 </script>
@@ -67,11 +51,6 @@
 <body>
    
             <div id="content-reg" class="col-lg-offset-3">
-               
-               
-             
-                <input class="myButton" id="pictureButton" type="button" value="הוספת תמונה" />
-
                 <h1>הרשמה כיועץ</h1>
               
                 @using (Html.BeginForm("ConsultantsRegister", "account", FormMethod.Post, new { enctype = "multipart/form-data" }))

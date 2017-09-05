@@ -79,12 +79,12 @@ namespace Consultants.Controllers
 
         public ActionResult ConsultantsRegister()
         {
-            string file = Server.MapPath("~/Content/counsilSubjects.json");
-            //deserialize JSON from file  
-            string Json = System.IO.File.ReadAllText(file);
-            JavaScriptSerializer ser = new JavaScriptSerializer();
-            var personlist = ser.Deserialize<List<SubjectConsultant>>(Json);
-            ViewBag.SubjectList = personlist;        
+
+            string file = Server.MapPath("~/Content/Subjects.txt");
+            string x = System.IO.File.ReadAllText(file, System.Text.Encoding.UTF8);
+         
+            List<SubjectConsultant> listofsubjects = Newtonsoft.Json.JsonConvert.DeserializeObject<List<SubjectConsultant>>(System.IO.File.ReadAllText(file));
+            ViewBag.SubjectList = listofsubjects;        
             return View();
         }
 

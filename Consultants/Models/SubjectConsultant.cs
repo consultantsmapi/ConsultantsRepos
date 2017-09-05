@@ -12,11 +12,12 @@ namespace Consultants.Models
             get;
             set;
         }
-        public string Name
+        public String Name
         {
             get;
             set;
         }
-    
+   
+
     }
 }
