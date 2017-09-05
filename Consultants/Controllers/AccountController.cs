@@ -17,6 +17,7 @@ using Newtonsoft.Json.Linq;
 using System.IO;
 using Newtonsoft.Json;
 using System.Web.Script.Serialization;
+using MongoDB.Driver.GridFS;
 
 namespace Consultants.Controllers
 {
@@ -96,8 +97,9 @@ namespace Consultants.Controllers
                 var collection = Context.Database.GetCollection<ConsultantsAccount>("Consultants");
                 consulQuery = Query<ConsultantsAccount>.Where(s => s.UserName == _useraccount.UserName);
                 var model = collection.FindOne(consulQuery);
-
-                if (model == null)
+        
+         
+            if (model == null)
                 {
                     string name = Request.Form["check"];
 
@@ -105,8 +107,31 @@ namespace Consultants.Controllers
                     {
                         _useraccount.CheckBox = 1;
                     }
+                    if(file1!=null)
+                    {
 
-                    Context.Consultants.Insert(_useraccount);
+                            ObjectId fileID1 = ObjectId.GenerateNewId();
+                            _useraccount.Documents1 = fileID1.ToString();
+                          var options = new MongoGridFSCreateOptions
+                        {
+                              Id= fileID1,//, If we want to link the file with a document
+                              ContentType = file1.ContentType
+                        };
+                        Context.Database.GridFS.Upload(file1.InputStream, file1.FileName, options);
+                    }
+                if (file2 != null)
+                {
+
+                    ObjectId fileID2 = ObjectId.GenerateNewId();
+                    _useraccount.Documents2 = fileID2.ToString();
+                    var options = new MongoGridFSCreateOptions
+                    {
+                        Id = fileID2,//, If we want to link the file with a document
+                        ContentType = file2.ContentType
+                    };
+                    Context.Database.GridFS.Upload(file2.InputStream, file2.FileName, options);
+                }
+                Context.Consultants.Insert(_useraccount);
                     ModelState.Clear();
                     TempData["Message"] = _useraccount.FirstName + " " + _useraccount.LastName + " נרשם בהצלחה";
                     return RedirectToAction("Login");

@@ -81,10 +81,11 @@ namespace Consultants.Models
         public String YearOfExprience1{ get; set; }
 
         [DataType(DataType.Upload)]
-        public String Documents1 { get; set; } //לשנות את DATATYPE
+        public string Documents1 { get; set; } //לשנות את DATATYPE
 
         [DataType(DataType.Upload)]
-        public String Documents2 { get; set; }
+        public string Documents2 { get; set; }
+
         public int CheckBox { get; set; }
 
     
