@@ -114,7 +114,7 @@ namespace Consultants.Controllers
                             _useraccount.Documents1 = fileID1.ToString();
                           var options = new MongoGridFSCreateOptions
                         {
-                              Id= fileID1,//, If we want to link the file with a document
+                              Id= fileID1,
                               ContentType = file1.ContentType
                         };
                         Context.Database.GridFS.Upload(file1.InputStream, file1.FileName, options);
@@ -126,7 +126,7 @@ namespace Consultants.Controllers
                     _useraccount.Documents2 = fileID2.ToString();
                     var options = new MongoGridFSCreateOptions
                     {
-                        Id = fileID2,//, If we want to link the file with a document
+                        Id = fileID2,
                         ContentType = file2.ContentType
                     };
                     Context.Database.GridFS.Upload(file2.InputStream, file2.FileName, options);
