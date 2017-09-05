@@ -196,7 +196,7 @@
   <ItemGroup>
     <Content Include="Content\bg.jpg" />
     <Content Include="Content\counsilSubjects.txt" />
-    <Content Include="Content\cream_pixels_%402X.png" />
+    <Content Include="Content\cream_pixels_%402x.png" />
     <Content Include="Content\moveIco.png" />
     <Content Include="Content\bootstrap-responsive.css" />
     <Content Include="Content\bootstrap-responsive.min.css" />
