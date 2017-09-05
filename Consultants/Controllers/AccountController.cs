@@ -224,10 +224,12 @@ namespace Consultants.Controllers
             }
         }
         
-        public ActionResult SearchConsultants(ConsultantsAccount x)
+        public ActionResult SearchConsultants()
         {
-            if (Session["UserName"] != null)
+            if (Session["UserName"] == null)
             {
+                return RedirectToAction("Login");
+            }
                 var usersCollection = Context.Database.GetCollection<UserAccount>("Users");
                 var consultantsCollection = Context.Database.GetCollection<ConsultantsAccount>("Consultants");
                 usersQuery = Query<UserAccount>.Where(s => s.UserName == Session["UserName"].ToString());
@@ -249,60 +251,47 @@ namespace Consultants.Controllers
                     }
 
                 }
+            if (TempData["Accounts"] != null)
+            {
+                ViewBag.my_cons = TempData["Accounts"];
+            }
+            else
+            {
                 ViewBag.type = type;
-
+                var sizecons = 0;
                 var consultants = new List<ConsultantsAccount>();
                 var usersCursor = consultantsCollection.FindAll().ToList();
-                var sizecons = 0;
-
-                if (TempData["acc1"] != null)
+                foreach (var item in usersCursor)
                 {
-                    var invalidFiles = (ConsultantsAccount)TempData["acc1"];
-                   
-                        consultants.Add(invalidFiles);
-                        sizecons++;
-
-                    
-                }
-                else
-                {
-                    foreach (var item in usersCursor)
-                    {
-                        consultants.Add(item);
-                        sizecons++;
-                       
-                    }
+                    consultants.Add(item);
+                    sizecons++;
                 }
                 ViewBag.my_cons = consultants;
-                ViewBag.my_cons_size = sizecons;
+            }
                 return View();
-            }
-          else
-            {
-                return RedirectToAction("Login");
-            }
         }
 
         [HttpPost]
         public ActionResult SearchConsultants(String _x)
         {
-            if (Session["UserName"] != null)
-            {
-                
-                var collection = Context.Database.GetCollection<ConsultantsAccount>("Consultants");
-                usersQuery = Query<ConsultantsAccount>.Where(s => s.UserName == _x);
-                ConsultantsAccount acc1 = collection.FindOne(usersQuery);
-                
-                ViewBag.my_cons = acc1;
-                TempData["acc1"] = acc1;
-                var redirectUrl = new UrlHelper(Request.RequestContext).Action("SearchConsultants", "Account");
-                return Json(new { Url = redirectUrl });
-            }
-
-            else
+            if (Session["UserName"] == null)
             {
                 return RedirectToAction("Login");
             }
+            
+                var collection = Context.Database.GetCollection<ConsultantsAccount>("Consultants");
+            // Need to continue the query
+                usersQuery = Query<ConsultantsAccount>.Where(s => s.UserName.Contains(_x) || s.YearOfExprience1.Contains(_x) || s.Street.Contains(_x) || s.ApartmentNumber.Contains(_x) || s.Birthday.Contains(_x) || s.City.Contains(_x));
+                var usercursor = collection.Find(usersQuery);
+                 var consultants = new List<ConsultantsAccount>();
+               foreach (var item in usercursor)
+            {
+                consultants.Add(item);   
+            }
+            TempData["Accounts"] = consultants;
+            return View();
+            
+
         }
 
         [AllowAnonymous]

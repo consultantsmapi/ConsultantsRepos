@@ -15,21 +15,23 @@
 
     window.onload=function OnCreate()
     {
-            var type = @Html.Raw(Json.Encode(ViewBag.type));
+        var i=0;
+        var type = @Html.Raw(Json.Encode(ViewBag.type));
 
-            if (type=="user")
-            {
-                document.getElementById("SmartProfile").style.display="none";
-            }
-            var cons = @Html.Raw(Json.Encode(ViewBag.my_cons));
-            var i=0;
-            while(cons[i]!=null)
-            {
+        if (type=="user")
+        {
+            document.getElementById("SmartProfile").style.display="none";
+        }
+        var cons = @Html.Raw(Json.Encode(ViewBag.my_cons));
+         while(cons[i]!=null)
+        {
 
-                $(".mytable").append("  <tr><td class=lalign>"+cons[i].FirstName + "</td><td>"+cons[i].LastName+"</td><td>"+cons[i].Email+"</td><td>"+cons[i].Phone+"</td><td><a class=aref id="+cons[i].UserName+">"+cons[i].UserName+"</a></td></tr>");
-                i++;
-            }
-       }
+             $(".mytable").append("  <tr><td class=lalign>"+cons[i].FirstName + "</td><td>"+cons[i].LastName+"</td><td>"+cons[i].HomePhone+"</td><td>"+cons[i].Email+"</td><td><a class=aref id="+cons[i].UserName+">Go To Profile!</a></td></tr>");
+           i++;
+          }
+
+        }
+    
         </script>     
 <script>
     $(document).on('click', '.aref', function () {
@@ -44,10 +46,8 @@
        
         $("#search").click(function ()
         {
-            
+ 
             var x=document.getElementById("consulat").value;
-
-       
             $.ajax({
                 type: "post",
                 url: "@Url.Action("SearchConsultants", "Account")",
@@ -56,14 +56,12 @@
                 }),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
-                success: function (response)
-                {
-                  
-                    window.location.href = response.Url;
+                success: function (response) {
+                    window.location.reload(true);
                 },
-                error: function (error) 
-                {
-                    alert(error);
+                error: function (error) {
+
+                    window.location.reload(true);
                 }
             });
           
@@ -83,7 +81,7 @@
                 <h2 id="header">חיפוש יועצים</h2>
             </div>
             <input  id="consulat" type="text"  />
-            <label>:שם משפחה</label>
+            <label>חפש לפי טקסט</label>
         </div>
     <div class="center-buttons">
         <input class="myButton" type="submit" id="search" value="חפש" />

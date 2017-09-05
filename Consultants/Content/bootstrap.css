@@ -7681,7 +7681,9 @@ form-style-test{
   user-select: text;
 }
 
-
+.mytable{
+    text-align:center;
+}
 
 .textDragger {
    
