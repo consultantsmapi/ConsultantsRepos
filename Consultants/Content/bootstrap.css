@@ -8134,3 +8134,7 @@ html .demo-container h3 {
     float:right;
  
 }
+
+.msgError{
+    color:red;
+}

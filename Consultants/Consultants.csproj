@@ -195,7 +195,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bg.jpg" />
-    <Content Include="Content\counsilSubjects.txt" />
     <Content Include="Content\cream_pixels_%402x.png" />
     <Content Include="Content\moveIco.png" />
     <Content Include="Content\bootstrap-responsive.css" />
@@ -207,7 +206,6 @@
     <Content Include="Content\removeIco.png" />
     <Content Include="Content\sayagata-400px.png" />
     <Content Include="Content\Subjects.txt" />
-    <Content Include="Content\try2.txt" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />

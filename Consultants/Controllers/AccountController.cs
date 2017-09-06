@@ -18,6 +18,7 @@ using System.IO;
 using Newtonsoft.Json;
 using System.Web.Script.Serialization;
 using MongoDB.Driver.GridFS;
+using System.Text.RegularExpressions;
 
 namespace Consultants.Controllers
 {
@@ -48,33 +49,37 @@ namespace Consultants.Controllers
         [HttpPost]
         public ActionResult UserRegister(UserAccount _useraccount)
         {
-            if (ModelState.IsValid)
+      
+            if (!CheckContentOfLoginRegister(_useraccount.UserName, _useraccount.Password, _useraccount.ConfirmPassword, _useraccount.Email, _useraccount.FirstName, _useraccount.LastName))
             {
-                var collection = Context.Database.GetCollection<UserAccount>("Users");
-                usersQuery = Query<UserAccount>.Where(s => s.UserName == _useraccount.UserName);
-                var model = collection.FindOne(usersQuery);
-
-                if (model == null)
-                {
-                    string name = Request.Form["check"];
-
-                    if (name == "true")
-                    {
-                        _useraccount.CheckBox = 1;
-                    }
-
-                    Context.Users.Insert(_useraccount);
-                    ModelState.Clear();
-                    TempData["Message"] = _useraccount.FirstName + " " + _useraccount.LastName + " נרשם בהצלחה";
-
-                    return RedirectToAction("Login");
-                }
-
-                else
-                {
-                    TempData["Message"] = "שם משתמש תפוס";
-                }
+                TempData["Message"] = "Something went wrong,Try again!";
+                return View();
             }
+            var collection = Context.Database.GetCollection<UserAccount>("Users");
+            usersQuery = Query<UserAccount>.Where(s => s.UserName == _useraccount.UserName);
+            var model = collection.FindOne(usersQuery);
+
+            if (model == null)
+            {
+                string checkbox = Request.Form["check"];
+
+                if (checkbox == "true")
+                {
+                    _useraccount.CheckBox = 1;
+                }
+
+                Context.Users.Insert(_useraccount);
+                ModelState.Clear();
+                TempData["Message"] = _useraccount.FirstName + " " + _useraccount.LastName + " נרשם בהצלחה";
+
+                return RedirectToAction("Login");
+            }
+
+            else
+            {
+                TempData["Message"] = "שם משתמש תפוס";
+            }
+            
             return View();
         }
 
@@ -370,12 +375,7 @@ namespace Consultants.Controllers
 
         }
 
-        public ActionResult Logout()
-        {
-            Session.Abandon();
-            return RedirectToAction("Login");
-        }
-
+    
 
 
         [HttpGet]
@@ -475,6 +475,13 @@ namespace Consultants.Controllers
             }
         }
 
+        public ActionResult SignOut()
+        {
+            Session.Abandon();
+            Session.Clear();
+            return RedirectToAction("Login", "account");
+        }
+
         private void smtpRequest(string userEmail, string emailSubject, string emailBody)
         {
             MailMessage mail = new MailMessage();
@@ -497,6 +504,35 @@ namespace Consultants.Controllers
             {
                 TempData["Message"] = "שגיאה" + ex.Message;
             }
+        }
+        private bool CheckContentOfLoginRegister(string username,string password,string confirmpassword,string email,string firstname,string lastname)
+        {
+            if (firstname == null || lastname == null ||email == null || password == null ||  username == null || confirmpassword ==null)
+            {
+                return false;
+            }
+            string passwordRegex = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,10}";
+            var matchPassword = Regex.Match(password, passwordRegex, RegexOptions.IgnoreCase);
+            if (!matchPassword.Success)
+            {
+                return false;
+            }
+            if(password!=confirmpassword)
+            {
+                return false;
+            }
+
+            string emailRegex = @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$";
+            var matchEmail = Regex.Match(email, emailRegex, RegexOptions.IgnoreCase);
+            if (!matchEmail.Success)
+            {
+                return false;
+            }
+
+
+
+            return true;
+
         }
     }
 }

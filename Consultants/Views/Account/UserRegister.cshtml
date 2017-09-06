@@ -5,12 +5,154 @@
     ViewBag.Title = "הרשמה";
 }
 
-<html>
+
 <head>
     <meta name="viewport" content="width=device-width" />
     <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css" />
     <link rel="stylesheet" type="text/css" href="~/Content/bootstrap-responsive.css" />
 </head>
+
+<script>
+  $(function () {
+
+
+
+        $('#password').on('input', function (e)
+        {
+            var regexPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@@$!%*?&])[A-Za-z\d$@@$!%*?&]{8,10}/;
+            var value = $(this).val();
+            if (value.length === 0) {
+                $('#passwordError').replaceWith("<p id=passwordError class=msgError>Error:Field is required. </p>");
+            }
+
+            else if (!regexPass.test(value)) {
+
+                $('#passwordError').replaceWith("<p id=passwordError class=msgError>Error:Minimum eight and maximum 10 characters, at least one uppercase letter, one lowercase letter, one number and one special character:</p>");
+            }
+            else {
+                $('#passwordError').replaceWith("<p id=passwordError></p>");
+            }
+        });
+        $('#username').on('input', function (e)
+        {
+            var value = $(this).val();
+            if (value.length === 0) {
+
+                $('#userNameerror').replaceWith("<p id=userNameerror class=msgError>Error:Field is required. </p>");
+            }
+            else {
+                $('#userNameerror').replaceWith("<p id=userNameerror></p>");
+            }
+        });
+        $('#ConfirmPassword').on('input', function (e) {
+            var value = $(this).val();
+            ConfirmPassword = document.getElementById("password").value;
+            if (value.length === 0 ) {
+
+                $('#confirmPasswordError').replaceWith("<p id=confirmPasswordError class=msgError>Error:Field is required. </p>");
+            }
+            else if (value != ConfirmPassword) {
+
+                $('#confirmPasswordError').replaceWith("<p id=confirmPasswordError class=msgError>Passwords are not match </p>");
+            }
+
+            else {
+                $('#confirmPasswordError').replaceWith("<p id=confirmPasswordError></p>");
+            }
+        });
+        $('#Email').on('input', function (e) {
+            var value = $(this).val();
+            var regexMail = /^([\w\.\-]+)@@([\w\-]+)((\.(\w){2,3})+)$/;
+
+            if (value.length === 0) {
+
+                $('#emailError').replaceWith("<p id=emailError class=msgError>Error:Field is required. </p>");
+            }
+             else  if (!regexMail.test(value)) {
+                 $('#emailError').replaceWith("<p id=emailError class=msgError>Error:Email is incorrect. </p>");
+
+            }
+            else {
+                $('#emailError').replaceWith("<p id=emailError></p>");
+            }
+        });
+        $('#FirstName').on('input', function (e) {
+            var value = $(this).val();
+            if (value.length === 0) {
+
+                $('#firstnameError').replaceWith("<p id=firstnameError class=msgError>Error:Field is required. </p>");
+            }
+
+            else if (!(value.match(/^[a-zA-Z()]*$/))) {
+                $('#firstnameError').replaceWith("<p id=firstnameError class=msgError>Error:Only Charcters are accepted. </p>");
+
+            }
+            else {
+                $('#firstnameError').replaceWith("<p id=firstnameError></p>");
+            }
+        });
+        $('#LastName').on('input', function (e) {
+            var value = $(this).val();
+            if (value.length === 0) {
+
+                $('#lastnameError').replaceWith("<p id=lastnameError class=msgError>Error:Field is required. </p>");
+            }
+
+            else if (!(value.match(/^[a-zA-Z()]*$/))) {
+                $('#lastnameError').replaceWith("<p id=lastnameError class=msgError>Error:Only Charcters are accepted. </p>");
+
+            }
+            else {
+                $('#lastnameError').replaceWith("<p id=lastnameError></p>");
+            }
+        });
+
+
+  });
+
+  function registerFormValidate() {
+
+      var userName = document.getElementById("username").value;
+      var password = document.getElementById("password").value;
+      var ConfirmPassword = document.getElementById("ConfirmPassword").value;
+      var Email = document.getElementById("Email").value;
+      var firstname = document.getElementById("FirstName").value;
+      var lastname = document.getElementById("LastName").value;
+
+
+      if (userName == "" || password == "" || ConfirmPassword == "" || Email == "" || firstname == "" || lastname == "") {
+          alert("Please check the Errors");
+          return false;
+      }
+      if (password != ConfirmPassword) {
+          alert("Please check the Errors");
+          return false;
+      }
+      var regexPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@@$!%*?&])[A-Za-z\d$@@$!%*?&]{8,10}/;
+      if (!regexPass.test(password)) {
+          alert("Please check the Errors");
+          return false;
+      }
+      var regexMail = /^([\w\.\-]+)@@([\w\-]+)((\.(\w){2,3})+)$/;
+      if (!regexMail.test(Email)) {
+          alert("Please check the Errors");
+          return false;
+      }
+
+      if (!(/^[a-zA-Z]+$/.test(firstname))) {
+          alert("Please check the Errors");
+          return false;
+      }
+      if (!(/^[a-zA-Z]+$/.test(lastname))) {
+          alert("Please check the Errors");
+          return false;
+      }
+
+      return true;
+  }
+
+
+</script>
 
 <body>
    
@@ -19,21 +161,26 @@
                 <h1>הרשמה</h1>
 
 
-                @using (Html.BeginForm())
-                {
+               @using (Html.BeginForm("UserRegister", "account", FormMethod.Post, new { onsubmit = "return registerFormValidate()" }))
+               {
                     <div class="row">
                         <div class="col-lg-6">
                             @Html.EditorFor(model => model.Password, new { htmlAttributes = new { type = "password", placeholder = "סיסמא", id = "password", required = "" } })
-                            @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { type = "password", placeholder = "אישור סיסמא", id = "password", required = "" } })
-                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { type = "text", placeholder = "אימייל", id = "username" } })
-                            @Html.ValidationMessageFor(model => model.Email)
+                            <p id="passwordError"></p>
+                            @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new {  type = "password", placeholder = "אישור סיסמא", id = "ConfirmPassword", required = ""} })
+                            <p id="confirmPasswordError"></p>
+                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { type = "text", placeholder = "אימייל", id = "Email" } })
+                            <p id="emailError"></p>
 
                         </div>
                         <div class="col-lg-6">
                   
-                            @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { type = "text", placeholder = "שם פרטי", id = "username", required = "" } })
-                            @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { type = "text", placeholder = "שם משפחה", id = "username", required = "" } })
+                            @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { type = "text", placeholder = "שם פרטי", id = "FirstName", required = "" } })
+                            <p id="firstnameError"></p>
+                            @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { type = "text", placeholder = "שם משפחה", id = "LastName", required = "" } })
+                            <p id="lastnameError"></p>
                             @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { type = "text", placeholder = "שם משתמש", id = "username", required = "" } })
+                            <p id="userNameerror"></p>
                         </div>
                     </div>
                     <div class="row">
@@ -47,10 +194,9 @@
                         <span style="color:red;">@TempData["Message"]</span>
                     </div>
                   
-                
+
                 }
             </div>
     
 </body>
 
-</html>
