@@ -38,9 +38,12 @@
             }
             else
             {
-
+                
                 <li><a class="active" onclick="location.href='@Url.Action("SearchConsultants", "account")'">Home Page</a></li>
+                if((string)Session["TypeOfUser"] =="consultant")
+                { 
                 <li><a class="active" onclick="location.href='@Url.Action("SmartProfile", "account")'">SmartForm</a></li>
+                }
                 <li><a class="active" onclick="location.href='@Url.Action("ChangePassword", "account")'">Change Password</a></li>
                 <li class="rightfloat"><a onclick="location.href='@Url.Action("Signout", "account")'" id="signOutButton">Sign Out</a></li>
 

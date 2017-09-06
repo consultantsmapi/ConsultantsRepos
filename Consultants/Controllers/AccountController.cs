@@ -26,6 +26,7 @@ namespace Consultants.Controllers
     {
         IMongoQuery usersQuery, consulQuery;
         OurDbContext Context = new OurDbContext();
+        const string c_passwordKey = "Sagi&Nadav&Ben&Guy";
 
         public ActionResult Index()
         {
@@ -67,7 +68,9 @@ namespace Consultants.Controllers
                 {
                     _useraccount.CheckBox = 1;
                 }
-
+               string encriptedPassword = EncryptionManager.Encrypt(_useraccount.Password, c_passwordKey);
+               _useraccount.Password = encriptedPassword;
+                _useraccount.ConfirmPassword = "";
                 Context.Users.Insert(_useraccount);
                 ModelState.Clear();
                 TempData["Message"] = _useraccount.FirstName + " " + _useraccount.LastName + " נרשם בהצלחה";
@@ -159,31 +162,34 @@ namespace Consultants.Controllers
             
             var usersCollection = Context.Database.GetCollection<UserAccount>("Users");
             var consultantsCollection = Context.Database.GetCollection<ConsultantsAccount>("Consultants");
-            usersQuery = Query<UserAccount>.Where(s => s.UserName == user.UserName && s.Password == user.Password);
-            consulQuery = Query<ConsultantsAccount>.Where(s => s.UserName == user.UserName && s.Password == user.Password);
+            usersQuery = Query<UserAccount>.Where(s => s.UserName == user.UserName);
+            consulQuery = Query<ConsultantsAccount>.Where(s => s.UserName == user.UserName);
             var model1 = usersCollection.FindOne(usersQuery);
             var model2 = consultantsCollection.FindOne(consulQuery);
-    
-            if (model1 != null || model2 != null)
+            if (model1!=null)
             {
-                if (model1 != null)
+                var decriptionismodel1 = EncryptionManager.Decrypt((string)model1.Password, c_passwordKey);
+                if (user.Password == decriptionismodel1)
                 {
                     Session["UserName"] = model1.UserName.ToString();
+                    Session["Type"] = "user";
                     return RedirectToAction("SearchConsultants");
                 }
 
-                if (model2 != null)
+            }
+            else if(model2!=null)
+            {
+                var decriptionismodel2 = EncryptionManager.Decrypt((string)model2.Password, c_passwordKey);
+                if (user.Password == decriptionismodel2)
                 {
+                    Session["Type"] = "consultant";
                     Session["UserName"] = model2.UserName.ToString();
                     return RedirectToAction("SearchConsultants");
                 }
-            }
 
-            else
-            {
-                TempData["Message"] = "שם משתמש או סיסמא שגויים";
             }
-
+ 
+              TempData["Message"] = "שם משתמש או סיסמא שגויים";
             return View();
         }
 
@@ -381,8 +387,11 @@ namespace Consultants.Controllers
         [HttpGet]
         public ActionResult SmartProfile()
         {
-            if (Session["UserName"] != null)
+            if (Session["UserName"] == null || (string)Session["TypeOfUser"]=="user")
             {
+                return RedirectToAction("Login");
+            }
+            
                 var size = 0;
                 var sizeLabel = 0;
                 var sizePicture = 0;
@@ -426,11 +435,8 @@ namespace Consultants.Controllers
                 return View();
             }
             
-            else
-            {
-                return RedirectToAction("Login");
-            }
-        }
+          
+ 
 
         [HttpPost]
         public ActionResult SmartProfile(List<TextBox> _textbox, List<EditBox> _editbox,List<Pictures> _pictures, int editBoxCount, int textBoxCount,int picturesCount)

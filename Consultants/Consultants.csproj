@@ -186,6 +186,7 @@
     </Compile>
     <Compile Include="Models\ConsultantsAccount.cs" />
     <Compile Include="Models\EditBox.cs" />
+    <Compile Include="Models\EncryptionManager.cs" />
     <Compile Include="Models\OurDbContext.cs" />
     <Compile Include="Models\Pictures.cs" />
     <Compile Include="Models\SubjectConsultant.cs" />

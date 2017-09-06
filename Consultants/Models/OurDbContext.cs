@@ -11,14 +11,13 @@ namespace Consultants.Models
         public String connectionString = "mongodb://localhost";
         public String DataBaseName = "ConsultantsDB";
         public MongoDatabase Database;
-        
-       public OurDbContext()
+
+        public OurDbContext()
         {
             var client = new MongoClient(connectionString);
             var server = client.GetServer();
             Database = server.GetDatabase(DataBaseName);
         }
-       
         public MongoCollection<UserAccount> Users
         {
             get
