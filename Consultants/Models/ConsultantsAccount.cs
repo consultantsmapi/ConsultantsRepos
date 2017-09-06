@@ -80,10 +80,9 @@ namespace Consultants.Models
         [Required(ErrorMessage = "נדרש שנות נסיון בתחום 1")]
         public String YearOfExprience1{ get; set; }
 
-        [DataType(DataType.Upload)]
+    
         public string Documents1 { get; set; } //לשנות את DATATYPE
 
-        [DataType(DataType.Upload)]
         public string Documents2 { get; set; }
 
         public int CheckBox { get; set; }

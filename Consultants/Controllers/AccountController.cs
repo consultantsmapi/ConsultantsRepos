@@ -28,20 +28,6 @@ namespace Consultants.Controllers
         OurDbContext Context = new OurDbContext();
         const string c_passwordKey = "Sagi&Nadav&Ben&Guy";
 
-        public ActionResult Index()
-        {
-            var collection = Context.Database.GetCollection<TextBox>("TextBox");
-            return View();
-
-        }
-
-        [HttpPost]
-        public ActionResult Index(double xPos, double yPos)
-        {
-            var collection = Context.Database.GetCollection<TextBox>("TextBox");
-
-            return View();
-        }
         public ActionResult UserRegister()
         {
             return View();
@@ -50,17 +36,20 @@ namespace Consultants.Controllers
         [HttpPost]
         public ActionResult UserRegister(UserAccount _useraccount)
         {
-      
+            //Add Email Confirm too 
             if (!CheckContentOfLoginRegister(_useraccount.UserName, _useraccount.Password, _useraccount.ConfirmPassword, _useraccount.Email, _useraccount.FirstName, _useraccount.LastName))
             {
                 TempData["Message"] = "Something went wrong,Try again!";
                 return View();
             }
+            var collection2 = Context.Database.GetCollection<ConsultantsAccount>("Consultants");
+            consulQuery = Query<ConsultantsAccount>.Where(s => s.UserName == _useraccount.UserName);
+            var model2 = collection2.FindOne(consulQuery);
             var collection = Context.Database.GetCollection<UserAccount>("Users");
             usersQuery = Query<UserAccount>.Where(s => s.UserName == _useraccount.UserName);
             var model = collection.FindOne(usersQuery);
 
-            if (model == null)
+            if (model == null && model2==null)
             {
                 string checkbox = Request.Form["check"];
 
@@ -68,8 +57,8 @@ namespace Consultants.Controllers
                 {
                     _useraccount.CheckBox = 1;
                 }
-               string encriptedPassword = EncryptionManager.Encrypt(_useraccount.Password, c_passwordKey);
-               _useraccount.Password = encriptedPassword;
+                string encriptedPassword = EncryptionManager.Encrypt(_useraccount.Password, c_passwordKey);
+                _useraccount.Password = encriptedPassword;
                 _useraccount.ConfirmPassword = "";
                 Context.Users.Insert(_useraccount);
                 ModelState.Clear();
@@ -82,72 +71,60 @@ namespace Consultants.Controllers
             {
                 TempData["Message"] = "שם משתמש תפוס";
             }
-            
+
             return View();
         }
 
         public ActionResult ConsultantsRegister()
         {
-
+            //Add Email Confirm too 
             string file = Server.MapPath("~/Content/Subjects.txt");
             string x = System.IO.File.ReadAllText(file, System.Text.Encoding.UTF8);
-         
+
             List<SubjectConsultant> listofsubjects = Newtonsoft.Json.JsonConvert.DeserializeObject<List<SubjectConsultant>>(System.IO.File.ReadAllText(file));
-            ViewBag.SubjectList = listofsubjects;        
+            ViewBag.SubjectList = listofsubjects;
             return View();
         }
 
         [HttpPost]
-        public ActionResult ConsultantsRegister(ConsultantsAccount _useraccount, HttpPostedFileBase file1, HttpPostedFileBase file2,String checkboxSelectCombo)
+        public ActionResult ConsultantsRegister(ConsultantsAccount _useraccount, HttpPostedFileBase file1, HttpPostedFileBase file2, String checkboxSelectCombo)
         {
-          
-
-                var collection = Context.Database.GetCollection<ConsultantsAccount>("Consultants");
-                consulQuery = Query<ConsultantsAccount>.Where(s => s.UserName == _useraccount.UserName);
-                var model = collection.FindOne(consulQuery);
-        
-         
-            if (model == null)
+            if (!CheckContentOfLoginRegister(_useraccount.UserName, _useraccount.Password, _useraccount.ConfirmPassword, _useraccount.Email, _useraccount.FirstName, _useraccount.LastName))
+            {
+                TempData["Message"] = "Something went wrong,Try again!";
+                return View();
+            }
+            var collection2 = Context.Database.GetCollection<UserAccount>("Users");
+            usersQuery = Query<UserAccount>.Where(s => s.UserName == _useraccount.UserName);
+            var model1 = collection2.FindOne(usersQuery);
+            var collection = Context.Database.GetCollection<ConsultantsAccount>("Consultants");
+            consulQuery = Query<ConsultantsAccount>.Where(s => s.UserName == _useraccount.UserName);
+            var model = collection.FindOne(consulQuery);
+            if (model == null && model1==null)
+            {
+                string checkbox = Request.Form["check"];
+                if (checkbox == "true")
                 {
-                    string name = Request.Form["check"];
-
-                    if (name == "true")
-                    {
-                        _useraccount.CheckBox = 1;
-                    }
-                    if(file1!=null)
-                    {
-
-                            ObjectId fileID1 = ObjectId.GenerateNewId();
-                            _useraccount.Documents1 = fileID1.ToString();
-                          var options = new MongoGridFSCreateOptions
-                        {
-                              Id= fileID1,
-                              ContentType = file1.ContentType
-                        };
-                        Context.Database.GridFS.Upload(file1.InputStream, file1.FileName, options);
-                    }
+                    _useraccount.CheckBox = 1;
+                }
+                if (file1 != null)
+                {
+                    _useraccount.Documents1 = InsertFileToDB(file1);
+                }
                 if (file2 != null)
                 {
-
-                    ObjectId fileID2 = ObjectId.GenerateNewId();
-                    _useraccount.Documents2 = fileID2.ToString();
-                    var options = new MongoGridFSCreateOptions
-                    {
-                        Id = fileID2,
-                        ContentType = file2.ContentType
-                    };
-                    Context.Database.GridFS.Upload(file2.InputStream, file2.FileName, options);
+                    _useraccount.Documents2 = InsertFileToDB(file2);
                 }
+                string encriptedPassword = EncryptionManager.Encrypt(_useraccount.Password, c_passwordKey);
+                _useraccount.Password = encriptedPassword;
+                _useraccount.ConfirmPassword = "";
                 Context.Consultants.Insert(_useraccount);
-                    ModelState.Clear();
-                    TempData["Message"] = _useraccount.FirstName + " " + _useraccount.LastName + " נרשם בהצלחה";
-                    return RedirectToAction("Login");
-                }
-
-            
-           
-
+                ModelState.Clear();
+                TempData["Message"] = _useraccount.FirstName + " " + _useraccount.LastName + " נרשם בהצלחה";
+                return RedirectToAction("Login");
+            }
+ 
+            TempData["Message"] = "שם משתמש תפוס";
             return View();
         }
 
@@ -159,14 +136,14 @@ namespace Consultants.Controllers
         [HttpPost]
         public ActionResult Login(UserAccount user)
         {
-            
+           
             var usersCollection = Context.Database.GetCollection<UserAccount>("Users");
             var consultantsCollection = Context.Database.GetCollection<ConsultantsAccount>("Consultants");
             usersQuery = Query<UserAccount>.Where(s => s.UserName == user.UserName);
             consulQuery = Query<ConsultantsAccount>.Where(s => s.UserName == user.UserName);
             var model1 = usersCollection.FindOne(usersQuery);
             var model2 = consultantsCollection.FindOne(consulQuery);
-            if (model1!=null)
+            if (model1 != null)
             {
                 var decriptionismodel1 = EncryptionManager.Decrypt((string)model1.Password, c_passwordKey);
                 if (user.Password == decriptionismodel1)
@@ -177,7 +154,7 @@ namespace Consultants.Controllers
                 }
 
             }
-            else if(model2!=null)
+            else if (model2 != null)
             {
                 var decriptionismodel2 = EncryptionManager.Decrypt((string)model2.Password, c_passwordKey);
                 if (user.Password == decriptionismodel2)
@@ -188,8 +165,8 @@ namespace Consultants.Controllers
                 }
 
             }
- 
-              TempData["Message"] = "שם משתמש או סיסמא שגויים";
+
+            TempData["Message"] = "שם משתמש או סיסמא שגויים";
             return View();
         }
 
@@ -259,34 +236,34 @@ namespace Consultants.Controllers
                 return RedirectToAction("Login");
             }
         }
-        
+
         public ActionResult SearchConsultants()
         {
             if (Session["UserName"] == null)
             {
                 return RedirectToAction("Login");
             }
-                var usersCollection = Context.Database.GetCollection<UserAccount>("Users");
-                var consultantsCollection = Context.Database.GetCollection<ConsultantsAccount>("Consultants");
-                usersQuery = Query<UserAccount>.Where(s => s.UserName == Session["UserName"].ToString());
-                consulQuery = Query<ConsultantsAccount>.Where(s => s.UserName == Session["UserName"].ToString());
-                var model1 = usersCollection.FindOne(usersQuery);
-                var model2 = consultantsCollection.FindOne(consulQuery);
-                string type = null;
-                if (model1 != null || model2 != null)
+            var usersCollection = Context.Database.GetCollection<UserAccount>("Users");
+            var consultantsCollection = Context.Database.GetCollection<ConsultantsAccount>("Consultants");
+            usersQuery = Query<UserAccount>.Where(s => s.UserName == Session["UserName"].ToString());
+            consulQuery = Query<ConsultantsAccount>.Where(s => s.UserName == Session["UserName"].ToString());
+            var model1 = usersCollection.FindOne(usersQuery);
+            var model2 = consultantsCollection.FindOne(consulQuery);
+            string type = null;
+            if (model1 != null || model2 != null)
+            {
+                if (model1 != null)
                 {
-                    if (model1 != null)
-                    {
-                        type = "user";
-                    }
+                    type = "user";
+                }
 
-                    if (model2 != null)
-                    {
-                        type = "consultant";
-
-                    }
+                if (model2 != null)
+                {
+                    type = "consultant";
 
                 }
+
+            }
             if (TempData["Accounts"] != null)
             {
                 ViewBag.my_cons = TempData["Accounts"];
@@ -304,7 +281,7 @@ namespace Consultants.Controllers
                 }
                 ViewBag.my_cons = consultants;
             }
-                return View();
+            return View();
         }
 
         [HttpPost]
@@ -314,19 +291,19 @@ namespace Consultants.Controllers
             {
                 return RedirectToAction("Login");
             }
-            
-                var collection = Context.Database.GetCollection<ConsultantsAccount>("Consultants");
+
+            var collection = Context.Database.GetCollection<ConsultantsAccount>("Consultants");
             // Need to continue the query
-                usersQuery = Query<ConsultantsAccount>.Where(s => s.UserName.Contains(_x) || s.YearOfExprience1.Contains(_x) || s.Street.Contains(_x) || s.ApartmentNumber.Contains(_x) || s.Birthday.Contains(_x) || s.City.Contains(_x));
-                var usercursor = collection.Find(usersQuery);
-                 var consultants = new List<ConsultantsAccount>();
-               foreach (var item in usercursor)
+            usersQuery = Query<ConsultantsAccount>.Where(s => s.UserName.Contains(_x) || s.YearOfExprience1.Contains(_x) || s.Street.Contains(_x) || s.ApartmentNumber.Contains(_x) || s.Birthday.Contains(_x) || s.City.Contains(_x));
+            var usercursor = collection.Find(usersQuery);
+            var consultants = new List<ConsultantsAccount>();
+            foreach (var item in usercursor)
             {
-                consultants.Add(item);   
+                consultants.Add(item);
             }
             TempData["Accounts"] = consultants;
             return View();
-            
+
 
         }
 
@@ -381,65 +358,65 @@ namespace Consultants.Controllers
 
         }
 
-    
+
 
 
         [HttpGet]
         public ActionResult SmartProfile()
         {
-            if (Session["UserName"] == null || (string)Session["TypeOfUser"]=="user")
+            if (Session["UserName"] == null || (string)Session["Type"] == "user")
             {
                 return RedirectToAction("Login");
             }
-            
-                var size = 0;
-                var sizeLabel = 0;
-                var sizePicture = 0;
-                var consultantsCollection = Context.Database.GetCollection<ConsultantsAccount>("Consultants");
-                var TextBoxCollection = Context.Database.GetCollection<TextBox>("TextBox");
-                var LabelCollection = Context.Database.GetCollection<EditBox>("EditBox");
-                var pictureCollection= Context.Database.GetCollection<Pictures>("Pictures");
-                usersQuery = Query<ConsultantsAccount>.Where(s => s.UserName == (Session["UserName"]).ToString());
-                var usersCursor = TextBoxCollection.Find(usersQuery);
-                var usersCursorLabel = LabelCollection.Find(usersQuery);
-                var usersCursorPictures = pictureCollection.Find(usersQuery);
-                var Consultant = consultantsCollection.Find(usersQuery);
-                var textBoxList = new List<TextBox>();
-                var LabelList = new List<EditBox>();
-                var pictureList = new List<Pictures>();
 
-                foreach (var users in usersCursor)
-                {
-                    textBoxList.Add(users);
-                    size++;
-                }
+            var size = 0;
+            var sizeLabel = 0;
+            var sizePicture = 0;
+            var consultantsCollection = Context.Database.GetCollection<ConsultantsAccount>("Consultants");
+            var TextBoxCollection = Context.Database.GetCollection<TextBox>("TextBox");
+            var LabelCollection = Context.Database.GetCollection<EditBox>("EditBox");
+            var pictureCollection = Context.Database.GetCollection<Pictures>("Pictures");
+            usersQuery = Query<ConsultantsAccount>.Where(s => s.UserName == (Session["UserName"]).ToString());
+            var usersCursor = TextBoxCollection.Find(usersQuery);
+            var usersCursorLabel = LabelCollection.Find(usersQuery);
+            var usersCursorPictures = pictureCollection.Find(usersQuery);
+            var Consultant = consultantsCollection.Find(usersQuery);
+            var textBoxList = new List<TextBox>();
+            var LabelList = new List<EditBox>();
+            var pictureList = new List<Pictures>();
 
-                foreach (var item in usersCursorLabel)
-                {
-                    LabelList.Add(item);
-                    sizeLabel++;
-                }
-                foreach (var item in usersCursorPictures)
-                {
-                    pictureList.Add(item);
-                    sizePicture++;
-                }
-
-                ViewBag.Consultant = Consultant;
-                ViewBag.textBoxList = (textBoxList);
-                ViewBag.size = size;
-                ViewBag.LabelList = (LabelList);
-                ViewBag.sizeLabel = sizeLabel;
-                ViewBag.pictureList = (pictureList);
-                ViewBag.sizePicture = sizePicture;
-                return View();
+            foreach (var users in usersCursor)
+            {
+                textBoxList.Add(users);
+                size++;
             }
-            
-          
- 
+
+            foreach (var item in usersCursorLabel)
+            {
+                LabelList.Add(item);
+                sizeLabel++;
+            }
+            foreach (var item in usersCursorPictures)
+            {
+                pictureList.Add(item);
+                sizePicture++;
+            }
+
+            ViewBag.Consultant = Consultant;
+            ViewBag.textBoxList = (textBoxList);
+            ViewBag.size = size;
+            ViewBag.LabelList = (LabelList);
+            ViewBag.sizeLabel = sizeLabel;
+            ViewBag.pictureList = (pictureList);
+            ViewBag.sizePicture = sizePicture;
+            return View();
+        }
+
+
+
 
         [HttpPost]
-        public ActionResult SmartProfile(List<TextBox> _textbox, List<EditBox> _editbox,List<Pictures> _pictures, int editBoxCount, int textBoxCount,int picturesCount)
+        public ActionResult SmartProfile(List<TextBox> _textbox, List<EditBox> _editbox, List<Pictures> _pictures, int editBoxCount, int textBoxCount, int picturesCount)
         {
             if (Session["UserName"] != null)
             {
@@ -452,7 +429,7 @@ namespace Consultants.Controllers
                 var usersCursorTextBox = TextBoxCollection.Remove(usersQuery);
                 var usersCursorPictures = picturesCollection.Remove(usersQuery);
                 var consultantsUsers = consultantsCollection.Find(usersQuery);
-             
+
                 for (int i = 0; i < textBoxCount; i++)
                 {
                     _textbox[i].UserName = Session["UserName"].ToString();
@@ -470,7 +447,7 @@ namespace Consultants.Controllers
                     _pictures[i].UserName = Session["UserName"].ToString();
                     Context.Pictures.Insert(_pictures[i]);
                 }
-            
+
                 return View(consultantsUsers);
             }
             else
@@ -503,7 +480,7 @@ namespace Consultants.Controllers
 
             try
             {
-                smtp.Send(mail);    
+                smtp.Send(mail);
                 TempData["Message"] = "נשלח בהצלחה";
             }
             catch (Exception ex)
@@ -511,9 +488,9 @@ namespace Consultants.Controllers
                 TempData["Message"] = "שגיאה" + ex.Message;
             }
         }
-        private bool CheckContentOfLoginRegister(string username,string password,string confirmpassword,string email,string firstname,string lastname)
+        private bool CheckContentOfLoginRegister(string username, string password, string confirmpassword, string email, string firstname, string lastname)
         {
-            if (firstname == null || lastname == null ||email == null || password == null ||  username == null || confirmpassword ==null)
+            if (firstname == null || lastname == null || email == null || password == null || username == null || confirmpassword == null)
             {
                 return false;
             }
@@ -523,7 +500,7 @@ namespace Consultants.Controllers
             {
                 return false;
             }
-            if(password!=confirmpassword)
+            if (password != confirmpassword)
             {
                 return false;
             }
@@ -539,6 +516,18 @@ namespace Consultants.Controllers
 
             return true;
 
+        }
+        private string InsertFileToDB(HttpPostedFileBase file)
+        {
+            ObjectId fileID1 = ObjectId.GenerateNewId();
+
+            var options = new MongoGridFSCreateOptions
+            {
+                Id = fileID1,
+                ContentType = file.ContentType
+            };
+            Context.Database.GridFS.Upload(file.InputStream, file.FileName, options);
+            return fileID1.ToString();
         }
     }
 }
