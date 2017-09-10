@@ -5,9 +5,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-
-
-
 namespace Consultants.Models
 {
     public class Pictures
@@ -20,6 +17,5 @@ namespace Consultants.Models
         public double Width { get; set; }
         public double Height { get; set; }
         public String base64Name { get; set; }
-    
     }
 }

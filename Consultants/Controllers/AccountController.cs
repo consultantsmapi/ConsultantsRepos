@@ -136,7 +136,6 @@ namespace Consultants.Controllers
         [HttpPost]
         public ActionResult Login(UserAccount user)
         {
-           
             var usersCollection = Context.Database.GetCollection<UserAccount>("Users");
             var consultantsCollection = Context.Database.GetCollection<ConsultantsAccount>("Consultants");
             usersQuery = Query<UserAccount>.Where(s => s.UserName == user.UserName);
@@ -292,19 +291,21 @@ namespace Consultants.Controllers
                 return RedirectToAction("Login");
             }
 
-            var collection = Context.Database.GetCollection<ConsultantsAccount>("Consultants");
-            // Need to continue the query
-            usersQuery = Query<ConsultantsAccount>.Where(s => s.UserName.Contains(_x) || s.YearOfExprience1.Contains(_x) || s.Street.Contains(_x) || s.ApartmentNumber.Contains(_x) || s.Birthday.Contains(_x) || s.City.Contains(_x));
-            var usercursor = collection.Find(usersQuery);
-            var consultants = new List<ConsultantsAccount>();
-            foreach (var item in usercursor)
+            if (_x != null)
             {
-                consultants.Add(item);
+                var collection = Context.Database.GetCollection<ConsultantsAccount>("Consultants");
+                // Need to continue the query
+                usersQuery = Query<ConsultantsAccount>.Where(s => s.UserName.Contains(_x) || s.YearOfExprience1.Contains(_x) || s.Street.Contains(_x) || s.ApartmentNumber.Contains(_x) || s.Birthday.Contains(_x) || s.City.Contains(_x));
+                var usercursor = collection.Find(usersQuery);
+                var consultants = new List<ConsultantsAccount>();
+                foreach (var item in usercursor)
+                {
+                    consultants.Add(item);
+                }
+                TempData["Accounts"] = consultants;
             }
-            TempData["Accounts"] = consultants;
+
             return View();
-
-
         }
 
         [AllowAnonymous]
@@ -333,9 +334,7 @@ namespace Consultants.Controllers
                     userEmail = model1.Email;
                     emailBody += model1.Password;
                     smtpRequest(userEmail, emailSubject, emailBody);
-
                     Session["UserName"] = model1.UserName.ToString();
-
                 }
 
                 if (model2 != null)
@@ -345,21 +344,16 @@ namespace Consultants.Controllers
                     smtpRequest(userEmail, emailSubject, emailBody);
 
                     Session["UserName"] = model2.UserName.ToString();
-
                 }
             }
 
             else
             {
                 TempData["Message"] = "משתמש לא נמצא";
-
             }
+
             return View();
-
         }
-
-
-
 
         [HttpGet]
         public ActionResult SmartProfile()
@@ -409,11 +403,9 @@ namespace Consultants.Controllers
             ViewBag.sizeLabel = sizeLabel;
             ViewBag.pictureList = (pictureList);
             ViewBag.sizePicture = sizePicture;
+
             return View();
         }
-
-
-
 
         [HttpPost]
         public ActionResult SmartProfile(List<TextBox> _textbox, List<EditBox> _editbox, List<Pictures> _pictures, int editBoxCount, int textBoxCount, int picturesCount)
@@ -452,9 +444,7 @@ namespace Consultants.Controllers
             }
             else
             {
-
                 return RedirectToAction("Login");
-
             }
         }
 
@@ -463,6 +453,57 @@ namespace Consultants.Controllers
             Session.Abandon();
             Session.Clear();
             return RedirectToAction("Login", "account");
+        }
+
+        public ActionResult StaticProfile(String username)
+        {
+            if (Session["UserName"] == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            var size = 0;
+            var sizeLabel = 0;
+            var sizePicture = 0;
+            var consultantsCollection = Context.Database.GetCollection<ConsultantsAccount>("Consultants");
+            var TextBoxCollection = Context.Database.GetCollection<TextBox>("TextBox");
+            var LabelCollection = Context.Database.GetCollection<EditBox>("EditBox");
+            var pictureCollection = Context.Database.GetCollection<Pictures>("Pictures");
+            usersQuery = Query<ConsultantsAccount>.Where(s => s.UserName == username);
+            var usersCursor = TextBoxCollection.Find(usersQuery);
+            var usersCursorLabel = LabelCollection.Find(usersQuery);
+            var usersCursorPictures = pictureCollection.Find(usersQuery);
+            var Consultant = consultantsCollection.Find(usersQuery);
+            var textBoxList = new List<TextBox>();
+            var LabelList = new List<EditBox>();
+            var pictureList = new List<Pictures>();
+
+            foreach (var users in usersCursor)
+            {
+                textBoxList.Add(users);
+                size++;
+            }
+
+            foreach (var item in usersCursorLabel)
+            {
+                LabelList.Add(item);
+                sizeLabel++;
+            }
+            foreach (var item in usersCursorPictures)
+            {
+                pictureList.Add(item);
+                sizePicture++;
+            }
+
+            ViewBag.Consultant = Consultant;
+            ViewBag.textBoxList = (textBoxList);
+            ViewBag.size = size;
+            ViewBag.LabelList = (LabelList);
+            ViewBag.sizeLabel = sizeLabel;
+            ViewBag.pictureList = (pictureList);
+            ViewBag.sizePicture = sizePicture;
+
+            return View();
         }
 
         private void smtpRequest(string userEmail, string emailSubject, string emailBody)
@@ -512,10 +553,7 @@ namespace Consultants.Controllers
                 return false;
             }
 
-
-
             return true;
-
         }
         private string InsertFileToDB(HttpPostedFileBase file)
         {

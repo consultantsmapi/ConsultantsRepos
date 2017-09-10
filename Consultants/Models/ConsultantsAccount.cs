@@ -36,7 +36,7 @@ namespace Consultants.Models
         [DataType(DataType.Password)]
         public String ConfirmPassword { get; set; }
 
-        [Required(ErrorMessage = "נדרש מס פלאפון")]
+        [Required(ErrorMessage = "נדרש מספר פלאפון")]
         [DataType(DataType.PhoneNumber)]
         public String Phone { get; set; }
 
@@ -46,7 +46,7 @@ namespace Consultants.Models
         [DataType(DataType.PhoneNumber)]
         public String Fax { get; set; }
 
-        [Required(ErrorMessage = "נדרש כתובת")]
+        [Required(ErrorMessage = "נדרש עיר")]
         [DataType(DataType.Text)]
         public String City { get; set; }
 
@@ -54,23 +54,23 @@ namespace Consultants.Models
         [DataType(DataType.Text)]
         public String Street { get; set; }
 
-        [Required(ErrorMessage = "נדרש כתובת")]
+        [Required(ErrorMessage = "נדרש מספר בית")]
         [DataType(DataType.Text)]
         public String HouseNumber { get; set; }
 
-        [Required(ErrorMessage = "נדרש כתובת")]
+        [Required(ErrorMessage = "נדרש מספר דירה")]
         [DataType(DataType.Text)]
         public String ApartmentNumber { get; set; }
 
-        [Required(ErrorMessage = "נדרש כתובת")]
+        [Required(ErrorMessage = "נדרש מיקוד")]
         [DataType(DataType.Text)]
-        public String Postal_Code { get; set; }
+        public String PostalCode { get; set; }
 
         [Required(ErrorMessage = "נדרש  תחום יעוץ")]
         [DataType(DataType.Text)]
         public String CounsilSubject1 { get; set; }
 
-        [Required(ErrorMessage = "נדרש  תחום יעוץ")]
+        [Required(ErrorMessage = "נדרש  תאריך יום הולדת")]
         [DataType(DataType.Text)]
         public String Birthday { get; set; }
 
@@ -80,17 +80,10 @@ namespace Consultants.Models
         [Required(ErrorMessage = "נדרש שנות נסיון בתחום 1")]
         public String YearOfExprience1{ get; set; }
 
-    
         public string Documents1 { get; set; } //לשנות את DATATYPE
 
         public string Documents2 { get; set; }
 
         public int CheckBox { get; set; }
-
-    
     }
-
-
-
-
 }

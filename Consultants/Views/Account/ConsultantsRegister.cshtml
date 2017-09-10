@@ -134,10 +134,9 @@
 
             });
         });
-</script>
+    </script>
     <script>
-        function registerFormValidate()
-        {
+        function registerFormValidate() {
 
             var userName = document.getElementById("username").value;
             var password = document.getElementById("password").value;
@@ -183,82 +182,82 @@
 
 
 <body>
-   
-            <div id="content-reg" class="col-lg-offset-3">
-                <h1>הרשמה כיועץ</h1>
-              
-                @using (Html.BeginForm("ConsultantsRegister", "account", FormMethod.Post, new { enctype = "multipart/form-data", onsubmit = "return registerFormValidate()" }))
-                {
+
+    <div id="content-reg" class="col-lg-offset-3">
+        <h1>הרשמה כיועץ</h1>
+
+        @using (Html.BeginForm("ConsultantsRegister", "account", FormMethod.Post, new { enctype = "multipart/form-data", onsubmit = "return registerFormValidate()" }))
+        {
 
 
-                    <div class="row">
-                        <div class="col-lg-6">
-                       
-                            @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { type = "text", placeholder = "שם פרטי", id = "FirstName", required = "" } })
-                            <p id="firstnameError" hidden></p>
-                            <br />
-                            @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { type = "text", placeholder = "שם משפחה", id = "LastName", required = "" } })
-                            <p id="lastnameError" hidden></p>
-                            <br />
-                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { type = "text", placeholder = "אימייל", id = "Email" } })
-                            <p id="emailError" hidden></p>
-                            <br />
-                            @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { type = "text", placeholder = "מספר פלאפון", id = "phone", required = "" } })
-                            <br />
-                            @Html.EditorFor(model => model.HomePhone, new { htmlAttributes = new { type = "text", placeholder = "מספר טלפון בבית", id = "HomePhone", required = "" } })
-                            <br />
-                            @Html.EditorFor(model => model.Fax, new { htmlAttributes = new { type = "text", placeholder = "מספר פקס", id = "Fax", required = "" } })
-                            <br />
-                           
-                            <br />
-                        </div>
+            <div class="row">
+                <div class="col-lg-6">
 
-                        <div class="col-lg-6">
-                            @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { type = "text", placeholder = "שם משתמש", id = "username", required = "" } })
-                            <br />
-                            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { type = "password", placeholder = "סיסמא", id = "password", required = "" } })
-                            <p id="passwordError" hidden></p>
-                            <br />
-                            @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { type = "password", placeholder = "אישור סיסמא", id = "ConfirmPassword", required = "" } })
-                            <p id="confirmPasswordError" hidden></p>
-                            <br />
-                            @Html.EditorFor(model => model.CounsilSubject1, new { htmlAttributes = new { type = "text", placeholder = " תחום יעוץ 1", id = "username", required = "" } })
-                            <br />
-                            @Html.EditorFor(model => model.YearOfExprience1, new { htmlAttributes = new { type = "text", placeholder = " שנות נסיון 1", id = "username", required = "" } })
-                            <br />
-                            @Html.EditorFor(model => model.CounsilSubject2, new { htmlAttributes = new { type = "text", placeholder = " תחום יעוץ 2", id = "username", required = "" } })
-                            <br />
-                                               
-                        </div>
-                    </div>
-                 
-                    <h4>בחירת תחומי ייעוץ</h4>
-                    <input name ="checkboxSelectCombo" id="checkboxSelectCombo">
+                    @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { type = "text", placeholder = "שם פרטי", id = "FirstName", required = "" } })
+                    <p id="firstnameError" hidden></p>
                     <br />
-                    <br/>
-                    <div class="row file-buttons-consultRegister">    
-                      
+                    @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { type = "text", placeholder = "שם משפחה", id = "LastName", required = "" } })
+                    <p id="lastnameError" hidden></p>
+                    <br />
+                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { type = "text", placeholder = "אימייל", id = "Email" } })
+                    <p id="emailError" hidden></p>
+                    <br />
+                    @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { type = "text", placeholder = "מספר פלאפון", id = "phone", required = "" } })
+                    <br />
+                    @Html.EditorFor(model => model.HomePhone, new { htmlAttributes = new { type = "text", placeholder = "מספר טלפון בבית", id = "HomePhone", required = "" } })
+                    <br />
+                    @Html.EditorFor(model => model.Fax, new { htmlAttributes = new { type = "text", placeholder = "מספר פקס", id = "Fax", required = "" } })
+                    <br />
+                    @Html.EditorFor(model => model.Street, new { htmlAttributes = new { type = "text", placeholder = "רחוב", id = "Street", required = "" } })
+                    <br />
+                </div>
+
+                <div class="col-lg-6">
+                    @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { type = "text", placeholder = "שם משתמש", id = "username", required = "" } })
+                    <br />
+                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { type = "password", placeholder = "סיסמא", id = "password", required = "" } })
+                    <p id="passwordError" hidden></p>
+                    <br />
+                    @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { type = "password", placeholder = "אישור סיסמא", id = "ConfirmPassword", required = "" } })
+                    <p id="confirmPasswordError" hidden></p>
+                    <br />
+                    @Html.EditorFor(model => model.CounsilSubject1, new { htmlAttributes = new { type = "text", placeholder = " תחום יעוץ 1", id = "username", required = "" } })
+                    <br />
+                    @Html.EditorFor(model => model.YearOfExprience1, new { htmlAttributes = new { type = "text", placeholder = " שנות נסיון 1", id = "username", required = "" } })
+                    <br />
+                    @Html.EditorFor(model => model.CounsilSubject2, new { htmlAttributes = new { type = "text", placeholder = " תחום יעוץ 2", id = "username", required = "" } })
+                    <br />
+
+                </div>
+            </div>
+
+                    <h4>בחירת תחומי ייעוץ</h4>
+                    <input name="checkboxSelectCombo" id="checkboxSelectCombo">
+                    <br />
+                    <br />
+                    <div class="row file-buttons-consultRegister">
+
                         <input type="file" name="file1" id="upload" class="custom-file-input">
-                        <br/>
+                        <br />
                         <input type="file" name="file2" id="upload2" class="custom-file-input">
                     </div>
-             
-                        <div class="row">
-                            <b>האם לקבל דיוור ממפ"י</b>
-                            <input id="checkbox" name="check" type="checkbox" value="true" />
-                        </div>
+
+                    <div class="row">
+                        <b>האם לקבל דיוור ממפ"י</b>
+                        <input id="checkbox" name="check" type="checkbox" value="true" />
+                    </div>
                         <div class="row right-buttons-consultRegister">
                             <input type="submit" class="" value="הרשם" }) />
                             <input type="button" value="חזור" onclick="location.href='@Url.Action("Login","account")'" }) />
                             <span style="color:red;">@TempData["Message"]</span>
                         </div>
-                      
 
-                }
-            
-                    </div>
-           
-      
+
+        }
+
+    </div>
+
+
 </body>
 </html>
 

@@ -18,41 +18,49 @@
         var i=0;
         var type = @Html.Raw(Json.Encode(ViewBag.type));
 
-        if (type=="user")
+        if (type == "user")
         {
             document.getElementById("SmartProfile").style.display="none";
         }
+
         var cons = @Html.Raw(Json.Encode(ViewBag.my_cons));
-         while(cons[i]!=null)
+
+        while(cons[i]!=null)
         {
 
-             $(".mytable").append("  <tr><td class=lalign>"+cons[i].FirstName + "</td><td>"+cons[i].LastName+"</td><td>"+cons[i].HomePhone+"</td><td>"+cons[i].Email+"</td><td><a class=aref id="+cons[i].UserName+">Go To Profile!</a></td></tr>");
-           i++;
-          }
-
+             $(".mytable").append("  <tr><td class=lalign>"+cons[i].FirstName + "</td><td>"+cons[i].LastName+"</td><td>"+cons[i].HomePhone+"</td><td>"+cons[i].Email+"</td><td><a href=@Url.Action("StaticProfile")?username="+cons[i].UserName+" class=aref id="+cons[i].UserName+">Go To Profile!</a></td></tr>");
+             i++;
         }
-    
-        </script>     
+
+    }
+
+</script>
 <script>
     $(document).on('click', '.aref', function () {
-        var id = $(this).attr('id');
-        alert(id);
-        // your function here
-    });
-    
+        var username = $(this).attr('id');
 
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("StaticProfile", "Account")",
+            data: JSON.stringify({
+                username: username
+            }),
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json'
+        });
+
+        @*$(this).attr('href', '@Url.Action("StaticProfile", "Account")');*@
+    });
 
     $(function () {
-       
         $("#search").click(function ()
         {
- 
             var x=document.getElementById("consulat").value;
             $.ajax({
                 type: "post",
                 url: "@Url.Action("SearchConsultants", "Account")",
                 data: JSON.stringify({
-                    _x:x
+                    _x: x
                 }),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -64,47 +72,47 @@
                     window.location.reload(true);
                 }
             });
-          
+
         });
     });
 
 </script>
 <body>
 
-         <h2 id="smartProfileHeader">Hello @Session["UserName"].ToString()</h2> 
+    <h2 id="smartProfileHeader">Hello @Session["UserName"].ToString()</h2>
     <div class="center-buttons">
 
 
     </div>
-        <div class="login-box animated fadeInUp">
-            <div class="box-header">
-                <h2 id="header">חיפוש יועצים</h2>
-            </div>
-            <input  id="consulat" type="text"  />
-            <label>חפש לפי טקסט</label>
+    <div class="login-box animated fadeInUp">
+        <div class="box-header">
+            <h2 id="header">חיפוש יועצים</h2>
         </div>
+        <input id="consulat" type="text" />
+        <label>חפש לפי טקסט</label>
+    </div>
     <div class="center-buttons">
         <input class="myButton" type="submit" id="search" value="חפש" />
     </div>
-        <div id="wrapper">
-            <h1 style="text-align:center">Consulats results query:</h1>
+    <div id="wrapper">
+        <h1 style="text-align:center">Consulats results query:</h1>
 
-            <table class="mytable" id="keywords" cellspacing="0" cellpadding="0">
+        <table class="mytable" id="keywords" cellspacing="0" cellpadding="0">
 
-                <thead>
+            <thead>
 
-                    <tr>
-                        <th><span>שם יועץ</span></th>
-                        <th><span>תחום</span></th>
-                        <th><span>טלפון</span></th>
-                        <th><span>אימיל</span></th>
-                        <th><span>אתר</span></th>
-                    </tr>
+                <tr>
+                    <th><span>שם יועץ</span></th>
+                    <th><span>תחום</span></th>
+                    <th><span>טלפון</span></th>
+                    <th><span>אימיל</span></th>
+                    <th><span>אתר</span></th>
+                </tr>
 
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
 
 </body>
 

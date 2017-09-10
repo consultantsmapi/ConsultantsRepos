@@ -1,0 +1,170 @@
+﻿@model Consultants.Models.ConsultantsAccount
+
+@{
+    ViewBag.Title = "פרופיל";
+}
+
+<html>
+<head>
+
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap-responsive.css" />
+    <link rel="stylesheet" type="text/javascript" href="~/Scripts/bootstrap.js" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"> </script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <title>פרופיל חכם</title>
+
+    <script type="text/javascript">
+
+        var countTextArea = 0;
+        var textBox;
+        var Label;
+        var imageCount=0;
+        var countLabel=0;
+        var sizeTextBox = @Html.Raw(Json.Encode(ViewBag.size));
+        var sizeLabel = @Html.Raw(Json.Encode(ViewBag.sizeLabel));
+        var sizePicture = @Html.Raw(Json.Encode(ViewBag.sizePicture));
+        var picArray=new Array();
+        var dataPictures = new FormData();
+        if(sizeTextBox == null)
+        {
+            var textBoxCount = 0;
+        }
+        var textBoxCount = sizeTextBox;
+        if(sizeLabel==null)
+        {
+            var LabelCount =0;
+        }
+        var LabelCount = sizeLabel;
+        if(sizePicture==null)
+        {
+            var PictureCount =0;
+        }
+        var imageCount = sizePicture;
+        function OnCreate()
+        {
+            var arrayTextBox = @Html.Raw(Json.Encode(ViewBag.textBoxList));
+            var sizeTextBox = @Html.Raw(Json.Encode(ViewBag.size));
+            var arrayLabel = @Html.Raw(Json.Encode(ViewBag.LabelList));
+            var sizeLabel = @Html.Raw(Json.Encode(ViewBag.sizeLabel));
+            var ConsultantInformation=@Html.Raw(Json.Encode(ViewBag.Consultant));
+            var arrayPictures=@Html.Raw(Json.Encode(ViewBag.pictureList));
+            var sizePicture = @Html.Raw(Json.Encode(ViewBag.sizePicture));
+            document.getElementById("consultantFirstName").value = ConsultantInformation[0].FirstName;
+            document.getElementById("consultantLastName").value = ConsultantInformation[0].LastName;
+            document.getElementById("consultantEmail").value = ConsultantInformation[0].Email;
+            document.getElementById("consultantPhone").value = ConsultantInformation[0].Phone;
+            document.getElementById("consultantHomePhone").value = ConsultantInformation[0].HomePhone;
+            document.getElementById("consultantFax").value = ConsultantInformation[0].Fax;
+            document.getElementById("consultantAddress").value = ConsultantInformation[0].Address;
+            document.getElementById("consultantCounsilSubject1").value = ConsultantInformation[0].CounsilSubject1;
+            document.getElementById("consultantCounsilSubject2").value = ConsultantInformation[0].CounsilSubject2;
+            document.getElementById("consultantYearOfExprience1").value = ConsultantInformation[0].YearOfExprience1;
+            document.getElementById("consultantYearOfExprience2").value = ConsultantInformation[0].YearOfExprience2;
+            var x = $("#rangeOfSmartFrom").position();
+            for(var i=0; i<sizeTextBox;i++)
+            {
+                $(".form-style-test").append("<div id=textBoxDragger" + i +" ><div></div><textarea id=textBoxTextArea" + i +"></textarea> </div>");
+                var myTextArea = $("#textBoxTextArea" + i);
+                var myDrager=$("#textBoxDragger" + i);
+                myTextArea.width(arrayTextBox[i].Width);
+                myTextArea.height(arrayTextBox[i].Height);
+                myTextArea.val(arrayTextBox[i].Text);
+                var left1=arrayTextBox[i].X;
+                var top1=arrayTextBox[i].Y;
+                document.getElementById('textBoxDragger'+i).style.position = "absolute";
+                document.getElementById('textBoxDragger'+i).style.top = top1+'px';
+                document.getElementById('textBoxDragger'+i).style.left = left1+'px';
+            }
+
+            for(var i=0; i<sizeLabel;i++)
+            {
+                $(".form-style-test").append("<div id=labelDragger" + i +" ><div></div><textarea rows=1 class=staticLabelBox id=labelTextArea" + i +"></textarea> </div>");
+                var myLabel = $("#labelTextArea" + i);
+                var myLabelDragger = $("#labelDragger" + i);
+                myLabel.width(arrayLabel[i].Width);
+                myLabel.val(arrayLabel[i].Text);
+                var left1=arrayLabel[i].X;
+                var top1=arrayLabel[i].Y;
+                document.getElementById('labelDragger'+i).style.position = "absolute";
+                document.getElementById('labelDragger'+i).style.top =top1+'px';
+                document.getElementById('labelDragger'+i).style.left = left1+'px';
+            }
+
+            for(var i=0; i<sizePicture;i++)
+            {
+                $(".form-style-test").append("<div id=imageDragger" + i +"><div></div><img class=thumbnail id=myImage"+i+" src="+arrayPictures[i].base64Name+" </> </div>");
+                var myPicture = $("#myImage" + i);
+                var myPictureDragger = $("#imageDragger" + i);
+                myPicture.width(arrayPictures[i].Width);
+                myPicture.height(arrayPictures[i].Height);
+                var left1=arrayPictures[i].X;
+                var top1=arrayPictures[i].Y;
+                document.getElementById('imageDragger'+i).style.position = "absolute";
+                document.getElementById('imageDragger'+i).style.top =top1+'px';
+                document.getElementById('imageDragger'+i).style.left = left1+'px';
+            }
+        }
+        window.onload = OnCreate;
+    </script>
+</head>
+
+<body>
+    <h2 id="smartProfileHeader">Profile</h2>
+
+    <hr class="brace">
+
+
+    <div class="login-box animated fadeInUp">
+        <div class="box-header">
+            <h2 id="header">פרטים אישים</h2>
+        </div>
+        <input class="inputSmartForm" id="consultantHomePhone" type="text" readonly />
+        <label>:פלאפון</label>
+        <input class="inputSmartForm" id="consultantPhone" type="text" readonly />
+        <label>:טלפון</label>
+        <input class="inputSmartForm" id="consultantLastName" type="text" readonly />
+        <label>:שם משפחה</label>
+        <input class="inputSmartForm" id="consultantFirstName" type="text" readonly />
+        <label>:שם פרטי</label>
+
+        <br />
+
+        <input class="inputSmartForm" id="consultantAddress" type="text" readonly />
+        <label>:כתובת</label>
+        <input class="inputSmartForm" id="consultantEmail" type="text" readonly />
+        <label>:אימיל</label>
+        <input class="inputSmartForm" id="consultantFax" type="text" readonly />
+        <label>:פקס</label>
+
+        <br />
+        <input class="inputSmartForm" id="consultantYearOfExprience1" type="text" readonly />
+        <label>:שנות ניסיון 1</label>
+
+        <input class="inputSmartForm" id="consultantCounsilSubject1" type="text" readonly />
+        <label>:תחום יעוץ 1</label>
+        <br />
+        <input class="inputSmartForm" id="consultantYearOfExprience2" type="text" readonly />
+        <label>:שנות ניסיון 1</label>
+
+        <input class="inputSmartForm" id="consultantCounsilSubject2" type="text" readonly />
+        <label>:תחום יעוץ 1</label>
+
+    </div>
+
+    <br />
+    <br />
+    <hr />
+
+    <div id="rangeOfSmartFrom" class="range">
+        <section class="form-style-test"></section>
+    </div>
+</body>
+</html>
+
+

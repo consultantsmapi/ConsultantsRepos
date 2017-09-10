@@ -7610,6 +7610,11 @@ select {
     
 }
 
+.staticLabelBox {
+    background: none;
+    height: 27px;
+}
+
 .textBox{
         
 }
